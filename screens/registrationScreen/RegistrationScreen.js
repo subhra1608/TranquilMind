@@ -14,7 +14,7 @@ const RegisterationScreen = () => {
 
   const handleSignUp = () => {
     // Implement your sign-up logic
-    console.log('Sign Up Pressed');
+    console.log('Sign Up Pressed :-)');
   };
 
   return (
