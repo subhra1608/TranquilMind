@@ -9,7 +9,7 @@ import OnboardingScreen from './screens/onboardingScreen/OnboardingScreen';
 import LandingScreen from './screens/landingScreen/LandingScreen';
 import ExploreScreen from './screens/exploreScreen/ExploreScreen';
 import QuizScreen from './quizScreen/QuizScreen';
-import RegisterationScreen from './screens/registerationScreen/RegisterationScreen';
+import RegistrationScreen from './screens/registerationScreen/RegistrationScreen';
 import BookAppointment from './screens/bookAppointmentScreen/BookAppointmentScreen';
 import AppointmentScreen from './screens/appointmentScreen/AppointmentScreen';
 import CourseHomeScreen from './screens/courseHomeScreen/CourseHomeScreen';
@@ -65,7 +65,7 @@ export default function App() {
       />
       <Stack.Screen
         name="RegistrationScreen"
-        component={RegisterationScreen}
+        component={RegistrationScreen}
         options={{
           headerShown:false,
           title: 'Awesome app',
