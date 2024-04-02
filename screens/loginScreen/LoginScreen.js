@@ -1,13 +1,15 @@
 // LoginScreen.js
 
 import React, { useState } from 'react';
-import { View, Text, TextInput,ImageBackground, Button, StyleSheet,Alert , TouchableOpacity} from 'react-native';
+import { View, Text, TextInput,ImageBackground, Button, StyleSheet,Alert } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import InputComponent from '../../Components/InputComponent';
+import { baseUrl } from '../../data/baseUrl';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("example@example.com");
+  const [password, setPassword] = useState('examplepassword');
   const [user,setUser]= useState({});
 
   const handleLogin = async() => {
@@ -23,13 +25,17 @@ const LoginScreen = ({ navigation }) => {
     console.log(email,password);
 
     try {
-      const response =  await axios.post(`https://673a-106-51-164-14.ngrok-free.app/api/user/authenticate`,cred,{headers});
+      const response =  await axios.post(`${baseUrl}/api/user/authenticate`,cred,{headers});
       console.log(response.data);  
-      setUser(response.data);
+      const userId = response.data.userId;
+      await AsyncStorage.setItem('token',response.data.accessToken);      // setUser(response.data);
+      await AsyncStorage.setItem('userId',String(userId));      // setUser(response.data);
+      
       navigation.navigate('LandingScreen');
 
     } catch (error) {
-      console.error('Error fetching data:', error);
+      
+      console.error('Error fetching data:', error.message);
       Alert.alert('Error', 'Failed to fetch data');
     }
 
@@ -70,9 +76,6 @@ const LoginScreen = ({ navigation }) => {
       />
       
       <Button title="Login" style={styles.btn} onPress={handleLogin} />
-      <TouchableOpacity onPress={() => navigation.navigate('RegistrationScreen')}>
-        <Text style={styles.signUpText}>Don't have an account? Sign up</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -110,12 +113,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#05445E',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  signUpText: {
-    color: 'blue', // You can adjust the color
-    marginTop: 15,
-    textDecorationLine: 'underline',
-
   }
 });
 

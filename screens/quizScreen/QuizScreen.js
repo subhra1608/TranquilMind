@@ -24,7 +24,7 @@ const QuizScreen = ({ navigation }) => {
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity onPress={() => navigation.goBack() }>
-              <Text style={styles.backButtonText}>{'< Back'}</Text>
+              <Text style={styles.backButtonText}>{'Back'}</Text>
       </TouchableOpacity>
       <Text style={styles.quizText}>Quizzes</Text>
       <FlatList

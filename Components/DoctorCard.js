@@ -1,31 +1,30 @@
-import { View, Text,StyleSheet,TouchableOpacity,Image,Modal } from 'react-native'
+import { View, Text,StyleSheet,Image,Modal } from 'react-native'
 import React, { useState } from 'react'
 
 const DoctorCard = ({doctorData}) => {
-    
+    // console.log(doctorData);
     
   return (
-    <TouchableOpacity style={styles.cardContainer}>
-      <Image source={{ uri: doctorData.image }} style={styles.image} />
-      <View style={styles.infoContainer}>
-        <Text style={styles.name}>{doctorData.name}</Text>
-        <Text>{`Experience: ${doctorData.experience}`}</Text>
-        <Text>{`Consultation Fee: ${doctorData.consultation_fee}`}</Text>
+    
+      <View style={styles.cardContainer}>
+        <Image source={{ uri: "https://www.shutterstock.com/image-photo/profile-photo-attractive-family-doc-600nw-1724693776.jpg" }} style={styles.image} />
+        <View style={styles.infoContainer}>
+          <Text style={styles.name}>{doctorData.firstName} {doctorData.middleName} {doctorData.lastName}</Text>
+          <Text>{`Experience: ${doctorData.experience}`}</Text>
+          <Text>{`Consultation Fee: Rs.${doctorData.consultationFee}`}</Text>
+        </View>
       </View>
-    </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({
     cardContainer: {
       flexDirection: 'row',
-      marginLeft:40,
+      margin:10,
       borderRadius:10,
       elevation: 2,
-      width:'80%',
+      width:'90%',
       alignItems: 'center',
-      padding: 10,
-      marginTop:10,
-      marginBottom:10,
+      padding: 5,
       borderBottomWidth: 1,
       borderBottomColor: '#ccc',
     },

@@ -1,21 +1,28 @@
-import { View, Text, FlatList, Button, ScrollView,StyleSheet} from 'react-native';
+import { View, Text, FlatList, Button, ScrollView,StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Header from '../../Components/HeaderComponent';
 import Card from '../../Components/CardComponent';
 import { data } from '../../data/courses';
+import { baseUrl } from '../../data/baseUrl';
 
 const ExploreScreen = ({ navigation }) => {
-  
+ 
 
   const renderItem = ({ item }) => {
+    
+    const onCardPress= () =>{
+      navigation.navigate('CourseHomeScreen',{ param1: item.id, param2: item.title })
+  }
     return (
-      <Card
+      <TouchableOpacity onPress={onCardPress}>
+        <Card
         id ={item.id}
         title={item.title}
         description={item.description}
         imageSource={item.image}
         navigation={navigation}
-      />  
+      />
+      </TouchableOpacity>  
     );
   };
 
@@ -27,7 +34,7 @@ const ExploreScreen = ({ navigation }) => {
         <Button
           style={styles.shortButton} // Apply the custom style here
           title="Book an appointment"
-          onPress={() => navigation.push('BookAppointmentScreen')}
+          onPress={() => navigation.push('DoctorsDetailScreen')}
           color="pink"
         />
       

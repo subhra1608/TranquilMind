@@ -9,11 +9,12 @@ import OnboardingScreen from './screens/onboardingScreen/OnboardingScreen';
 import LandingScreen from './screens/landingScreen/LandingScreen';
 import ExploreScreen from './screens/exploreScreen/ExploreScreen';
 import QuizScreen from './screens/quizScreen/QuizScreen';
-import RegistrationScreen from './screens/registrationScreen/RegistrationScreen';
-import BookAppointment from './screens/bookAppointmentScreen/BookAppointmentScreen';
 import AppointmentScreen from './screens/appointmentScreen/AppointmentScreen';
 import CourseHomeScreen from './screens/courseHomeScreen/CourseHomeScreen';
-// import quizzes from './screens/quizScreen/quizzes';
+import DoctorsDetailScreen from './screens/bookAppointmentScreen/DoctorsDetailScreen';
+import BookAppointmentScreen from './screens/bookAppointmentScreen/BookAppointmentScreen';
+import CommunityScreen from './screens/communityScreen/CommunityScreen';
+import RegistrationScreen from './screens/registrationScreen/RegistrationScreen';
 import QuestionScreen from './screens/questionScreen/QuestionScreen';
 
 const Stack = createNativeStackNavigator();
@@ -72,15 +73,23 @@ export default function App() {
           headerShown:false,
           title: 'Awesome app',
         }}
-      />    
+      />     
       <Stack.Screen
         name="BookAppointmentScreen"
-        component={BookAppointment}
+        component={BookAppointmentScreen}
         options={{
           headerShown:false,
           title: 'Awesome app',
         }}
-      />        
+      /> 
+      <Stack.Screen
+        name="DoctorsDetailScreen"
+        component={DoctorsDetailScreen}
+        options={{
+          headerShown:false,
+          title: 'Awesome app',
+        }}
+      />         
       <Stack.Screen
         name="ExploreScreen"
         component={ExploreScreen}
@@ -97,6 +106,14 @@ export default function App() {
           title: 'Awesome app',
         }}
       /> 
+      <Stack.Screen
+        name="CommunityScreen"
+        component={CommunityScreen}
+        options={{
+          headerShown:false,
+          title: 'Login',
+        }}
+      />
 
       <Stack.Screen
         name="QuizScreen"
@@ -105,15 +122,15 @@ export default function App() {
           headerShown:false,
           title: 'Awesome app',
         }}
-      />
-      <Stack.Screen
+      />  
+       <Stack.Screen
         name="QuestionScreen"
         component={QuestionScreen}
         options={{
           headerShown:false,
           title: 'Awesome app',
         }}
-      />    
+      />  
     </Stack.Navigator>
   </NavigationContainer>
   );
