@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import EmailVerificationScreen from '../emailVerificationScreen/EmailVerificationScreen';
+// import EmailVerificationScreen from '../emailVerificationScreen/EmailVerificationScreen';
 const RegistrationScreen = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState(''); // Added state variable for middle name
@@ -14,8 +14,24 @@ const RegistrationScreen = ({navigation}) => {
   const [gender, setGender] = useState(''); // Added state variable for gender
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMatch, setPasswordMatch] = useState(true);
+
+  const handlePasswordChange = (password) => {
+    setPassword(password);
+    setPasswordMatch(password === confirmPassword);
+  };
+
+  const handleConfirmPasswordChange = (confirmPassword) => {
+    setConfirmPassword(confirmPassword);
+    setPasswordMatch(password === confirmPassword);
+  };
 
   const handleRegistration = async () => {
+
+    // if (password !== confirmPassword) {
+    //   Alert.alert("Password Mismatch", "Password and Confirm Password do not match. Please try again.");
+    //   return; // Exit the function early if passwords don't match
+    // }
       
       const registrationEndpoint = 'https://af6a-119-161-98-68.ngrok-free.app/api/patient/register';  
       const userDetails = {
@@ -138,18 +154,21 @@ const RegistrationScreen = ({navigation}) => {
         </Picker>
         <TextInput
           value={password}
-          onChangeText={setPassword}
+          onChangeText={handlePasswordChange}
           placeholder="Enter Password"
           secureTextEntry
           style={styles.input}
         />
         <TextInput
           value={confirmPassword}
-          onChangeText={setConfirmPassword}
+          onChangeText={handleConfirmPasswordChange}
           placeholder="Confirm Password"
           secureTextEntry
           style={styles.input}
         />
+        {!passwordMatch && (
+        <Text style={styles.passwordMismatchText}>Passwords do not match</Text>
+      )}
       </View>
       <TouchableOpacity style={styles.signupButton} onPress={handleRegistration}>
         <Text style={styles.signupButtonText}>Sign Up</Text>
@@ -207,6 +226,11 @@ const styles = StyleSheet.create({
   signupButtonText: {
     color: '#fff',
     fontSize: 18,
+  },
+  passwordMismatchText: {
+    color: 'red',
+    fontSize: 14,
+    marginLeft: 8,
   },
 });
 

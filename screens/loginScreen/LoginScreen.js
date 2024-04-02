@@ -1,7 +1,7 @@
 // LoginScreen.js
 
 import React, { useState } from 'react';
-import { View, Text, TextInput,ImageBackground, Button, StyleSheet,Alert } from 'react-native';
+import { View, Text, TextInput,ImageBackground, Button, StyleSheet,Alert , TouchableOpacity} from 'react-native';
 import axios from 'axios';
 import InputComponent from '../../Components/InputComponent';
 
@@ -70,6 +70,9 @@ const LoginScreen = ({ navigation }) => {
       />
       
       <Button title="Login" style={styles.btn} onPress={handleLogin} />
+      <TouchableOpacity onPress={() => navigation.navigate('RegistrationScreen')}>
+        <Text style={styles.signUpText}>Don't have an account? Sign up</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -107,6 +110,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#05445E',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  signUpText: {
+    color: 'blue', // You can adjust the color
+    marginTop: 15,
+    textDecorationLine: 'underline',
+
   }
 });
 

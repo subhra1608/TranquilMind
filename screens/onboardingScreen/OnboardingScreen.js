@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 import LoginScreen from '../loginScreen/LoginScreen';
-import RegisterationScreen from '../registerationScreen/RegisterationScreen';
+import RegisterationScreen from '../registrationScreen/RegistrationScreen';
 
 const {width, height} = Dimensions.get('window');
 
