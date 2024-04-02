@@ -1,26 +1,8 @@
-  // import { View, Text } from 'react-native'
-  // import React from 'react'
-  // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-  // import ProfileScreen from '../profileScreen/ProfileScreen';
-  // import HomeScreen from '../homeScreen/HomeScreen';
-
-  // const LandingScreen = () => {
-  //     const Tab = createBottomTabNavigator();
-  //   return (
-  //     <Tab.Navigator>
-  //         <Tab.Screen name="HomeScreen" component={HomeScreen} />
-  //         <Tab.Screen name="ProfileScreen" component={ProfileScreen} />
-  //         <Tab.Screen name="SettingScreen" component={HomeScreen} />
-  //     </Tab.Navigator>
-  //   )
-  // }
-
-  // export default LandingScreen
-
   import React from 'react';
   import {
     Alert,
     Animated,
+    ScrollView,
     StyleSheet,
     TouchableOpacity,
     View,
@@ -77,7 +59,7 @@
           type="DOWN"
           style={styles.bottomBar}
           shadowStyle={styles.shawdow}
-          height={55}
+          height={50}
           circleWidth={40}
           bgColor="#DFA0D1"
           initialRouteName="HomeScreen"
@@ -97,7 +79,7 @@
           <CurvedBottomBarExpo.Screen
             name="HomeScreen"
             position="LEFT"
-            component={() => <HomeScreen navigation ={navigation} />}
+            component={() => <ScrollView><HomeScreen navigation ={navigation} /></ScrollView>}
           />
           <CurvedBottomBarExpo.Screen
             name="CommunityScreen"
@@ -123,7 +105,10 @@
   export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
+    },
+    content: {
+      flex: 1,
+      paddingBottom: 60, // Adjust the padding to accommodate the bottom tab bar
     },
     shawdow: {
       shadowColor: '#D9FA7C',
