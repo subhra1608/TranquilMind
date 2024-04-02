@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 // import EmailVerificationScreen from '../emailVerificationScreen/EmailVerificationScreen';
 const RegistrationScreen = ({navigation}) => {
@@ -100,7 +100,8 @@ const RegistrationScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView>
+      <View style={styles.container}>
       <TouchableOpacity style={styles.backButtonText} onPress={() => navigation.navigate('LoginScreen')}>
         <Text style={styles.backButtonText}>{'< Back'}</Text>
       </TouchableOpacity>
@@ -174,6 +175,7 @@ const RegistrationScreen = ({navigation}) => {
         <Text style={styles.signupButtonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 };
 
