@@ -25,7 +25,8 @@ export default function App() {
     
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="LandingScreen" >
+        initialRouteName="CommunityScreen" >
+          
         <Stack.Screen
         name="OnboardingScreen"
         component={OnboardingScreen}
@@ -36,7 +37,7 @@ export default function App() {
       />
       <Stack.Screen
         name="LoginScreen"
-        component={RegistrationScreen}
+        component={LoginScreen}
         options={{
           headerShown:false,
           title: 'Login',

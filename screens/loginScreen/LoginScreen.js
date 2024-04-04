@@ -1,7 +1,7 @@
 // LoginScreen.js
 
 import React, { useState } from 'react';
-import { View, Text, TextInput,ImageBackground, Button, StyleSheet,Alert } from 'react-native';
+import { View, Text, TextInput,ImageBackground, Button, StyleSheet,Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import InputComponent from '../../Components/InputComponent';
@@ -35,15 +35,13 @@ const LoginScreen = ({ navigation }) => {
 
     } catch (error) {
       
-      console.error('Error fetching data:', error.message);
-      Alert.alert('Error', 'Failed to fetch data');
+      console.error('Invalid Credentials:', error.message);
+      Alert.alert('Error', 'Invalid Credentials');
     }
 
     navigation.navigate('LandingScreen');
     
-    // if (1) {
-    //   Alert.alert('Invalid Login', 'Please enter valid email and password.');
-    // }
+   
   };
 
   return (
@@ -74,6 +72,8 @@ const LoginScreen = ({ navigation }) => {
       style1={{ position: "relative",
       top:-100 }}
       />
+      
+      <Text>Not yet Registered? <TouchableOpacity onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text>Register Now</Text></TouchableOpacity></Text>
       
       <Button title="Login" style={styles.btn} onPress={handleLogin} />
     </View>

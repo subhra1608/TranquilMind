@@ -13,6 +13,7 @@ module.exports = {
             "./Components/CoursesCardComponent.js",
             "./Components/ButtonComponent.js",
             "./screens/communityScreen/CommunityScreen.js",
+            "./Components/PostCardComponent.js",
             ],
   theme: {
     extend: {},

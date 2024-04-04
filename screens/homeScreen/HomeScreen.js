@@ -24,7 +24,7 @@ const HomeScreen = ({navigation}) => {
 
     const renderQuotes = ({ item }) => {
       return (
-        <View style={styles.item} className="shadow-lg rounded-3xl p-3 bg-cyan-800 ">
+        <View style={styles.item} className="shadow-lg rounded-3xl p-3" >
           <Text style= {styles.overlay} className="text-lg p-3 mt-1 text-white justify-items-center  font-bold" >{item.text}</Text>
           {/* <Text style={styles.author}>{item.author}</Text> */}
         </View>
@@ -68,7 +68,7 @@ const HomeScreen = ({navigation}) => {
               </View>
               
             </View>
-            <View className="flex-row mx-2 p-2 h-20 rounded-3xl bg-cyan-800">
+            <View className="flex-row mx-2 p-2 h-20 rounded-3xl" style={{backgroundColor:"#C26DBC"}}>
               <View className="flex-row w-10/12">
                 <View className="flex-col flex-1 justify-between">
                   <View className="flex-1">
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     height:120,
     borderRadius: 5,
     marginHorizontal: 10,
+    backgroundColor:"#C26DBC",
     width: 250, // Set width of each item
   },
   text: {

@@ -1,17 +1,50 @@
-import React from 'react';
+import React, { useState ,useEffect} from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import Header from '../../Components/HeaderComponent';
+import { baseUrl } from '../../data/baseUrl';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+
 
 
 // Sample appointment data
-const appointments = [
-  { id: 1, date: '2024-03-10', doctor: 'Dr. Smith' ,problem:' cannot workout'},
-  { id: 2, date: '2024-03-15', doctor: 'Dr. Johnson',problem:'cannot Dance' },
-  { id: 3, date: '2024-03-20', doctor: 'Dr. Lee',problem:'cannot eat' },
-];
+// const appointments = [
+//   { id: 1, date: '2024-03-10', doctor: 'Dr. Smith' ,problem:' cannot workout'},
+//   { id: 2, date: '2024-03-15', doctor: 'Dr. Johnson',problem:'cannot Dance' },
+//   { id: 3, date: '2024-03-20', doctor: 'Dr. Lee',problem:'cannot eat' },
+// ];
 
 const AppointmentScreen = ({navigation}) => {
   const [selectedTab, setSelectedTab] = React.useState('past');
+  const [appointments,setAppointments]=useState([]);
+  useEffect(() => {
+    
+    fetchAppointmentDetails();
+  }, []);
+
+  const fetchAppointmentDetails = async () => {
+    try {
+      const token = await  AsyncStorage.getItem('token');
+
+      const userID = await  AsyncStorage.getItem('userId');
+
+      const response = await axios.get(`${baseUrl}/api/appointment/patient-appointments/${userID}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type":"application/json"
+          }
+        });
+
+      console.log(response.data);
+      if (response.data && response.data.length > 0) {
+        setAppointments(response.data);
+      }
+    } catch (error) {
+      console.log(error.message);
+      console.error('Error fetching Appointment Details:', error);
+    }
+  };
+
 
   // Filter appointments based on past or upcoming
   const filteredAppointments = selectedTab === 'past'
@@ -36,12 +69,12 @@ const AppointmentScreen = ({navigation}) => {
         </View>
         <FlatList
             data={filteredAppointments}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item.appointmentId.toString()}
             renderItem={({ item }) => (
             <View style={styles.appointmentItem}>
-                <Text style={styles.appointmentText}>Date: {item.date}</Text>
+                <Text style={styles.appointmentText}>Date: {item.date}  Start Time : {item.startTime}</Text>
                 <Text style={styles.appointmentText}>Doctor: {item.doctor}</Text>
-                <Text style={styles.appointmentText}>Concern: {item.problem}</Text>
+                <Text style={styles.appointmentText}>Reason : {item.description}</Text>
             </View>
             )}
         />

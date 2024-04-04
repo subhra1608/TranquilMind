@@ -130,7 +130,7 @@ const BookAppointmentScreen = ({navigation}) => {
         "date":selectedDate,
         "startTime":selectedTime,
         "endTime":"00:00:00",
-        "description":"heello",
+        "description":remark,
         "remarks":remark
         }
       const response = await axios.post(`${baseUrl}/api/appointment/new-appointment`,payload,{
