@@ -39,6 +39,7 @@ const QuestionScreen = ({ route, navigation }) => {
     const totalScore = Object.values(selectedOptions).reduce((acc, curr) => acc + curr, 0);
     navigation.navigate('TotalScoreScreen', { score: totalScore });
   };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 15,
     fontWeight: '500',
-    fontFamily: 'Avenir', // Change this to your preferred font
+    fontFamily: '', // Change this to your preferred font
     color: '#333',
   },
   optionButton: {
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    fontFamily: 'Avenir', // Change this to your preferred font
+    fontFamily: '', // Change this to your preferred font
     color: '#333',
   },
   backButton: {
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontFamily: 'Avenir', // Change this to your preferred font
+    fontFamily: '', // Change this to your preferred font
   },
   submitButton: {
     padding: 15,
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     padding:10,
     left: -3,
     fontWeight: 'bold',
-    fontFamily: 'Avenir', // Change this to your preferred font
+    fontFamily: '', // Change this to your preferred font
   },
 });
 
