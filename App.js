@@ -16,6 +16,8 @@ import BookAppointmentScreen from './screens/bookAppointmentScreen/BookAppointme
 import CommunityScreen from './screens/communityScreen/CommunityScreen';
 import RegistrationScreen from './screens/registrationScreen/RegistrationScreen';
 import QuestionScreen from './screens/questionScreen/QuestionScreen';
+import TotalScoreScreen from './screens/totalScoreScreen/TotalScoreScreen';
+import CreatePostScreen from './screens/createPostScreen/CreatePostScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -127,6 +129,22 @@ export default function App() {
        <Stack.Screen
         name="QuestionScreen"
         component={QuestionScreen}
+        options={{
+          headerShown:false,
+          title: 'Awesome app',
+        }}
+      />   
+      <Stack.Screen
+        name="TotalScoreScreen"
+        component={TotalScoreScreen}
+        options={{
+          headerShown:false,
+          title: 'Awesome app',
+        }}
+      />  
+      <Stack.Screen
+        name="CreatePostScreen"
+        component={CreatePostScreen}
         options={{
           headerShown:false,
           title: 'Awesome app',
