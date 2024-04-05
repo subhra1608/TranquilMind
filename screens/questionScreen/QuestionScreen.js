@@ -1,15 +1,13 @@
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Button } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import quizzes from '../quizScreen/quizzes';
-// import { Button } from 'react-native-paper';
-import jwtDecode from 'jwt-decode';
-import axios from 'axios';
+
 
 const QuestionScreen = ({ route, navigation }) => {
-  
   const { quizTitle } = route.params;
   const quiz = quizzes.find(q => q.title === quizTitle);
   const [selectedOptions, setSelectedOptions] = useState({});
+  console.log(quiz);
   
   const handleOptionSelect = (questionsId, optionsId, score) => {
     setSelectedOptions({
@@ -37,40 +35,10 @@ const QuestionScreen = ({ route, navigation }) => {
       ))}
     </View>
   );
-  const getToken = async () => {
-    return await AsyncStorage.getItem('accessToken');
+  const handleSubmit = () => {
+    const totalScore = Object.values(selectedOptions).reduce((acc, curr) => acc + curr, 0);
+    navigation.navigate('TotalScoreScreen', { score: totalScore });
   };
-  
-  const submitQuizScores = async (quizScores) => {
-    try {
-      const response = await axios.post('http://yourbackend.com/quiz/new', quizScores);
-      if (response.status === 200) {
-        console.log('Quiz scores saved successfully:', response.data);
-        // Handle success (maybe navigate to a success screen or show a message)
-      }
-    } catch (error) {
-      console.error('Error submitting quiz scores:', error.response || error.message);
-      // Handle error (show error message to user)
-    }
-  };
-
-  const handleSubmit = async () => {
-    const token = await getToken();
-    const decodedToken = jwtDecode(token);
-    const patientId = decodedToken.id;
-    const totalScore = Object.values(selectedOptions).reduce((acc, score) => acc + score, 0);
-  
-    const quizScores = {
-      quizId: quiz.id, // The ID of the current quiz
-      patientId: patientId, // Retrieved from the token
-      scores: selectedOptions, // Contains scores for individual questions
-      totalScore: totalScore, // The total score
-    };
-  
-    await submitQuizScores(quizScores);
-  };
-  
-  
   return (
     <View style={styles.container}>
       <FlatList
@@ -97,14 +65,12 @@ const QuestionScreen = ({ route, navigation }) => {
   
 };
 
-const styles = StyleSheet.create(
-  {
+const styles = StyleSheet.create({
   listContainer: {
     padding: 20,
     marginTop: 30,
     paddingTop: 60, // Increase padding at the top to make space for the back button
   },
-  
   questionContainer: {
     marginBottom: 30,
     borderWidth: 1,
@@ -122,7 +88,7 @@ const styles = StyleSheet.create(
     fontSize: 20,
     marginBottom: 15,
     fontWeight: '500',
-    // fontFamily: 'Avenir', // Change this to your preferred font
+    fontFamily: 'Avenir', // Change this to your preferred font
     color: '#333',
   },
   optionButton: {
@@ -139,6 +105,7 @@ const styles = StyleSheet.create(
   },
   optionText: {
     fontSize: 16,
+    fontFamily: 'Avenir', // Change this to your preferred font
     color: '#333',
   },
   backButton: {
@@ -153,6 +120,7 @@ const styles = StyleSheet.create(
   backButtonText: {
     color: '#fff',
     fontSize: 16,
+    fontFamily: 'Avenir', // Change this to your preferred font
   },
   submitButton: {
     padding: 15,
@@ -171,6 +139,7 @@ const styles = StyleSheet.create(
     padding:10,
     left: -3,
     fontWeight: 'bold',
+    fontFamily: 'Avenir', // Change this to your preferred font
   },
 });
 

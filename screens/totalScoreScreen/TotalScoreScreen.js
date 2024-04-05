@@ -1,18 +1,15 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const TotalScoreScreen = ({ route, navigation }) => {
   const { score } = route.params;
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('LandingScreen')} style={styles.backButton}>
-        <Text style={styles.backButtonText}>Go Back</Text>
-      </TouchableOpacity>
       <Text style={styles.scoreText}>Your Total Score: {score}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.backButton}>
         <Text style={styles.backButtonText}>Back to Quizzes</Text>
       </TouchableOpacity>
-
     </View>
   );
 };
@@ -23,25 +20,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  scoreText: {
+    fontSize: 24,
+    margin: 20,
+  },
   backButton: {
-    position: 'absolute',
-    top: 40,
-    left: 20,
     padding: 10,
+    marginTop: 20,
     backgroundColor: '#7f3db5',
     borderRadius: 5,
   },
   backButtonText: {
     color: '#fff',
-    fontSize: 16,
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  scoreText: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 18,
   },
 });
 
