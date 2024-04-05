@@ -10,7 +10,6 @@ const QuestionScreen = ({ route, navigation }) => {
   const { quizTitle } = route.params;
   const quiz = quizzes.find(q => q.title === quizTitle);
   const [selectedOptions, setSelectedOptions] = useState({});
-  console.log(quiz);
   
   const handleOptionSelect = (questionsId, optionsId, score) => {
     setSelectedOptions({
@@ -98,12 +97,14 @@ const QuestionScreen = ({ route, navigation }) => {
   
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create(
+  {
   listContainer: {
     padding: 20,
     marginTop: 30,
     paddingTop: 60, // Increase padding at the top to make space for the back button
   },
+  
   questionContainer: {
     marginBottom: 30,
     borderWidth: 1,
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 15,
     fontWeight: '500',
-    fontFamily: 'Avenir', // Change this to your preferred font
+    // fontFamily: 'Avenir', // Change this to your preferred font
     color: '#333',
   },
   optionButton: {
@@ -138,7 +139,6 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    fontFamily: 'Avenir', // Change this to your preferred font
     color: '#333',
   },
   backButton: {
@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontFamily: 'Avenir', // Change this to your preferred font
   },
   submitButton: {
     padding: 15,
@@ -172,7 +171,6 @@ const styles = StyleSheet.create({
     padding:10,
     left: -3,
     fontWeight: 'bold',
-    fontFamily: 'Avenir', // Change this to your preferred font
   },
 });
 

@@ -1,26 +1,8 @@
-  // import { View, Text } from 'react-native'
-  // import React from 'react'
-  // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-  // import ProfileScreen from '../profileScreen/ProfileScreen';
-  // import HomeScreen from '../homeScreen/HomeScreen';
-
-  // const LandingScreen = () => {
-  //     const Tab = createBottomTabNavigator();
-  //   return (
-  //     <Tab.Navigator>
-  //         <Tab.Screen name="HomeScreen" component={HomeScreen} />
-  //         <Tab.Screen name="ProfileScreen" component={ProfileScreen} />
-  //         <Tab.Screen name="SettingScreen" component={HomeScreen} />
-  //     </Tab.Navigator>
-  //   )
-  // }
-
-  // export default LandingScreen
-
   import React from 'react';
   import {
     Alert,
     Animated,
+    ScrollView,
     StyleSheet,
     TouchableOpacity,
     View,
@@ -77,9 +59,9 @@
           type="DOWN"
           style={styles.bottomBar}
           shadowStyle={styles.shawdow}
-          height={55}
+          height={50}
           circleWidth={40}
-          bgColor="#DFA0D1"
+          bgColor="#C26DBC"
           initialRouteName="HomeScreen"
           borderTopLeftRight
           renderCircle={({ selectedTab, navigate }) => (
@@ -97,7 +79,7 @@
           <CurvedBottomBarExpo.Screen
             name="HomeScreen"
             position="LEFT"
-            component={() => <HomeScreen navigation ={navigation} />}
+            component={() => <ScrollView><HomeScreen navigation ={navigation} /></ScrollView>}
           />
           <CurvedBottomBarExpo.Screen
             name="CommunityScreen"
@@ -123,10 +105,13 @@
   export const styles = StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
+    },
+    content: {
+      flex: 1,
+      paddingBottom: 60, // Adjust the padding to accommodate the bottom tab bar
     },
     shawdow: {
-      shadowColor: '#D9FA7C',
+      shadowColor: '#C26DBC',
       shadowOffset: {
         width: 0,
         height: 0,
@@ -139,7 +124,7 @@
       justifyContent: 'center',
     },
     bottomBar: {
-      color:'#05445E'
+      color:'#C26DBC'
     },
     btnCircleUp: {
       width: 60,
@@ -147,7 +132,7 @@
       borderRadius: 30,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#DFA0D1',
+      backgroundColor: '#C26DBC',
       bottom: 30,
       shadowColor: '#000',
       shadowOffset: {
@@ -161,7 +146,7 @@
     imgCircle: {
       width: 30,
       height: 30,
-      tintColor: '#D9FA7C',
+      tintColor: '#C26DBC',
     },
     tabbarItem: {
       flex: 1,

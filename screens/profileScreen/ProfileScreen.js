@@ -4,7 +4,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, 
 import InputComponent from '../../Components/InputComponent';
 
 const ProfileScreen = ({ navigation }) => {
-  // Dummy user data
+  
   const user = {
     name: 'Subhra Singh',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-a9wdsqFbo6C2AXpAqFhukcppgJgpUy5qPg&usqp=CAU',

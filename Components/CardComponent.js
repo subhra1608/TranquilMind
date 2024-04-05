@@ -1,13 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const Card = ({ id,title, description, imageSource, navigation }) => {
+const Card = ({ id,title, description, imageSource }) => {
 
-  const onCardPress= () =>{
-      navigation.navigate('CourseHomeScreen',{ param1: id, param2: title })
-  }
+  
   return (
-    <TouchableOpacity onPress={onCardPress} style={styles.card}>
+    <View style={styles.card}>
       <Image source={{
           uri: imageSource,
         }} style={styles.image} />
@@ -15,7 +13,7 @@ const Card = ({ id,title, description, imageSource, navigation }) => {
         <Text style={styles.title}>{title}</Text>
         <Text  style={styles.description}>{description}</Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { baseUrl } from '../../data/baseUrl';
 // import EmailVerificationScreen from '../emailVerificationScreen/EmailVerificationScreen';
 const RegistrationScreen = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
@@ -33,7 +34,7 @@ const RegistrationScreen = ({navigation}) => {
     //   return; // Exit the function early if passwords don't match
     // }
       
-      const registrationEndpoint = 'https://af6a-119-161-98-68.ngrok-free.app/api/patient/register';  
+      const registrationEndpoint = baseUrl+'/api/patient/register';  
       const userDetails = {
         firstName,
         middleName,
@@ -47,7 +48,11 @@ const RegistrationScreen = ({navigation}) => {
       };
       try {
         
-        const response = await axios.post(registrationEndpoint, userDetails);
+        const response = await axios.post(registrationEndpoint, userDetails,{
+          headers:{
+            "Content-Type":'application/json'
+          }
+        });
     
         if (response.status === 200 || response.status === 201) {
           console.log(response.data.accessToken);
@@ -55,7 +60,7 @@ const RegistrationScreen = ({navigation}) => {
       
         if (accessToken) {
           await AsyncStorage.setItem('userToken', accessToken); // Save the accessToken in AsyncStorage
-          navigation.navigate('LandingScreen');
+          navigation.navigate('LoginScreen');
         } else {
           console.error('No access token received');
           // Handle case where no token is received
@@ -71,7 +76,7 @@ const RegistrationScreen = ({navigation}) => {
       catch (error) {
         // Check if the error response has a status code
         if (error.response) {
-          console.log(error.response.status);
+          console.log(error.response);
           // Check if the status code is 409 Conflict, which indicates a duplicate email
           if (error.response.status === 409) {
             Alert.alert("Registration Failed", "This email is already registered. Please use a different email.");
@@ -100,7 +105,8 @@ const RegistrationScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView>
+      <View style={styles.container}>
       <TouchableOpacity style={styles.backButtonText} onPress={() => navigation.navigate('LoginScreen')}>
         <Text style={styles.backButtonText}>{'< Back'}</Text>
       </TouchableOpacity>
@@ -174,6 +180,7 @@ const RegistrationScreen = ({navigation}) => {
         <Text style={styles.signupButtonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 };
 
