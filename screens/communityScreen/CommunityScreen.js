@@ -25,8 +25,6 @@ const CommunityScreen = ({ navigation }) => {
   setIsViewPostsSelected(false);
   };
 
-  
-
   const renderItem = ({ item }) => <PostCardComponent {...item} />
 
   return (
