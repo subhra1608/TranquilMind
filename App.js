@@ -18,6 +18,7 @@ import RegistrationScreen from './screens/registrationScreen/RegistrationScreen'
 import QuestionScreen from './screens/questionScreen/QuestionScreen';
 import TotalScoreScreen from './screens/totalScoreScreen/TotalScoreScreen';
 import CreatePostScreen from './screens/createPostScreen/CreatePostScreen';
+import YouTubeScreen from './screens/youTubeScreen/YouTubeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,14 @@ export default function App() {
       <Stack.Screen
         name="LandingScreen"
         component={LandingScreen}
+        options={{
+          headerShown:false,
+          title: 'Login',
+        }}
+      />
+      <Stack.Screen
+        name="YouTubeScreen"
+        component={YouTubeScreen}
         options={{
           headerShown:false,
           title: 'Login',

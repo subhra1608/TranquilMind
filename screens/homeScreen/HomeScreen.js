@@ -5,21 +5,35 @@ import { Ionicons } from '@expo/vector-icons'
 import axios from 'axios';
 import GraphComponent from '../../Components/GraphComponent'
 import { useFonts } from 'expo-font';
+import Carousel from '../../Components/Carousel';
+import youTubeData from '../../data/youTubeData';
 
 
 const HomeScreen = ({navigation}) => {
 
   
   const [quote, setQuote] = useState(null);
-  const [fontsLoaded] = useFonts({
-    'ds-bold': require('../../assets/fonts/DS-bold.ttf'),
-  });
+  const [fontsLoaded] = useState(true);
   
   useEffect(() => {
     
     fetchQuote();
   }, []);
 
+  const renderYouTubeSeries = ({item}) => {
+    return (
+      <TouchableOpacity onPress={()=>{navigation.navigate('YouTubeScreen',{item:{item:{articleUrl:item.playlistURL}}})}}>
+        <View className="h-56 w-52 rounded-xl mt-2">
+          <View className="justify-center">
+          <Image source={{ uri:item.thumbnail }} className=" justify-center top-1 left-6 justify-items-center h-40 w-48 rounded-xl" />
+          </View>
+          <View className=" justify-items-center">
+            <Text className="text-center text-lg text-black mt-2 ">{item.title}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
+  }
 
 
     const renderQuotes = ({ item }) => {
@@ -54,17 +68,18 @@ const HomeScreen = ({navigation}) => {
         {fontsLoaded && (
           <View className="  flex-1 flex-col bg-white">
           <View className=" px-2 py-2 ">
-              <Image
+              {/* <Image
               className=" h-48 w-full rounded-3xl"
               source={{ uri: 'https://img.freepik.com/free-vector/vector-illustration-mountain-landscape_1441-77.jpg?size=626&ext=jpg&ga=GA1.1.87170709.1707609600&semt=sph' }} // Replace with your image URI
               resizeMode="cover"
-              />
+              /> */}
+              <Carousel/>
           </View> 
           <View className=" flex-1 bg-white">
   
             <View className=" h-8 mb-2 flex-row justify-between">
               <View >
-                <Text style={{fontFamily:"ds-bold", fontSize:22,fontWeight:'600'}} className="mt-1 ml-4" >Mental Checkout</Text>
+                <Text style={{ fontSize:22,fontWeight:'600'}} className="mt-1 ml-4" >Mental Checkout</Text>
               </View>
               
             </View>
@@ -72,7 +87,7 @@ const HomeScreen = ({navigation}) => {
               <View className="flex-row w-10/12">
                 <View className="flex-col flex-1 justify-between">
                   <View className="flex-1">
-                    <Text style={{fontFamily:"ds-bold"}} className=" text-3xl  mx-1  text-white ">Test your stress Level</Text>
+                    <Text  className=" text-lg mx-1  text-white ">Test your stress Level</Text>
                   </View>
                 </View>
    
@@ -95,7 +110,16 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View className="flex-1 rounded-lg">
-          <GraphComponent />
+          <Text className="mt-2 ml-3 mb-2 text-lg"> You Tube channels for self development </Text>
+          <View>
+          <FlatList
+              data={youTubeData}
+              renderItem={({ item}) => renderYouTubeSeries(item={item})}
+              keyExtractor={item => item.playlistId.toString()}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+          />
+        </View>
           </View>
           </View>
         )}

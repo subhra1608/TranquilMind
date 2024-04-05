@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { baseUrl } from '../../data/baseUrl';
 // import EmailVerificationScreen from '../emailVerificationScreen/EmailVerificationScreen';
@@ -16,6 +16,7 @@ const RegistrationScreen = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [isLoading,setIsLoading]=useState(false);
 
   const handlePasswordChange = (password) => {
     setPassword(password);
@@ -33,7 +34,7 @@ const RegistrationScreen = ({navigation}) => {
     //   Alert.alert("Password Mismatch", "Password and Confirm Password do not match. Please try again.");
     //   return; // Exit the function early if passwords don't match
     // }
-      
+      setIsLoading(true);
       const registrationEndpoint = baseUrl+'/api/patient/register';  
       const userDetails = {
         firstName,
@@ -89,7 +90,9 @@ const RegistrationScreen = ({navigation}) => {
           Alert.alert("Network Error", "Please check your internet connection and try again.");
         }
       }
-  };      
+      setIsLoading(false);
+  };   
+
   const handleSecureStoreError = async (action, key) => {
     try {
       if (action === 'set') {
@@ -177,7 +180,8 @@ const RegistrationScreen = ({navigation}) => {
       )}
       </View>
       <TouchableOpacity style={styles.signupButton} onPress={handleRegistration}>
-        <Text style={styles.signupButtonText}>Sign Up</Text>
+        {isLoading && (<ActivityIndicator size={30} color='white'/>)}
+        {!isLoading && (<Text style={styles.signupButtonText}>Sign Up</Text>) }
       </TouchableOpacity>
     </View>
     </ScrollView>
