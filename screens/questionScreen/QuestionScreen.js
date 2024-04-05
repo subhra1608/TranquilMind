@@ -39,6 +39,7 @@ const QuestionScreen = ({ route, navigation }) => {
     const totalScore = Object.values(selectedOptions).reduce((acc, curr) => acc + curr, 0);
     navigation.navigate('TotalScoreScreen', { score: totalScore });
   };
+
   return (
     <View style={styles.container}>
       <FlatList
