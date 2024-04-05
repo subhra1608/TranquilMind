@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: Platform.OS === "ios" ? 60 : 40, // Adjusted for platform-specific positioning
     left: 20,
-    backgroundColor: '#7f3db5', // A rich purple for visual appeal
+    backgroundColor: '#9B8BCA', // A rich purple for visual appeal
     borderRadius: 50, // Fully rounded corners for a modern, button-like appearance
     paddingVertical: 8,
     paddingHorizontal: 12,
