@@ -68,7 +68,7 @@ const HomeScreen = ({navigation}) => {
               </View>
               
             </View>
-            <View className="flex-row mx-2 p-2 h-20 rounded-3xl" style={{backgroundColor:"#C26DBC"}}>
+            <View className="flex-row mx-2 p-2 h-20 rounded-3xl" style={{backgroundColor:"#9B8BCA"}}>
               <View className="flex-row w-10/12">
                 <View className="flex-col flex-1 justify-between">
                   <View className="flex-1">
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     height:120,
     borderRadius: 5,
     marginHorizontal: 10,
-    backgroundColor:"#C26DBC",
+    backgroundColor:"#9B8BCA",
     width: 250, // Set width of each item
   },
   text: {

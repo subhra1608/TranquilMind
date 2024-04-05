@@ -130,7 +130,7 @@ const OnboardingScreen = ({navigation}) => {
                   {
                     borderColor: 'black',
                     borderWidth: 1,
-                    backgroundColor: '#05445E',
+                    backgroundColor: '#9B8BCA',
                   },
                 ]}
                 onPress={skip}>
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     borderRadius: 5,
-    backgroundColor: '#05445E',
+    backgroundColor: '#9B8BCA',
     justifyContent: 'center',
     alignItems: 'center',
   },

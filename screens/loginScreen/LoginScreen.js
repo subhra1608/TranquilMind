@@ -46,21 +46,25 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     
-    <View style={styles.container}>
-      <ImageBackground
-      source={require('../../assets/images/yoga.jpg')} // Adjust the path to your background image
-      style={styles.backgroundImage}
-      />
-      <Text style={styles.title}>Login</Text>
+    <View className="flex flex-1">
+      <View className="justify-start items-center">
+        <ImageBackground
+        source={require('../../assets/images/logo.jpg')} // Adjust the path to your background image
+        // style={styles.backgroundImage}
+        className="rounded-full overflow-hidden h-60 w-60 mt-24"
+        />
+      </View>
+      <View className="justify-start items-center">
+        <Text className="text-xl mt-6 font-semibold ">Welcome Back To TranquilMind!</Text>
+      </View>
       
-      <InputComponent  className="mt-4"
-      placeholder="example@email.com"
-      value={email}
-      onChangeMethod={setEmail}
-      keyboardType="email-address"
-      secureTextEntry={false}
-      style1={{ position: "relative",
-      top:-100 }}
+      <View className="w-11/12 justify-center align-middle ml-4 mt-2">
+      <InputComponent  
+        placeholder="example@email.com"
+        value={email}
+        onChangeMethod={setEmail}
+        keyboardType="email-address"
+        secureTextEntry={false}
       />
   
       <InputComponent 
@@ -69,13 +73,19 @@ const LoginScreen = ({ navigation }) => {
       value={password}
       onChangeMethod={setPassword}
       secureTextEntry={true}
-      style1={{ position: "relative",
-      top:-100 }}
+      
       />
       
-      <Text>Not yet Registered? <TouchableOpacity onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text>Register Now</Text></TouchableOpacity></Text>
-      
-      <Button title="Login" style={styles.btn} onPress={handleLogin} />
+      </View>
+      <View className="flex flex-row justify-center">
+      <TouchableOpacity className="  justify-center items-center rounded-xl mt-3 bg-[#9B8BCA] h-10 w-4/6 " onPress={handleLogin} ><Text className="text-lg text-neutral-50">Login</Text></TouchableOpacity>
+      </View>
+      <View className="flex flex-row justify-center">
+      <TouchableOpacity className="  justify-center items-center rounded-xl mt-3 bg-[#9B8BCA] h-10 w-4/6 " onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text className="text-lg text-neutral-50">Register Now</Text></TouchableOpacity>
+      </View>
+      {/* <View className="flex flex-row justify-end mr-4">
+      <TouchableOpacity onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text className="text-lg">Register Now</Text></TouchableOpacity>
+      </View> */}
     </View>
   );
 };
@@ -91,29 +101,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   backgroundImage: {
-    position: "relative",
-    top:-100,
+    marginTop:20,
     height:340,
     width:360,
-    resizeMode: "cover",
   },
-  title: {
-    position: "relative",
-    top:-100,
-    fontSize: 24,
-    marginBottom: 20,
-  },
+ 
   pos:{
     position: "relative",
     top:-100,
   },
-  btn: {
-    height: 50,
-    borderRadius: 5,
-    backgroundColor: '#05445E',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
+  
 });
 
 export default LoginScreen;

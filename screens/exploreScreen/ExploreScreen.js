@@ -35,7 +35,7 @@ const ExploreScreen = ({ navigation }) => {
           style={styles.shortButton} // Apply the custom style here
           title="Book an appointment"
           onPress={() => navigation.push('DoctorsDetailScreen')}
-          color="pink"
+          color="#9B8BCA"
         />
       
       <FlatList

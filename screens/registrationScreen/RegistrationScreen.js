@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   signupButton: {
-    backgroundColor: '#7f3db5', // Purple color
+    backgroundColor: '#9B8BCA', // Purple color
     padding: 15,
     borderRadius: 30, // Slightly rounded corners
     alignItems: 'center',

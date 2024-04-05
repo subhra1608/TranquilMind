@@ -61,7 +61,7 @@
           shadowStyle={styles.shawdow}
           height={50}
           circleWidth={40}
-          bgColor="#C26DBC"
+          bgColor="#9B8BCA"
           initialRouteName="HomeScreen"
           borderTopLeftRight
           renderCircle={({ selectedTab, navigate }) => (
@@ -124,7 +124,7 @@
       justifyContent: 'center',
     },
     bottomBar: {
-      color:'#C26DBC'
+      color:'#9B8BCA'
     },
     btnCircleUp: {
       width: 60,
@@ -132,7 +132,7 @@
       borderRadius: 30,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#C26DBC',
+      backgroundColor: '#9B8BCA',
       bottom: 30,
       shadowColor: '#000',
       shadowOffset: {
