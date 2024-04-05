@@ -1,20 +1,24 @@
-import { View, Text, TouchableOpacity, StyleSheet, Button, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Button } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import quizzes from '../quizScreen/quizzes';
-
+// import { Button } from 'react-native-paper';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios';
 
 const QuestionScreen = ({ route, navigation }) => {
+  
   const { quizTitle } = route.params;
   const quiz = quizzes.find(q => q.title === quizTitle);
   const [selectedOptions, setSelectedOptions] = useState({});
   console.log(quiz);
   
-  const handleOptionSelect = (questionsId, optionsId) => {
+  const handleOptionSelect = (questionsId, optionsId, score) => {
     setSelectedOptions({
       ...selectedOptions,
-      [questionsId]: optionsId,
+      [questionsId]: score,
     });
   };
+ 
   // console.log(questionsId);
 
   const renderQuestionItem = ({ item: questions }) => (
@@ -25,15 +29,49 @@ const QuestionScreen = ({ route, navigation }) => {
           key={options.id}
           style={[
             styles.optionButton,
-            selectedOptions[questions.id] === options.id && styles.selectedOption,
+            selectedOptions[questions.id] === options.score && styles.selectedOption,
           ]}
-          onPress={() => handleOptionSelect(questions.id, options.id)}
+          onPress={() => handleOptionSelect(questions.id, options.id, options.score)}
         >
           <Text style={styles.optionText}>{options.optionText}</Text>
         </TouchableOpacity>
       ))}
     </View>
   );
+  const getToken = async () => {
+    return await AsyncStorage.getItem('accessToken');
+  };
+  
+  const submitQuizScores = async (quizScores) => {
+    try {
+      const response = await axios.post('http://yourbackend.com/quiz/new', quizScores);
+      if (response.status === 200) {
+        console.log('Quiz scores saved successfully:', response.data);
+        // Handle success (maybe navigate to a success screen or show a message)
+      }
+    } catch (error) {
+      console.error('Error submitting quiz scores:', error.response || error.message);
+      // Handle error (show error message to user)
+    }
+  };
+
+  const handleSubmit = async () => {
+    const token = await getToken();
+    const decodedToken = jwtDecode(token);
+    const patientId = decodedToken.id;
+    const totalScore = Object.values(selectedOptions).reduce((acc, score) => acc + score, 0);
+  
+    const quizScores = {
+      quizId: quiz.id, // The ID of the current quiz
+      patientId: patientId, // Retrieved from the token
+      scores: selectedOptions, // Contains scores for individual questions
+      totalScore: totalScore, // The total score
+    };
+  
+    await submitQuizScores(quizScores);
+  };
+  
+  
   return (
     <View style={styles.container}>
       <FlatList
@@ -42,12 +80,17 @@ const QuestionScreen = ({ route, navigation }) => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
         ListHeaderComponent={
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.backButton}>
+          <>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
               <Text style={styles.backButtonText}>Go Back</Text>
             </TouchableOpacity>
             <Text style={styles.text}>Questions</Text>
-          </View>
+          </>
+        }
+        ListFooterComponent={
+          <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
+            <Text style={styles.submitButtonText}>Submit</Text>
+          </TouchableOpacity>
         }
       />
     </View>
@@ -111,6 +154,17 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontFamily: 'Avenir', // Change this to your preferred font
+  },
+  submitButton: {
+    padding: 15,
+    backgroundColor: '#7f3db5',
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 18,
   },
   text: {
     fontSize: 24,

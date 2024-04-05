@@ -10,7 +10,7 @@ const quizzes = [
               { id:'1', optionText: 'Not at all', score: 0 },
               { id:'2', optionText: 'Several days', score: 1},
               { id:'3', optionText: 'More than half the days', score: 2},
-              { id:'4', optionText: 'Nearly every day', score: 0 }
+              { id:'4', optionText: 'Nearly every day', score: 3 }
             ],
           },
           {
@@ -20,7 +20,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
           },
           {
@@ -30,7 +30,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
           },
           {
@@ -40,7 +40,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
           },
           {
@@ -50,7 +50,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
           },
           {
@@ -60,7 +60,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
           },
           {
@@ -70,7 +70,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
           },
   
@@ -87,7 +87,7 @@ const quizzes = [
             { id:'1', optionText: 'Not at all', score: 0 },
             { id:'2', optionText: 'Several days', score: 1},
             { id:'3', optionText: 'More than half the days', score: 2},
-            { id:'4', optionText: 'Nearly every day', score: 0 }
+            { id:'4', optionText: 'Nearly every day', score: 3 }
           ],
         },
         {
@@ -97,7 +97,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
         },
         {
@@ -107,7 +107,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
             ],
         },
         {
@@ -117,7 +117,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
         },
         {
@@ -127,7 +127,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
         },
         {
@@ -137,7 +137,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
         },
         {
@@ -147,7 +147,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
         },
         {
@@ -157,7 +157,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
         },
         {
@@ -167,7 +167,7 @@ const quizzes = [
                 { id:'1', optionText: 'Not at all', score: 0 },
                 { id:'2', optionText: 'Several days', score: 1},
                 { id:'3', optionText: 'More than half the days', score: 2},
-                { id:'4', optionText: 'Nearly every day', score: 0 }
+                { id:'4', optionText: 'Nearly every day', score: 3 }
               ],
         }
       ],

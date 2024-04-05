@@ -15,6 +15,8 @@ import AppointmentScreen from './screens/appointmentScreen/AppointmentScreen';
 import CourseHomeScreen from './screens/courseHomeScreen/CourseHomeScreen';
 // import quizzes from './screens/quizScreen/quizzes';
 import QuestionScreen from './screens/questionScreen/QuestionScreen';
+import TotalScoreScreen from './screens/totalScoreScreen/TotalScoreScreen';
+import CreatePostScreen from './screens/createPostScreen/CreatePostScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -113,7 +115,23 @@ export default function App() {
           headerShown:false,
           title: 'Awesome app',
         }}
-      />    
+      />   
+      <Stack.Screen
+        name="TotalScoreScreen"
+        component={TotalScoreScreen}
+        options={{
+          headerShown:false,
+          title: 'Awesome app',
+        }}
+      />  
+      <Stack.Screen
+        name="CreatePostScreen"
+        component={CreatePostScreen}
+        options={{
+          headerShown:false,
+          title: 'Awesome app',
+        }}
+      />  
     </Stack.Navigator>
   </NavigationContainer>
   );
