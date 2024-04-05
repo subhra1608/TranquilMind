@@ -94,13 +94,13 @@ const styles = StyleSheet.create({
   indicator: {
     height: '100%',
     borderRadius: 25,
-    backgroundColor: '#7F3DB5', // Purple indicator
+    backgroundColor: '#9B8BCA', // Purple indicator
     position: 'absolute',
     top: 0,
     left: 0,
   },
   addButton: {
-    backgroundColor: '#7F3DB5',
+    backgroundColor: '#9B8BCA',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
