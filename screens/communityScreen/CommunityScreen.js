@@ -4,7 +4,7 @@ import PostCardComponent from '../../Components/PostCardComponent';
 import { postData } from '../../data/postData';
 
 const { width } = Dimensions.get('window');
-const segmentWidth = width / 2; // Assuming two segments
+const segmentWidth = width / 2; 
 
 const CommunityScreen = ({ navigation }) => {
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(0);
