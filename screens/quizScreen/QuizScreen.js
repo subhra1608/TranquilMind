@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   quizButton: {
-    backgroundColor: '#7f3db5',
+    backgroundColor: '#9B8BCA',
     paddingVertical: 25, // Make the button taller
     paddingHorizontal: 20,
     // padding: 25
@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
     top: 10,
     left: 15,
     padding: 8,
-    backgroundColor: '#7f3db5',
+    backgroundColor: '#9B8BCA',
     borderRadius: 5,
     elevation: 3,
   },
   backButtonText: {
-    color: 'purple',
+    color: '#9B8BCA',
     top: 40,
     left: 10,
     fontSize: 18,

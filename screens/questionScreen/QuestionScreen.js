@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   selectedOption: {
-    backgroundColor: '#7f3db5',
+    backgroundColor: '#9B8BCA',
     borderColor: '#7f3db5',
   },
   optionText: {
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     top: -50,
     left: 0,
     padding: 10,
-    backgroundColor: '#7f3db5',
+    backgroundColor: '#9B8BCA',
     borderRadius: 5,
     zIndex: 100, // Ensure the button is above other elements
   },
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     padding: 15,
-    backgroundColor: '#7f3db5',
+    backgroundColor: '#9B8BCA',
     borderRadius: 5,
     alignItems: 'center',
     marginBottom: 20,
@@ -145,3 +145,5 @@ const styles = StyleSheet.create({
 
 
 export default QuestionScreen;
+
+
