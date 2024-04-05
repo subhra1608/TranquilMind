@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Image } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 const CreatePostScreen = ({ navigation }) => {
   const [postTitle, setPostTitle] = useState('');
@@ -9,26 +10,32 @@ const CreatePostScreen = ({ navigation }) => {
   // Placeholder for the user's name
   const userName = "Kaushal Pancholi";
 
-  const handleSelectImage = () => {
-    const options = {
-      mediaType: 'photo',
-      quality: 1,                                                                                                                                                                                                                                                                               
-    };
-    alert('Function to select image would be triggered');
-    launchImageLibrary(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ',response.error);
-      } else {
-        const source = { uri: response.assets[0].uri };
-        setImageUri(source);
-      }
-    });                                                                                                                           
+  const handleSelectImage = async () => {
+    // Request permission to access the media library
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this app to access your photos!");
+      return;
+    }
+  
+    // Launch the image picker
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+  
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+  
+    // If an image is picked, set it to state
+    setImageUri(pickerResult.uri);
   };
 
   const handleSubmit = () => {
     alert('Post submitted successfully!');
+    navigation.goBack();
   };
 
   return (
