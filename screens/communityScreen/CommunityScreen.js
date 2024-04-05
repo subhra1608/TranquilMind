@@ -8,6 +8,7 @@ const segmentWidth = width / 2; // Assuming two segments
 
 const CommunityScreen = ({ navigation }) => {
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(0);
+  const [isViewPostsSelected,setIsViewPostsSelected]=useState(true);
   const indicatorAnim = useRef(new Animated.Value(0)).current;
 
   const handleSelectSegment = (index) => {
@@ -17,13 +18,14 @@ const CommunityScreen = ({ navigation }) => {
       useNativeDriver: true,
     }).start();
     setSelectedSegmentIndex(index);
+
+    if(index===0)
+    setIsViewPostsSelected(true);
+  else if(index===1)
+  setIsViewPostsSelected(false);
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('PostDetail', { postId: item.id })} style={styles.postContainer}>
-      <PostCardComponent {...item} />
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => <PostCardComponent {...item} />
 
   return (
     <View style={styles.container}>
@@ -50,14 +52,32 @@ const CommunityScreen = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
-        <Text style={styles.addButtonText}>+ Add Post</Text>
-      </TouchableOpacity>
-      <FlatList
-        data={postData}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-      />
+      <>
+      {isViewPostsSelected && (
+      <View>
+        <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
+          <Text style={styles.addButtonText}>+ Add Post</Text>
+        </TouchableOpacity>
+        <FlatList
+          data={postData}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+        />
+      </View>
+      )}
+      {!isViewPostsSelected && (
+      <View>
+        <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
+          <Text style={styles.addButtonText}>+ Add Question</Text>
+        </TouchableOpacity>
+        <FlatList
+          data={[]}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+        />
+      </View>
+      )}
+      </>
     </View>
   );
 };
