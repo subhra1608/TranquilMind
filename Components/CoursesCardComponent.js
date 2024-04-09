@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Avatar } from 'react-native-paper';
-import { ProgressBar, MD3Colors } from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper';
 
 const CoursesCardComponent = () => {
   return (
