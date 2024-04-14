@@ -10,7 +10,7 @@ const YouTubeScreen = ({route}) => {
       setYouTubeURL(route.params.item.item.articleUrl);
     }, [])
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
   const handleLoad = () => {
     setIsLoading(false);

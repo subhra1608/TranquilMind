@@ -2,6 +2,7 @@
 module.exports = {
   content: ["./screens/homeScreen/HomeScreen.js",
             "./screens/loginScreen/LoginScreen.js",
+            "./screens/landingScreen/LandingScreen.js",
             "./screens/bookAppointmentScreen/BookAppointmentScreen.js",
             "./screens/onboardingScreen/OnboardingScreen.js",
             "./screens/exploreScreen/ExploreSreen.js",
@@ -13,6 +14,7 @@ module.exports = {
             "./Components/CoursesCardComponent.js",
             "./Components/ButtonComponent.js",
             "./screens/communityScreen/CommunityScreen.js",
+            "./screens/exploreScreen/ExploreScreen.js",
             "./Components/PostCardComponent.js",
             ],
   theme: {

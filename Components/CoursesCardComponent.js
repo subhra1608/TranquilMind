@@ -3,13 +3,16 @@ import React from 'react'
 import { Avatar } from 'react-native-paper';
 import { ProgressBar } from 'react-native-paper';
 
-const CoursesCardComponent = () => {
+const CoursesCardComponent = ({item}) => {
+  console.log("Inside card component");
+  console.log(item);
+
   return (
       <View className="flex-1">
         <View className="mt-2 rounded-lg basis-24 m-2 justify-center bg-yellow-100">
           <View className="flex flex-row justify-evenly">
             <View className="m-3">
-              <Avatar.Text size={55} label='50%'/>
+              <Avatar.Text size={55} label={item.taskId}/>
             </View>
             <View className=" flex flex-1 justify-evenly content-center flex-col">
                 <View>

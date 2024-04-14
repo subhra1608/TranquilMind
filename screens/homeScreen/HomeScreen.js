@@ -1,31 +1,42 @@
-import { View, Text ,Image,StyleSheet, ActivityIndicator} from 'react-native'
+import { View, Text ,Image,StyleSheet, ActivityIndicator, Alert, SafeAreaView, ScrollView} from 'react-native'
 import React, { useState,useEffect } from 'react'
 import { FlatList,TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import axios from 'axios';
-import GraphComponent from '../../Components/GraphComponent'
-import { useFonts } from 'expo-font';
-import Carousel from '../../Components/Carousel';
 import youTubeData from '../../data/youTubeData';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n from '../../i18';
+import translations from './translations';
 
 const HomeScreen = ({navigation}) => {
 
   
   const [quote, setQuote] = useState(null);
   const [fontsLoaded] = useState(true);
+  const [language,setLanguage]=useState("");
+  const t = i18n.t;
+
   
   useEffect(() => {
-    
+    setLanguageFromAsyncStorage();
     fetchQuote();
   }, []);
+
+  const setLanguageFromAsyncStorage = async ()=>
+  {
+      const getSelectedLanguage = await AsyncStorage.getItem('language');
+      if(getSelectedLanguage===null)
+      {setLanguage('en');}
+      else
+      {setLanguage(getSelectedLanguage);}
+  }
 
   const renderYouTubeSeries = ({item}) => {
     return (
       <TouchableOpacity onPress={()=>{navigation.navigate('YouTubeScreen',{item:{item:{articleUrl:item.playlistURL}}})}}>
-        <View className="h-56 w-52 rounded-xl mt-2">
+        <View className="h-56 w-52 rounded-xl mt-1">
           <View className="justify-center">
-          <Image source={{ uri:item.thumbnail }} className=" justify-center top-1 left-6 justify-items-center h-40 w-48 rounded-xl" />
+          <Image source={{ uri:item.thumbnail }} className=" justify-center top-1 left-4 justify-items-center h-40 w-48 rounded-xl" />
           </View>
           <View className=" justify-items-center">
             <Text className="text-center text-lg text-black mt-2 ">{item.title}</Text>
@@ -38,8 +49,8 @@ const HomeScreen = ({navigation}) => {
 
     const renderQuotes = ({ item }) => {
       return (
-        <View style={styles.item} className="shadow-lg rounded-3xl p-3" >
-          <Text style= {styles.overlay} className="text-lg p-3 mt-1 text-white justify-items-center  font-bold" >{item.text}</Text>
+        <View style={styles.item} className="shadow-lg rounded-3xl p-1" >
+          <Text style= {styles.overlay} className="text-lg p-2 mt-1 text-white justify-items-center  font-bold" >{item.text}</Text>
           {/* <Text style={styles.author}>{item.author}</Text> */}
         </View>
       );
@@ -58,6 +69,18 @@ const HomeScreen = ({navigation}) => {
     }
   };
   
+    const showAlert = (emotions, language) => {
+      console.log(emotions,language);
+      const translation = translations[language][emotions];
+      const { title, message,okButton } = translation;
+    
+      return Alert.alert(
+        title,
+        message,
+        [{ text: okButton }],
+        { cancelable: true }
+      );
+    };
 
   const seeAll = () => {
     navigation.navigate("QuizScreen");
@@ -66,14 +89,55 @@ const HomeScreen = ({navigation}) => {
       return(
         <>
         {fontsLoaded && (
-          <View className="  flex-1 flex-col bg-white">
+            <ScrollView>
+            <View className=" bg-white">
           <View className=" px-2 py-2 ">
-              {/* <Image
+              <Image
               className=" h-48 w-full rounded-3xl"
-              source={{ uri: 'https://img.freepik.com/free-vector/vector-illustration-mountain-landscape_1441-77.jpg?size=626&ext=jpg&ga=GA1.1.87170709.1707609600&semt=sph' }} // Replace with your image URI
+              source={{ uri: 'https://media.istockphoto.com/id/1443495299/vector/abstract-fingerprint-seamless-background-finger-marks-on-a-dark-purple-background-shades-of.jpg?s=612x612&w=0&k=20&c=vgn7pKgCI3FAdDE7HyAjQCQ896zCBzfpGyrpyebut0k=' }} // Replace with your image URI
               resizeMode="cover"
-              /> */}
-              <Carousel/>
+              />
+              <View className="absolute top-5 left-4 ">
+              <Text className=" font-bold text-lg ml-20 text-neutral-50">{t('welcomeMessage', { lng: language })}</Text>
+              <Text className="mt-2 font-bold text-lg ml-20 text-neutral-50">{t('How are you feeling today', { lng: language })}</Text>
+              <View className="flex-row justify-between">
+              <View>
+                <TouchableOpacity onPress={()=>{showAlert("confused",language)}}>
+                  <Image 
+                    className="h-20 w-20 m-2"
+                    source={require('../../assets/images/confused.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity onPress={()=>{showAlert("happy",language)}}>
+                  <Image 
+                    className="h-20 w-20 m-2"
+                    source={require('../../assets/images/happy.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity onPress={()=>{showAlert("sad",language)}}>
+                  <Image 
+                    className="h-20 w-20 m-2"
+                    source={require('../../assets/images/sad.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity onPress={()=>{showAlert("angry",language)}}>
+                  <Image 
+                    className="h-20 w-20 m-2"
+                    source={require('../../assets/images/ang.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+              
+              
+              
+              </View>
+              </View>
           </View> 
           <View className=" flex-1 bg-white">
   
@@ -83,7 +147,7 @@ const HomeScreen = ({navigation}) => {
               </View>
               
             </View>
-            <View className="flex-row mx-2 p-2 h-20 rounded-3xl" style={{backgroundColor:"#9B8BCA"}}>
+            <View className="flex-row mx-2 p-2 h-20 rounded-3xl" style={{backgroundColor:"#8155BA"}}>
               <View className="flex-row w-10/12">
                 <View className="flex-col flex-1 justify-between">
                   <View className="flex-1">
@@ -111,7 +175,7 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View className="flex-1 rounded-lg">
           <Text className="mt-2 ml-3 mb-2 text-lg"> You Tube channels for self development </Text>
-          <View>
+          <View className="h-5/6">
           <FlatList
               data={youTubeData}
               renderItem={({ item}) => renderYouTubeSeries(item={item})}
@@ -122,6 +186,7 @@ const HomeScreen = ({navigation}) => {
         </View>
           </View>
           </View>
+            </ScrollView>
         )}
         {
           !fontsLoaded && <ActivityIndicator size={100}/>
@@ -131,6 +196,8 @@ const HomeScreen = ({navigation}) => {
     );
   
 }
+
+
 
 export default HomeScreen
 
@@ -143,7 +210,7 @@ const styles = StyleSheet.create({
     height:120,
     borderRadius: 5,
     marginHorizontal: 10,
-    backgroundColor:"#9B8BCA",
+    backgroundColor:"#8155BA",
     width: 250, // Set width of each item
   },
   text: {

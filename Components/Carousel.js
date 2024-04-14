@@ -83,9 +83,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: '80%',
+    width: '100%',
     height: 200, // Set your desired height
     resizeMode: 'cover',
+    marginBottom:2,
     marginBottom: 5,
     borderRadius: 10,
   },

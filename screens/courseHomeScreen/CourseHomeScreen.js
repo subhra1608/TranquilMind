@@ -1,25 +1,65 @@
-import * as React from 'react';
-import { View, Text, ScrollView, Button, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, Button, StyleSheet,FlatList } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Header from '../../Components/HeaderComponent';
-import { ProgressBar, MD3Colors } from 'react-native-paper';
+import { ProgressBar, MD3Colors, ActivityIndicator } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
 import CoursesCardComponent from '../../Components/CoursesCardComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { baseUrl } from '../../data/baseUrl';
 
 const CourseHomeScreen = ({ navigation }) => {
   const route = useRoute();
-  const { param2 } = route.params;
+
+  const { param1,param2 } = route.params;
+
+  const [selectedWeek, setSelectedWeek] = useState(1);
+  const [isLoading,setIsLoading]= useState(false);
+  const [courseMaterial,setCourseMaterial]= useState({});
+  const [selectedTask,setSelectedTask] =useState({});
+
+  useEffect(() => {
+    fetchCoursesByWeek();
+  }, [])
   
-  const [selectedWeek, setSelectedWeek] = React.useState(1);
+
+  const fetchCoursesByWeek = async() => {
+
+    setIsLoading(true);
+    const token = await  AsyncStorage.getItem('token');
+    try {
+      const response = await axios.get(`${baseUrl}/api/course/get-course/${param1}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCourseMaterial(response.data.tasksByWeek);
+;    } catch (error) {
+
+      console.log(error.message);
+      console.error('Error Getting details:', error);
+    }    
+   setIsLoading(false);
+   
+  };
+
+
+  const renderCourseCard = ({item}) => {
+    return (
+      <CoursesCardComponent item={item} />
+    )
+  }
+
 
   const handleWeekButtonClick = (week) => {
     setSelectedWeek(week);
+    setSelectedTask(courseMaterial[week]);
   };
 
   return (
-      <ScrollView>
         <View className="flex flex-1 mt-6 bg-red-300">
-
         <View className=" basis-1/14">
           <Header onPressBack={() => navigation.goBack()} title="It's course page"/>
         </View>
@@ -37,58 +77,39 @@ const CourseHomeScreen = ({ navigation }) => {
                   <View className=" w-11/12">
                     <ProgressBar  progress={0.25}  color='purple' />
                   </View>
-              
                 </View>
             </View>
           </View>
         </View>
         <View className="mt-2 rounded-lg basis-16 m-2 justify-center">
           <View className="flex flex-row justify-around">
-            <View>
-              <Button 
-                title="Week 1" 
-                onPress={() => handleWeekButtonClick(1)} 
-                color={selectedWeek === 1 ? 'blue' : 'gray'}
-                accessibilityLabel="Select Week 1"
-              />
+            {
+              Object.keys(courseMaterial).map(key=>(
+                <View>
+                <Button 
+                  title={key}   
+                  onPress={() => handleWeekButtonClick(parseInt(key))} 
+                  color={selectedWeek === parseInt(key) ? 'blue' : 'gray'}
+                  accessibilityLabel="Select Week 1"
+                />
+              </View>
+              ))
+            }
 
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button 
-                title="Week 1" 
-                onPress={() => handleWeekButtonClick(2)} 
-                color={selectedWeek === 2 ? 'blue' : 'gray'}
-                accessibilityLabel="Select Week 1"
-                style={styles.buttonText}
-              />
-          
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button 
-                title="Week 1" 
-                onPress={() => handleWeekButtonClick(3)} 
-                color={selectedWeek === 3 ? 'blue' : 'gray'}
-                accessibilityLabel="Select Week 1"
-                style={styles.buttonText}
-              />
-          
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button 
-                title="Week 1" 
-                onPress={() => handleWeekButtonClick(4)} 
-                color={selectedWeek === 4 ? 'blue' : 'gray'}
-                accessibilityLabel="Select Week 1"
-                style={styles.buttonText}
-              />
-            </View>
           </View>
         </View>
         <View className="mt-2 rounded-lg flex flex-1  bg-red-100 justify-center">
-          <CoursesCardComponent />
+          {isLoading && <ActivityIndicator size={40}/>}
+          {!isLoading && (
+            <FlatList
+            data={selectedTask}
+            renderItem={({ item}) => renderCourseCard(item={item})}
+            keyExtractor={item => item.taskId}
+            horizontal={false}
+        />
+          )}
         </View>
       </View>
-</ScrollView>
   );
 };
 

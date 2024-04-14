@@ -149,15 +149,13 @@ const ProfileScreen = ({ navigation }) => {
             <InputComponent placeholder="Gender" value={gender} onChangeMethod={setGender}  keyboardType='default'  />
             <InputComponent placeholder="Age" value={age.toString()} onChangeMethod={setAge}  keyboardType='default'  />
 
-            {/* Add more account details as needed */}
-          </View>
-        )}
-      </View>
-        
-          <TouchableOpacity 
-          style={styles.logoutButton} onPress={()=>updateUserDetails()}>
+          <TouchableOpacity style={styles.logoutButton} onPress={()=>updateUserDetails()}>
             <Text style={styles.logoutButtonText}>Submit</Text>
           </TouchableOpacity>
+          </View>
+          
+        )}
+      </View>
           
           <TouchableOpacity 
           style={styles.logoutButton} onPress={()=>handleLogout()}>

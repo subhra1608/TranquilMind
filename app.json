@@ -22,11 +22,17 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE"], 
+      "permissions": [
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+     
+    ]
   }
 }

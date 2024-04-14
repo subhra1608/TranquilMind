@@ -1,15 +1,47 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Animated, Dimensions } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Animated, Dimensions, ActivityIndicator } from 'react-native';
 import PostCardComponent from '../../Components/PostCardComponent';
 import { postData } from '../../data/postData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { baseUrl } from '../../data/baseUrl';
 
 const { width } = Dimensions.get('window');
 const segmentWidth = width / 2; 
 
-const CommunityScreen = ({ navigation }) => {
+  const CommunityScreen = ({ navigation }) => {
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(0);
   const [isViewPostsSelected,setIsViewPostsSelected]=useState(true);
+  const [post,setPost]=useState({});
+  const [isLoading,setIsLoading]=useState(true);
   const indicatorAnim = useRef(new Animated.Value(0)).current;
+  const [isRefresh,setIsRefresh]=useState(false);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [isRefresh])
+
+  const fetchPosts = async() => {
+
+    setIsLoading(true);
+    const token = await  AsyncStorage.getItem('token');
+    try {
+      const response = await axios.get(`${baseUrl}/api/post/get-posts`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPost(response.data);
+      setIsRefresh(true);
+
+;    } catch (error) {
+
+      console.log(error.message);
+      console.error('Error Getting details:', error);
+    }    
+   setIsLoading(false);
+   
+  };
 
   const handleSelectSegment = (index) => {
     Animated.timing(indicatorAnim, {
@@ -25,7 +57,12 @@ const CommunityScreen = ({ navigation }) => {
   setIsViewPostsSelected(false);
   };
 
-  const renderItem = ({ item }) => <PostCardComponent {...item} />
+  const renderItem = ({ item }) => {
+    return(
+      <PostCardComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} />
+    );
+  }
+  
 
   return (
     <View style={styles.container}>
@@ -53,18 +90,24 @@ const CommunityScreen = ({ navigation }) => {
         ))}
       </View>
       <>
-      {isViewPostsSelected && (
-      <View>
-        <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
+     
+     
+        
+        {isViewPostsSelected && !isLoading && 
+        ( <View>
+          <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
           <Text style={styles.addButtonText}>+ Add Post</Text>
         </TouchableOpacity>
+        <View className=" h-5/6">
         <FlatList
-          data={postData}
-          keyExtractor={(item) => item.id.toString()}
+          data={post}
+          keyExtractor={(item,index) => item.id.toString()}
           renderItem={renderItem}
         />
-      </View>
-      )}
+        </View>
+        </View>)}
+      
+      { isLoading && (<ActivityIndicator size={30} />)}
       {!isViewPostsSelected && (
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
