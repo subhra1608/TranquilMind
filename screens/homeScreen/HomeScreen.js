@@ -34,12 +34,12 @@ const HomeScreen = ({navigation}) => {
   const renderYouTubeSeries = ({item}) => {
     return (
       <TouchableOpacity onPress={()=>{navigation.navigate('YouTubeScreen',{item:{item:{articleUrl:item.playlistURL}}})}}>
-        <View className="h-56 w-52 rounded-xl mt-1">
+        <View className="h-48 w-48 m-2 rounded-xl mt-1">
           <View className="justify-center">
-          <Image source={{ uri:item.thumbnail }} className=" justify-center top-1 left-4 justify-items-center h-40 w-48 rounded-xl" />
+          <Image source={{ uri:item.thumbnail }} className=" justify-center top-1 justify-items-center h-40 w-48 rounded-xl" />
           </View>
           <View className=" justify-items-center">
-            <Text className="text-center text-lg text-black mt-2 ">{item.title}</Text>
+            <Text className="text-center text-md text-black mt-2 ">{item.title}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -89,7 +89,6 @@ const HomeScreen = ({navigation}) => {
       return(
         <>
         {fontsLoaded && (
-            <ScrollView>
             <View className=" bg-white">
           <View className=" px-2 py-2 ">
               <Image
@@ -174,30 +173,26 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View className="flex-1 rounded-lg">
-          <Text className="mt-2 ml-3 mb-2 text-lg"> You Tube channels for self development </Text>
-          <View className="h-5/6">
+          <Text className="mt-2 ml-2 mb-2 text-lg"> You Tube channels for self development </Text>
+          <View className="h-60">
           <FlatList
               data={youTubeData}
               renderItem={({ item}) => renderYouTubeSeries(item={item})}
               keyExtractor={item => item.playlistId.toString()}
               horizontal={true}
+              // numColumns={2}
               showsHorizontalScrollIndicator={false}
           />
         </View>
           </View>
           </View>
-            </ScrollView>
         )}
         {
           !fontsLoaded && <ActivityIndicator size={100}/>
         }
         </>
-      
     );
-  
 }
-
-
 
 export default HomeScreen
 
