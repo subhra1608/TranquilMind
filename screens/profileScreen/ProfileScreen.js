@@ -20,7 +20,8 @@ const ProfileScreen = ({ navigation }) => {
   const [mobileNo,setMobileNo]=useState(0);
   const [isLoading,setIsLoading]=useState(true);
   const [email,setEmail]=useState("");
-
+  const [responseData, setResponseData]=useState({});
+  
   const updateUserDetails = async() => {
 
     try {
@@ -82,7 +83,7 @@ const ProfileScreen = ({ navigation }) => {
       });
       // Assuming response.data is an array of quotes
       if (response.data) {
-
+        setResponseData(response.data);
         setAge(response.data.age);
         setFirstName(response.data.firstName);
         setMiddleName(response.data.middleName);
@@ -115,10 +116,10 @@ const ProfileScreen = ({ navigation }) => {
       {!isLoading && (  <View style={styles.header}>
         <Image source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGDohX4qAelLzi3t8vCfqccDFxifY-huxkmRrgnSRoig&s" }} style={styles.image} />
         <View style={styles.userInfo}>
-          <Text style={styles.name}>{firstName} {middleName} {lastName}</Text>
-          <Text>Email: {email}</Text>
-          <Text>Phone Number: {mobileNo}</Text>
-          <Text>Age: {age}</Text>
+          <Text style={styles.name}>{responseData.firstName} {responseData.middleName} {responseData.lastName}</Text>
+          <Text>Email: {responseData.email}</Text>
+          <Text>Phone Number: {responseData.mobileNo}</Text>
+          <Text>Age: {responseData.age}</Text>
 
         </View>
       </View>)}
@@ -191,12 +192,16 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 20,
-    elevation: 5,
+    borderWidth:2,
+    borderRadius:5,
+    borderColor:'#9B8BCA',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom:10,
+    //marginBottom:10,
+    padding:5,
+    textAlign:'center',
   },
   logoutButton: {
     backgroundColor: '#9B8BCA',

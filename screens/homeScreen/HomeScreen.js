@@ -155,7 +155,7 @@ const HomeScreen = ({navigation}) => {
                 </View>
    
               </View>
-              <View className="flex flex-col justify-center bg">
+              <View className="flex flex-col justify-center ">
                   <TouchableOpacity onPress={() =>{seeAll()} } >
                       <Ionicons name="chevron-forward-outline" size={64} color="white" ></Ionicons>
                   </TouchableOpacity>
@@ -163,7 +163,7 @@ const HomeScreen = ({navigation}) => {
             </View>
             <Text className=" mt-2 ml-3 mb-2 text-lg">Glance over these beautiful quotes!</Text>
             
-            <View className="flex-1  mx-1  rounded-3xl ">
+            <View className="flex-1 h-32  mx-1  rounded-3xl ">
               <FlatList
               data={quote}
               renderItem={renderQuotes}
@@ -174,7 +174,7 @@ const HomeScreen = ({navigation}) => {
           </View>
           <View className="flex-1 rounded-lg">
           <Text className="mt-2 ml-2 mb-2 text-lg"> You Tube channels for self development </Text>
-          <View className="h-60">
+          <View className="h-64">
           <FlatList
               data={youTubeData}
               renderItem={({ item}) => renderYouTubeSeries(item={item})}

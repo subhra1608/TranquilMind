@@ -27,6 +27,7 @@ const ExploreScreen = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       });;        
+      //console.log(response.data);
       setCourseData(response.data);
 ;    } catch (error) {
       
@@ -38,7 +39,7 @@ const ExploreScreen = ({ navigation }) => {
   const renderItem = ({ item }) => {
     
     const onCardPress= () =>{
-      navigation.navigate('CourseHomeScreen',{ param1: item.courseId, param2: item.courseName })
+      navigation.navigate('CourseHomeScreen',{ param1: item.courseId, param2: item.courseName,param3: item.category })
   }
     return (
       <TouchableOpacity onPress={onCardPress}>
@@ -47,7 +48,6 @@ const ExploreScreen = ({ navigation }) => {
         title={item.category}
         description={item.description}
         imageSource="https://img.freepik.com/premium-vector/flat-valentine-s-day-illustration_52683-157836.jpg"
-        navigation={navigation}
       />
       </TouchableOpacity>  
     );

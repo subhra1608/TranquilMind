@@ -21,11 +21,15 @@ import CreatePostScreen from './screens/createPostScreen/CreatePostScreen';
 import YouTubeScreen from './screens/youTubeScreen/YouTubeScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SafeViewAndroid from './Components/SafeViewAndroid';
+import ViewTaskScreen from './screens/courseHomeScreen/ViewTaskScreen';
+import { useEffect } from 'react';
 const Stack = createNativeStackNavigator();
 
 
 export default function App() {
   
+  
+
   return (
     
     <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
@@ -120,8 +124,11 @@ export default function App() {
         name="HomeScreen"
         component={HomeScreen}
         options={{headerShown: false}}
-        
       /> 
+      <Stack.Screen
+        name="ViewTaskScreen"
+        component={ViewTaskScreen}
+      />
       <Stack.Screen
         name="CommunityScreen"
         component={CommunityScreen}

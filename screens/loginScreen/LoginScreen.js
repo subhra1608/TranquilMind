@@ -117,10 +117,10 @@ const LoginScreen = ({ navigation }) => {
       </View>
       {isLoading && <ActivityIndicator size={(30)}/>}
       {!isLoading && (<View className="flex flex-row justify-center">
-      <TouchableOpacity className="  justify-center items-center rounded-xl mt-3 bg-[#9B8BCA] h-10 w-4/6 " onPress={handleLogin} ><Text className="text-lg text-neutral-50">{t('loginButton', { lng: language })}</Text></TouchableOpacity>
+      <TouchableOpacity className="  justify-center items-center rounded-xl mt-3 bg-[#9B8BCA] h-10 w-3/6 text-2xl " onPress={handleLogin} ><Text className="text-lg text-neutral-50">{t('loginButton', { lng: language })}</Text></TouchableOpacity>
       </View>)}
       <View className="flex flex-row justify-center">
-      <TouchableOpacity className="  justify-center items-center rounded-xl mt-3 bg-[#9B8BCA] h-10 w-4/6 " onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text className="text-lg text-neutral-50">{t('registerButton', { lng: language })}</Text></TouchableOpacity>
+      <TouchableOpacity className="  justify-center items-center rounded-xl mt-3 bg-[#9B8BCA] h-10 w-2/6 " onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text className="text-lg text-neutral-50">{t('registerButton', { lng: language })}</Text></TouchableOpacity>
       </View>
       {/* <View className="flex flex-row justify-end mr-4">
       <TouchableOpacity onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text className="text-lg">Register Now</Text></TouchableOpacity>

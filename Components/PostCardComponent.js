@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import { Avatar, Divider } from 'react-native-paper';
 import HorizontalLine from './HorizontalLine';
@@ -7,28 +7,42 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../data/baseUrl';
 
+
 const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
   
   const [commentInput, setCommentInput] = useState('');
   const [showComments, setShowComments] = useState(false);
   const [isLoading,setIsLoading]=useState(false);
+  const [userId,setUserId] =useState(null);
   
   const handleLike = () => {
     console.log('Liked!');
   };
 
+
+  useEffect(() => {
+    setUserFromAsyncStorage();
+  }, []);
+
+  const setUserFromAsyncStorage = async ()=>
+  {
+      const getUserId = await AsyncStorage.getItem('userId');
+      setUserId(getUserId)
+  }
+
+  
   const handleSubmitComment = async() => {
 
     setIsLoading(true);
     const token = await  AsyncStorage.getItem('token');
-    const userId = await  AsyncStorage.getItem('userId');
     if(commentInput.length<5)
     {
       return Alert.alert("Please Enter a valid comment","The length of comment must be greater than 5.",[
         {
-        text: 'OK',
-        onPress: () => {null}
-      }]);
+          text: 'OK',
+          onPress: () => {null}
+        }
+      ]);
     }
     payload ={
       description:commentInput,
@@ -37,7 +51,6 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
       commentById:userId,
       name:item.name
     }
-    console.log(payload);
 
     try {
       const response = await axios.post(`${baseUrl}/api/post/add-comment`,payload,{
@@ -95,11 +108,14 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.description}>{item.description}</Text>
       <View style={styles.interactions}>
-
-        <TouchableOpacity style={styles.interaction} onPress={handleLike}>
-          <Text style={styles.interactionText}>{item.flagged}</Text>
-          <Image source={{uri:'https://png.pngtree.com/png-vector/20210228/ourmid/pngtree-fluttering-red-flag-png-image_2986748.jpg'}} style={styles.icon} />
-        </TouchableOpacity>
+        {
+          (!(item.isApproved))&&(
+          <TouchableOpacity style={styles.interaction} onPress={handleLike}>
+            <Text style={styles.interactionText}>{item.flagged}</Text>
+            <Image source={{uri:'https://png.pngtree.com/png-vector/20210228/ourmid/pngtree-fluttering-red-flag-png-image_2986748.jpg'}} style={styles.icon} />
+          </TouchableOpacity>
+          )
+        }
 
         <TouchableOpacity
           style={styles.interaction}
@@ -112,13 +128,23 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
         <View style={styles.comments}>
           { item.comments.length>0 && item.comments.map((comment, index) => (
             <View key={index} style={styles.commentContainer} className="mt-2">
-              <View className="flex-row col justify-start">
-                <View>
-                  <Avatar.Text size={30} label={comment.name.charAt(0).toUpperCase()} />                
+              <View className="flex-row justify-between">
+                <View className=" flex-row justify-start">
+                  <View>
+                    <Avatar.Text size={30} label={comment.name.charAt(0).toUpperCase()} />                
+                  </View>
+                  <View className="mx-2 mt-1">
+                    <Text style={styles.commentUsername}>{comment.name}</Text>
+                  </View>
                 </View>
-                <View  className="mx-2 mt-1">
-                  <Text style={styles.commentUsername}>{comment.name}</Text>
-                </View>
+                {
+                  (comment.commentById == userId) && 
+                  (<View>  
+                    <TouchableOpacity>
+                      <Ionicons name="trash" size={18}/>
+                    </TouchableOpacity>
+                  </View>)
+                }
               </View>
               <HorizontalLine borderWidth={1}/>
 

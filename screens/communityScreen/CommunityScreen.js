@@ -5,11 +5,13 @@ import { postData } from '../../data/postData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../../data/baseUrl';
+import QnAComponent from '../../Components/QnAComponent';
 
 const { width } = Dimensions.get('window');
 const segmentWidth = width / 2; 
 
   const CommunityScreen = ({ navigation }) => {
+
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(0);
   const [isViewPostsSelected,setIsViewPostsSelected]=useState(true);
   const [post,setPost]=useState({});
@@ -39,6 +41,7 @@ const segmentWidth = width / 2;
       console.log(error.message);
       console.error('Error Getting details:', error);
     }    
+
    setIsLoading(false);
    
   };
@@ -62,7 +65,21 @@ const segmentWidth = width / 2;
       <PostCardComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} />
     );
   }
+
+  const renderItemQnA = ({ item }) => {
+    return(
+      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} />
+    );
+  }
   
+  const qnaData=[
+    {id:1,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:2,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:3,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:4,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:5,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:6,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+  ]
 
   return (
     <View style={styles.container}>
@@ -90,9 +107,6 @@ const segmentWidth = width / 2;
         ))}
       </View>
       <>
-     
-     
-        
         {isViewPostsSelected && !isLoading && 
         ( <View>
           <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
@@ -107,19 +121,22 @@ const segmentWidth = width / 2;
         </View>
         </View>)}
       
-      { isLoading && (<ActivityIndicator size={30} />)}
-      {!isViewPostsSelected && (
+      { !isLoading && !isViewPostsSelected && (
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
-          <Text style={styles.addButtonText}>+ Add Question</Text>
+          <Text style={styles.addButtonText}> + Add Question</Text>
         </TouchableOpacity>
+        <View  className=" h-5/6">
         <FlatList
-          data={[]}
+          data={qnaData}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={renderItem}
+          renderItem={renderItemQnA}
         />
+        </View>
       </View>
       )}
+      { isLoading && (<ActivityIndicator size={30} />)}
+
       </>
     </View>
   );

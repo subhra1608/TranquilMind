@@ -16,6 +16,7 @@ module.exports = {
             "./screens/communityScreen/CommunityScreen.js",
             "./screens/exploreScreen/ExploreScreen.js",
             "./Components/PostCardComponent.js",
+            "./Components/QnAComponent.js",
             ],
   theme: {
     extend: {},
