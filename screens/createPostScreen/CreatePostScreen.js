@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Image } from 'react-native';
 // import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import * as ImageManipulator from 'expo-image-manipulator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const CreatePostScreen = ({ navigation }) => {
   const [postTitle, setPostTitle] = useState('');
@@ -9,6 +13,10 @@ const CreatePostScreen = ({ navigation }) => {
   const [imageUri, setImageUri] = useState(null);
   // Placeholder for the user's name
   const userName = "Kaushal Pancholi";
+  const getCurrentTimestamp = () => {
+    return new Date().toISOString();
+  };
+  
 
   const handleSelectImage = async () => {
     // Request permission to access the media library
@@ -24,19 +32,92 @@ const CreatePostScreen = ({ navigation }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
     });
+
+    // if (!pickerResult.cancelled && pickerResult.assets) {
+      
+    //   setImageUri(pickerResult.assets[0].uri);
+    //   console.log('Selected image URI: ', pickerResult.assets[0].uri);
+    // }
+    // console.log('Image URI in state: ', imageUri);
+
+    // const base64 = await FileSystem.readAsStringAsync(imageUri, {
+    //   encoding: FileSystem.EncodingType.Base64,
+    // });
+
+    if (!pickerResult.cancelled && pickerResult.assets) {
+      const imageUri = pickerResult.assets[0].uri;
+      
+      // Compress and resize the image
+      const manipResult = await ImageManipulator.manipulateAsync(
+        imageUri,
+        [{ resize: { width: 800 } }], // Adjust the width to your requirement
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      );
   
-    if (pickerResult.cancelled === true) {
-      return;
+      setImageUri(manipResult.uri);
+  
+      // Convert the compressed image to base64
+      const base64 = await FileSystem.readAsStringAsync(manipResult.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+  
+      console.log('Compressed image as Base64:', base64);
     }
-  
-    // If an image is picked, set it to state
-    setImageUri(pickerResult.uri);
   };
 
-  const handleSubmit = () => {
-    
-    alert('Post submitted successfully!');
-    navigation.goBack();
+  const handleSubmit = async () => {
+    // Check if the title, content, or imageUri is not empty
+  if (!postTitle || !postContent || !imageUri) {
+    alert('Please fill in all fields and select an image.');
+    return;
+  }
+  // Get user ID from AsyncStorage
+  const userId = await AsyncStorage.getItem('userId');
+  if (!userId) {
+    alert('No user ID found. Please login again.');
+    return;
+  }
+  // Convert the image to base64
+  const base64 = await FileSystem.readAsStringAsync(imageUri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  // Construct the request body
+  const requestBody = {
+    title: postTitle,
+    description: postContent,
+    postedBy: parseInt(userId, 10), // You might want to get the actual user ID dynamically
+    uploadedAt: getCurrentTimestamp(),
+    image: `${base64}`, // Prefix with data URI schema
+    flagged: 0, // Assuming this is the default value for new posts
+  };
+
+  // Replace 'http://backend-api-url/posts' with your actual backend API URL
+  try {
+    const response = await fetch('http://10.0.2.2:8082/api/post/add-post', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Include other headers like Authorization if needed
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const responseData = await response.json();
+
+    if (response.ok) {
+      alert('Post submitted successfully!');
+      console.log('Response data:', responseData);
+      navigation.goBack();
+    } else {
+      alert('Failed to submit post. Please try again.');
+      console.log('Response error:', responseData);
+    }
+  } catch (error) {
+    console.error('Submit post error:', error);
+    alert('An error occurred. Please try again.');
+  }
+
   };
 
   return (
@@ -68,7 +149,17 @@ const CreatePostScreen = ({ navigation }) => {
           <TouchableOpacity onPress={handleSelectImage} style={styles.imageSelectButton}>
             <Text style={styles.imageSelectButtonText}>+ Add Image</Text>
           </TouchableOpacity>
-          {imageUri && <Image source={{ uri: imageUri }} style={styles.previewImage} />}
+          {imageUri ? (
+          <View style={styles.imagePreviewContainer}>
+            <Image source={{ uri: imageUri }} style={styles.previewImage} />
+            <Text style={styles.imageUploadedText}>Image Uploaded! </Text>  
+          </View>
+        ) : (
+          <View style={styles.imagePlaceholder}>
+            <Text style={styles.imagePlaceholderText}>No image selected</Text>
+          </View>
+        )}
+       
           <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
             <Text style={styles.submitButtonText}>Submit Post</Text>
           </TouchableOpacity>
@@ -203,12 +294,44 @@ const styles = StyleSheet.create({
   },
   previewImage: {
     width: '100%',
-    height: 200,
+    height: 85,
+    resizeMode : "contain",
     marginBottom: 20,
     borderRadius: 8, // Rounded corners for a softer look
     borderWidth: 1, // Define the boundary of the image
     borderColor: '#EEE', // Light border color
   },
+  
+  imagePreviewContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  // previewImage: {
+  //   width: '100%', // or a fixed size like 300
+  //   height: 200, // or a fixed size like 200
+  //   borderRadius: 8,
+  // },
+  imageUploadedText: {
+    color: 'green',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  imagePlaceholder: {
+    width: '100%', // or a fixed size like 300
+    height: 100, // or a fixed size like 200
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F0F0F0',
+    marginBottom: 20,
+  },
+  imagePlaceholderText: {
+    color: '#999',
+  },
+
 });
 
 export default CreatePostScreen;

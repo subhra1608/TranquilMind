@@ -1,51 +1,98 @@
-import { View, Text, TouchableOpacity, StyleSheet, Button, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import quizzes from '../quizScreen/quizzes';
-
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const QuestionScreen = ({ route, navigation }) => {
-  const { quizTitle } = route.params;
-  const quiz = quizzes.find(q => q.title === quizTitle);
+  const { quizName, quizTypeId } = route.params;
+  console.log(route.params);
+  const [questions, setQuestions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState({});
-  console.log(quiz);
   
-  const handleOptionSelect = (questionsId, optionsId, score) => {
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+        const response = await axios.get(`http://10.0.2.2:8082/api/quiz-question/get-questions/${quizName}`, { headers });
+        setQuestions(response.data);
+      } catch (error) {
+        console.error("Failed to fetch questions:", error);
+      }
+    };
+    fetchQuestions();
+  }, [quizName]);
+
+ 
+  const handleOptionSelect = (questionId, optionId, score) => {
     setSelectedOptions({
       ...selectedOptions,
-      [questionsId]: score,
+      [questionId]: parseInt(score, 10),
     });
   };
- 
-  // console.log(questionsId);
 
-  const renderQuestionItem = ({ item: questions }) => (
+  const renderQuestionItem = ({ item }) => (
     <View style={styles.questionContainer}>
-      <Text style={styles.questionText}>{questions.questionText}</Text>
-      {questions.options.map(options => (
+      <Text style={styles.questionText}>{item.description}</Text>
+      {item.options.map(option => (
         <TouchableOpacity
-          key={options.id}
+          key={option.quizAnswerId.toString()}
           style={[
             styles.optionButton,
-            selectedOptions[questions.id] === options.score && styles.selectedOption,
+            selectedOptions[item.quizQuestionId] === parseInt(option.score, 10) ? styles.selectedOption : {}
           ]}
-          onPress={() => handleOptionSelect(questions.id, options.id, options.score)}
+          onPress={() => handleOptionSelect(item.quizQuestionId, option.quizAnswerId, option.score)}
         >
-          <Text style={styles.optionText}>{options.optionText}</Text>
+          <Text style={styles.optionText}>{option.answerOption}</Text>
         </TouchableOpacity>
       ))}
     </View>
   );
-  const handleSubmit = () => {
-    const totalScore = Object.values(selectedOptions).reduce((acc, curr) => acc + curr, 0);
-    navigation.navigate('TotalScoreScreen', { score: totalScore });
-  };
 
+
+  const handleSubmit = async () => {
+    const patientId = await AsyncStorage.getItem('userId');
+    const quizType = { quizName };
+    // const totalScore = Object.values(selectedOptions).reduce((acc, curr) => acc + curr, 0);
+    const totalScore = Object.values(selectedOptions).reduce((acc, score) => acc + Number(score), 0);
+    const jsonQuizScores = questions.map(question => ({
+      quizQuestionId: question.quizQuestionId,
+      score: selectedOptions[question.quizQuestionId] // Ensure this is the score as a number, not a string
+    }));
+    const quizScoresData = {
+      patientId: Number(patientId), // Convert to number if your backend expects a number
+      quizType :
+      {
+          quizTypeId : quizTypeId,
+          quizName : quizName
+      },
+      totalScore: totalScore,
+      jsonQuizScores: JSON.stringify(jsonQuizScores) // Convert the array to a JSON string
+    };
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+  
+      const response = await axios.post('http://10.0.2.2:8082/api/quiz/new', quizScoresData, { headers });
+      console.log('Quiz scores submitted:', response.data);
+    navigation.navigate('TotalScoreScreen', { score: totalScore });
+    }catch (error) {
+      console.error("Failed to submit quiz scores:", error);
+      // Handle error - perhaps show an error message
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <FlatList
-        data={quiz.questions}
+        data={questions}
         renderItem={renderQuestionItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => String(item.quizQuestionId)}
         contentContainerStyle={styles.listContainer}
         ListHeaderComponent={
           <>
@@ -65,6 +112,8 @@ const QuestionScreen = ({ route, navigation }) => {
   );
   
 };
+
+
 
 const styles = StyleSheet.create({
   listContainer: {
