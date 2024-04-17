@@ -34,6 +34,7 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
+    
     alert('Post submitted successfully!');
     navigation.goBack();
   };

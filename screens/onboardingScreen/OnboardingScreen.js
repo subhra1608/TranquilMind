@@ -128,8 +128,6 @@ const OnboardingScreen = ({navigation}) => {
                 style={[
                   styles.btn,
                   {
-                    borderColor: 'black',
-                    borderWidth: 1,
                     backgroundColor: '#9B8BCA',
                   },
                 ]}

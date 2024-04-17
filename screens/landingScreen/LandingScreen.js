@@ -159,3 +159,141 @@
     },
     
   });
+
+  // import React from 'react';
+  // import { View, StyleSheet } from 'react-native';
+  
+  // import { CommonActions } from '@react-navigation/native';
+  // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+  // import { Text, BottomNavigation } from 'react-native-paper';
+  // import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+  // import HomeScreen from '../homeScreen/HomeScreen';
+  // import ProfileScreen from '../profileScreen/ProfileScreen';
+  // import CommunityScreen from '../communityScreen/CommunityScreen';
+  // import ExploreScreen from '../exploreScreen/ExploreScreen';
+  // import ChatScreen from '../chatScreen/ChatScreen';
+
+
+  // const Tab = createBottomTabNavigator();
+  
+
+  
+
+  // export default function LandingScreen() {
+
+
+
+  //   return (
+  //     <Tab.Navigator
+  //       screenOptions={{
+  //         headerShown: false,
+  //       }}
+        
+                
+  //       tabBar={({ navigation, state, descriptors, insets }) => (
+  //         <BottomNavigation.Bar
+  //           style={{
+  //             backgroundColor:'',
+              
+  //           }}
+            
+  //           activeColor='#8155AA'
+  //           inactiveColor='black'
+  //           keyboardHidesNavigationBar={true}
+  //           shifting={true}
+  //           navigationState={state}
+  //           compact={true}
+  //           safeAreaInsets={insets}
+  //           onTabPress={({ route, preventDefault }) => {
+  //             const event = navigation.emit({
+  //               type: 'tabPress',
+  //               target: route.key,
+  //               canPreventDefault: false,
+  //             });
+  
+  //             if (event.defaultPrevented) {
+  //               preventDefault();
+  //             } else {
+  //              navigation.dispatch({
+  //                 ...CommonActions.navigate(route.name, route.params),
+  //                 target: state.key,
+  //               });
+  //             }
+  //           }}
+  //           renderIcon={({ route, focused, color }) => {
+  //             const { options } = descriptors[route.key];
+  //             if (options.tabBarIcon) {
+  //               return options.tabBarIcon({ focused, color, size: 24 });
+  //             }
+  
+  //             return null;
+  //           }}
+  //           getLabelText={({ route }) => {
+  //             const { options } = descriptors[route.key];
+  //             const label =
+  //               options.tabBarLabel !== undefined
+  //                 ? options.tabBarLabel
+  //                 : options.title !== undefined
+  //                 ? options.title
+  //                 : route.title;
+  
+  //             return label;
+  //           }}
+  //         />
+  //       )}
+  //     >
+  //       <Tab.Screen
+  //         name="Home"
+  //         component={HomeScreen}
+  //         options={{
+  //           tabBarLabel: 'Home',
+  //           tabBarIcon: ({ color, size }) => {
+  //             return <Icon name="home" size={size} color={color} />;
+  //           },
+  //         }}
+  //       />
+  //       <Tab.Screen
+  //         name="Community"
+  //         component={CommunityScreen}
+  //         options={{
+  //           tabBarLabel: 'community',
+  //           tabBarIcon: ({ color, size }) => {
+  //             return <Icon name="account-group" size={size} color={color} />;
+  //           },
+  //         }}
+  //       />
+  //       <Tab.Screen
+  //         name="Explore"
+  //         component={ExploreScreen}
+  //         options={{
+  //           tabBarLabel: 'Explore',
+  //           tabBarIcon: ({ color, size }) => {
+  //             return <Icon name="airplane-takeoff" size={size} color={color} />;
+  //           },
+  //         }}
+  //       />
+  //       <Tab.Screen
+  //         name="Chat"
+  //         component={ChatScreen}
+  //         options={{
+  //           tabBarLabel: 'Chat',
+  //           tabBarIcon: ({ color, size }) => {
+  //             return <Icon name="message-text" size={size} color={color} />;
+  //           },
+  //         }}
+  //       />
+  //       <Tab.Screen
+  //         name="Profile"
+  //         component={ProfileScreen}
+  //         options={{
+  //           tabBarLabel: 'Profile',
+  //           tabBarIcon: ({ color, size }) => {
+  //             return <Icon name="account-circle" size={size} color={color} />;
+  //           },
+  //         }}
+  //       />
+         
+  //     </Tab.Navigator>
+  //   );
+  // }
+  

@@ -11,7 +11,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@react-native-async-storage/async-storage": "1.21.0",
-    "@react-native-picker/picker": "^2.6.1",
+    "@react-native-picker/picker": "^2.7.5",
     "@react-navigation/bottom-tabs": "^6.5.12",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
@@ -21,6 +21,7 @@
     "expo-image-picker": "~14.7.1",
     "expo-linear-gradient": "~12.7.1",
     "expo-status-bar": "~1.11.1",
+    "i18next": "^23.11.1",
     "ionicons": "^7.2.2",
     "jwt-decode": "^4.0.0",
     "nativewind": "^2.0.11",
@@ -38,7 +39,8 @@
     "react-native-screens": "~3.29.0",
     "react-native-svg": "^14.1.0",
     "react-native-vector-icons": "^10.0.3",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "react-native-webview": "13.6.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

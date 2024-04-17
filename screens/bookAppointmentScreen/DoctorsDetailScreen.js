@@ -26,7 +26,7 @@ const DoctorsDetailScreen = ({ navigation }) => {
         },
       });
       
-      // console.log(response.data);
+      console.log(response.data);
       setDoctorData(response.data);
       // Handle the response data as needed
     } catch (error) {
@@ -46,7 +46,7 @@ const DoctorsDetailScreen = ({ navigation }) => {
   };
 
   return (
-    <View className="flex flex-1 mt-5 ">
+    <View className="flex flex-1 ">
       <Header title="See Doctor's List" onPressBack={() => navigation.goBack()} />
         <FlatList
           className="bg-white"

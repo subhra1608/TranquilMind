@@ -35,7 +35,6 @@ const AppointmentScreen = ({navigation}) => {
           }
         });
 
-      console.log(response.data);
       if (response.data && response.data.length > 0) {
         setAppointments(response.data);
       }

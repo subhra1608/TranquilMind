@@ -1,94 +1,122 @@
-import * as React from 'react';
-import { View, Text, ScrollView, Button, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, Button, StyleSheet,FlatList, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Header from '../../Components/HeaderComponent';
-import { ProgressBar, MD3Colors } from 'react-native-paper';
+import { ProgressBar, MD3Colors, ActivityIndicator } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
 import CoursesCardComponent from '../../Components/CoursesCardComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { baseUrl } from '../../data/baseUrl';
 
 const CourseHomeScreen = ({ navigation }) => {
   const route = useRoute();
-  const { param2 } = route.params;
+
+  const { param1,param2,param3 } = route.params;
+
+  const [selectedWeek, setSelectedWeek] = useState(1);
+  const [isLoading,setIsLoading]= useState(false);
+  const [courseMaterial,setCourseMaterial]= useState({});
+  const [selectedTask,setSelectedTask] =useState({});
+ 
+
+
+  useEffect(() => {
+    fetchCoursesByWeek();
+  }, [])
   
-  const [selectedWeek, setSelectedWeek] = React.useState(1);
+
+  const fetchCoursesByWeek = async() => {
+
+    setIsLoading(true);
+    const token = await  AsyncStorage.getItem('token');
+    try {
+      const response = await axios.get(`${baseUrl}/api/course/get-course/${param1}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setCourseMaterial(response.data.tasksByWeek);
+;    } catch (error) {
+
+      console.log(error.message);
+      console.error('Error Getting details:', error);
+    }    
+   setIsLoading(false);
+   
+  };
+  const handleCardPress = (item) => {
+    navigation.navigate('ViewTaskScreen',{ param1: item});
+  }
+
+
+  const renderCourseCard = ({item}) => {
+    return (
+      <TouchableOpacity className=" mt-6 ml-3 mr-3"onPress={()=>{handleCardPress(item)}}>
+        <CoursesCardComponent item={item} />
+      </TouchableOpacity>
+    )
+  }
+
 
   const handleWeekButtonClick = (week) => {
     setSelectedWeek(week);
+    setSelectedTask(courseMaterial[week]);
   };
 
   return (
-      <ScrollView>
-        <View className="flex flex-1 mt-6 bg-red-300">
-
+        <View className="flex flex-1 bg-[#D3BBDD]">
         <View className=" basis-1/14">
-          <Header onPressBack={() => navigation.goBack()} title="It's course page"/>
+          <Header onPressBack={() => navigation.goBack()} title={param3}/>
         </View>
-        <Text className="text-xl font-bold ml-2 mt-2">Welcome to the {param2} module!</Text>
-        <View className="mt-2 rounded-lg basis-24 m-2 justify-center bg-yellow-100">
+        <Text className="text-2xl font-bold ml-2 mt-2 text-center">Welcome to the {param2} module!</Text>
+        <View className="mt-2 rounded-lg basis-18 m-2 justify-center bg-yellow-100">
           <View className="flex flex-row justify-evenly">
             <View className="m-3">
-              <Avatar.Text size={55} label='50%'/>
+              <Avatar.Text size={45} label='50%'/>
             </View>
-            <View className=" flex flex-1 justify-evenly content-center flex-col">
+            <View className=" flex flex-1 justify-evenly content-center flex-col w-6">
                 <View>
-                  <Text className="justify-center text-xl font-bold">Your Current Progress</Text>
+                  <Text className="justify-center text-lg font-bold">Your Current Progress</Text>
                 </View>
                 <View className="flex flex-row content-center">
                   <View className=" w-11/12">
-                    <ProgressBar  progress={0.25}  color='purple' />
+                    <ProgressBar  progress={0.50}  color='purple' />
                   </View>
-              
                 </View>
             </View>
           </View>
         </View>
         <View className="mt-2 rounded-lg basis-16 m-2 justify-center">
           <View className="flex flex-row justify-around">
-            <View>
-              <Button 
-                title="Week 1" 
-                onPress={() => handleWeekButtonClick(1)} 
-                color={selectedWeek === 1 ? 'blue' : 'gray'}
-                accessibilityLabel="Select Week 1"
-              />
+            {
+              Object.keys(courseMaterial).map(key=>(
+                <View>
+                <Button 
+                  title={`Week ${key}`} 
+                  onPress={() => handleWeekButtonClick(parseInt(key))} 
+                  color={selectedWeek === parseInt(key) ? 'blue' : 'gray'}
+                  accessibilityLabel="Select Week 1"
+                />
+              </View>
+              ))
+            }
 
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button 
-                title="Week 1" 
-                onPress={() => handleWeekButtonClick(2)} 
-                color={selectedWeek === 2 ? 'blue' : 'gray'}
-                accessibilityLabel="Select Week 1"
-                style={styles.buttonText}
-              />
-          
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button 
-                title="Week 1" 
-                onPress={() => handleWeekButtonClick(3)} 
-                color={selectedWeek === 3 ? 'blue' : 'gray'}
-                accessibilityLabel="Select Week 1"
-                style={styles.buttonText}
-              />
-          
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button 
-                title="Week 1" 
-                onPress={() => handleWeekButtonClick(4)} 
-                color={selectedWeek === 4 ? 'blue' : 'gray'}
-                accessibilityLabel="Select Week 1"
-                style={styles.buttonText}
-              />
-            </View>
           </View>
         </View>
-        <View className="mt-2 rounded-lg flex flex-1  bg-red-100 justify-center">
-          <CoursesCardComponent />
+        <View className="mt-2 rounded-3xl flex flex-1 bg-white  justify-center">
+          {isLoading && <ActivityIndicator size={40}/>}
+          {!isLoading && (
+            <FlatList
+            data={selectedTask}
+            renderItem={({ item}) => renderCourseCard(item={item})}
+            keyExtractor={item => item.taskId}
+            horizontal={false}
+        />
+          )}
         </View>
       </View>
-</ScrollView>
   );
 };
 

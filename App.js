@@ -18,22 +18,32 @@ import RegistrationScreen from './screens/registrationScreen/RegistrationScreen'
 import QuestionScreen from './screens/questionScreen/QuestionScreen';
 import TotalScoreScreen from './screens/totalScoreScreen/TotalScoreScreen';
 import CreatePostScreen from './screens/createPostScreen/CreatePostScreen';
-
+import YouTubeScreen from './screens/youTubeScreen/YouTubeScreen';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import SafeViewAndroid from './Components/SafeViewAndroid';
+import ViewTaskScreen from './screens/courseHomeScreen/ViewTaskScreen';
+import { useEffect } from 'react';
 const Stack = createNativeStackNavigator();
 
 
 export default function App() {
+  
+  
+
   return (
     
-    <NavigationContainer>
+    <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
+      <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="OnboardingScreen" >
-          
+        screenOptions={{
+          headerShown:false
+        }}
+        
+        initialRouteName="LandingScreen" >
         <Stack.Screen
         name="OnboardingScreen"
         component={OnboardingScreen}
         options={{
-          title: 'Onboarding',
           headerShown:false
         }}
       />
@@ -66,6 +76,14 @@ export default function App() {
         component={LandingScreen}
         options={{
           headerShown:false,
+          title: 'LandingScreen',
+        }}
+      />
+      <Stack.Screen
+        name="YouTubeScreen"
+        component={YouTubeScreen}
+        options={{
+          headerShown:false,
           title: 'Login',
         }}
       />
@@ -92,6 +110,7 @@ export default function App() {
           headerShown:false,
           title: 'Awesome app',
         }}
+        
       />         
       <Stack.Screen
         name="ExploreScreen"
@@ -104,11 +123,12 @@ export default function App() {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{
-          headerShown:false,
-          title: 'Awesome app',
-        }}
+        options={{headerShown: false}}
       /> 
+      <Stack.Screen
+        name="ViewTaskScreen"
+        component={ViewTaskScreen}
+      />
       <Stack.Screen
         name="CommunityScreen"
         component={CommunityScreen}
@@ -152,14 +172,6 @@ export default function App() {
       />  
     </Stack.Navigator>
   </NavigationContainer>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
