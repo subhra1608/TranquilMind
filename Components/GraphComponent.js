@@ -27,7 +27,7 @@ const GraphComponent = () => {
             yAxisSuffix=""
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
-           backgroundColor:'white',
+           backgroundColor:'#9B8BCA',
             // backgroundGradientFrom: "#fb8c00",
             // backgroundGradientTo: "#ffa726",
             decimalPlaces: 2, // optional, defaults to 2dp

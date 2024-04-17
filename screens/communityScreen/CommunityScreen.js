@@ -1,14 +1,50 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Animated, Dimensions } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Animated, Dimensions, ActivityIndicator } from 'react-native';
 import PostCardComponent from '../../Components/PostCardComponent';
 import { postData } from '../../data/postData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { baseUrl } from '../../data/baseUrl';
+import QnAComponent from '../../Components/QnAComponent';
 
 const { width } = Dimensions.get('window');
-const segmentWidth = width / 2; // Assuming two segments
+const segmentWidth = width / 2; 
 
-const CommunityScreen = ({ navigation }) => {
+  const CommunityScreen = ({ navigation }) => {
+
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(0);
+  const [isViewPostsSelected,setIsViewPostsSelected]=useState(true);
+  const [post,setPost]=useState({});
+  const [isLoading,setIsLoading]=useState(true);
   const indicatorAnim = useRef(new Animated.Value(0)).current;
+  const [isRefresh,setIsRefresh]=useState(false);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [isRefresh])
+
+  const fetchPosts = async() => {
+
+    setIsLoading(true);
+    const token = await  AsyncStorage.getItem('token');
+    try {
+      const response = await axios.get(`${baseUrl}/api/post/get-posts`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPost(response.data);
+      setIsRefresh(true);
+
+;    } catch (error) {
+
+      console.log(error.message);
+      console.error('Error Getting details:', error);
+    }    
+
+   setIsLoading(false);
+   
+  };
 
   const handleSelectSegment = (index) => {
     Animated.timing(indicatorAnim, {
@@ -17,13 +53,33 @@ const CommunityScreen = ({ navigation }) => {
       useNativeDriver: true,
     }).start();
     setSelectedSegmentIndex(index);
+
+    if(index===0)
+    setIsViewPostsSelected(true);
+  else if(index===1)
+  setIsViewPostsSelected(false);
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('PostDetail', { postId: item.id })} style={styles.postContainer}>
-      <PostCardComponent {...item} />
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    return(
+      <PostCardComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} />
+    );
+  }
+
+  const renderItemQnA = ({ item }) => {
+    return(
+      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} />
+    );
+  }
+  
+  const qnaData=[
+    {id:1,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:2,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:3,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:4,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:5,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+    {id:6,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+  ]
 
   return (
     <View style={styles.container}>
@@ -50,14 +106,38 @@ const CommunityScreen = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
-        <Text style={styles.addButtonText}>+ Add Post</Text>
-      </TouchableOpacity>
-      <FlatList
-        data={postData}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-      />
+      <>
+        {isViewPostsSelected && !isLoading && 
+        ( <View>
+          <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
+          <Text style={styles.addButtonText}>+ Add Post</Text>
+        </TouchableOpacity>
+        <View className=" h-5/6">
+        <FlatList
+          data={post}
+          keyExtractor={(item,index) => item.id.toString()}
+          renderItem={renderItem}
+        />
+        </View>
+        </View>)}
+      
+      { !isLoading && !isViewPostsSelected && (
+      <View>
+        <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
+          <Text style={styles.addButtonText}> + Add Question</Text>
+        </TouchableOpacity>
+        <View  className=" h-5/6">
+        <FlatList
+          data={qnaData}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItemQnA}
+        />
+        </View>
+      </View>
+      )}
+      { isLoading && (<ActivityIndicator size={30} />)}
+
+      </>
     </View>
   );
 };

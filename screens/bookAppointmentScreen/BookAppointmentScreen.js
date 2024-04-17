@@ -151,7 +151,7 @@ const BookAppointmentScreen = ({navigation}) => {
             }
           }
         ],
-        { cancelable: false }
+        { cancelable: true }
       );
     
 
