@@ -1,25 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const QuizScreen = ({ navigation }) => {
-  const quizzes = [
-    { id: '1', title: 'GAD7' },
-    { id: '2', title: 'PHQ9' },
-    // { id: '3', title: 'Science' },
-    // { id: '4', title: 'CS' },
-    // { id: '5', title: 'AI' },
-    // { id: '6', title: 'ML' },
-  ];
+
+  const [quizzes, setQuizzes] = useState([]);
+  const [token, setToken] = useState([]);
+  
+  useEffect(() => {
+    // Function to retrieve the token from AsyncStorage
+    const retrieveToken = async () => {
+      try {
+        const retrievedToken = await AsyncStorage.getItem('token');
+        // console.log(retrievedToken);
+        setToken(retrievedToken); // Set the token in state
+        // You may now use the token to perform actions that require authentication
+      } catch (error) {
+        console.error("Failed to retrieve the token:", error);
+        // Handle the error, perhaps navigate to login screen
+      }
+    };
+    retrieveToken();
+  }, []);
+  // console.log(token);
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      if (token) {  // Check if token is available
+        try {
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          };
+          const response = await axios.get('http://10.0.2.2:8082/api/quiz/quiz-types', { headers });
+          setQuizzes(response.data);
+          console.log(response.data);
+        } catch (error) {
+          console.error("Failed to fetch quizzes:", error);
+        }
+      }
+    };
+    fetchQuizzes();
+  }, [token]);  // Depend on token state
+  
 
   const renderQuizItem = ({ item }) => (
     <TouchableOpacity
       style={styles.quizButton}
-      onPress={() => navigation.navigate('QuestionScreen', { quizTitle: item.title })}
+      onPress={() => navigation.navigate('QuestionScreen', { quizName: item.quizName , quizTypeId: item.quizTypeId })}
     >
-      <Text style={styles.quizButtonText}>{item.title}</Text>
+      <Text style={styles.quizButtonText}>{item.quizName}</Text>
     </TouchableOpacity>
   );
+
+
 
   return (
     <View style={{ flex: 1, marginTop:8 }}>
@@ -30,7 +64,7 @@ const QuizScreen = ({ navigation }) => {
       <FlatList
         data={quizzes}
         renderItem={renderQuizItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => String(index)}
         contentContainerStyle={styles.listContainer}
       />
     </View>

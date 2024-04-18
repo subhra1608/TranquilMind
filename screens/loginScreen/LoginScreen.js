@@ -12,8 +12,8 @@ import {Picker} from '@react-native-picker/picker';
 const LoginScreen = ({ navigation }) => {
 
   const t = i18n.t;
-  const [email, setEmail] = useState("example@example.com");
-  const [password, setPassword] = useState('examplepassword');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState('');
   const [user,setUser]= useState({});
   const [selectedLanguage, setSelectedLanguage] = useState("en"); 
   const [isLoading,setIsLoading]=useState(false);
@@ -51,8 +51,10 @@ const LoginScreen = ({ navigation }) => {
       console.log(response.data);  
       const userId = response.data.userId;
       await AsyncStorage.setItem('token',response.data.accessToken);      // setUser(response.data);
+      console.log(response.data.accessToken);
       await AsyncStorage.setItem('userId',String(userId));      // setUser(response.data);
-      
+
+      //console.log(token)
       navigation.navigate('LandingScreen');
 
     } catch (error) {

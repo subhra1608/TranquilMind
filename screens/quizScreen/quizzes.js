@@ -1,7 +1,7 @@
 const quizzes = [
     {
         id: '1',
-        title: 'GAD7',
+        title: 'GA7',
         questions: [
           {
             id: '1',
