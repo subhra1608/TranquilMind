@@ -3,7 +3,7 @@ import React, { useState,useEffect } from 'react'
 import { FlatList,TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import axios from 'axios';
-import youTubeData from '../../data/youTubeData';
+import {ka,en,hi} from '../../data/youTubeData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../../i18';
 import translations from './translations';
@@ -142,7 +142,7 @@ const HomeScreen = ({navigation}) => {
   
             <View className=" h-8 mb-2 flex-row justify-between">
               <View >
-                <Text style={{ fontSize:22,fontWeight:'600'}} className="mt-1 ml-4" >Mental Checkout</Text>
+                <Text style={{ fontSize:18,fontWeight:'600'}} className="mt-1 ml-4" >{t('mentalCheckout', { lng: language })}</Text>
               </View>
               
             </View>
@@ -150,7 +150,7 @@ const HomeScreen = ({navigation}) => {
               <View className="flex-row w-10/12">
                 <View className="flex-col flex-1 justify-between">
                   <View className="flex-1">
-                    <Text  className=" text-lg mx-1  text-white ">Test your stress Level</Text>
+                    <Text  className=" text-lg mx-1  text-white ">{t('engageInQuizzes', { lng: language })} </Text>
                   </View>
                 </View>
    
@@ -161,7 +161,7 @@ const HomeScreen = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
             </View>
-            <Text className=" mt-2 ml-3 mb-2 text-lg">Glance over these beautiful quotes!</Text>
+            <Text className=" mt-2 ml-3 mb-2 text-lg">{t('exploreQuotes', { lng: language })}</Text>
             
             <View className="flex-1 h-32  mx-1  rounded-3xl ">
               <FlatList
@@ -173,10 +173,10 @@ const HomeScreen = ({navigation}) => {
             </View>
           </View>
           <View className="flex-1 rounded-lg">
-          <Text className="mt-2 ml-2 mb-2 text-lg"> You Tube channels for self development </Text>
+          <Text className="mt-2 ml-2 mb-2 text-lg">{t('elevateWithChannels', { lng: language })}</Text>
           <View className="h-64">
           <FlatList
-              data={youTubeData}
+              data={language==='en'?en:language==='hi'?hi:ka}
               renderItem={({ item}) => renderYouTubeSeries(item={item})}
               keyExtractor={item => item.playlistId.toString()}
               horizontal={true}

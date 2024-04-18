@@ -63,7 +63,7 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert('Error',"Credentials are invalid");
     }
 
-    //navigation.navigate('LandingScreen');
+    navigation.navigate('LandingScreen');
     setIsLoading(false);
    
   };
