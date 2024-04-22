@@ -50,7 +50,7 @@ const HomeScreen = ({navigation}) => {
     const renderQuotes = ({ item }) => {
       return (
         <View style={styles.item} className="shadow-lg rounded-3xl p-1" >
-          <Text style= {styles.overlay} className="text-lg p-2 mt-1 text-white justify-items-center  font-bold" >{item.text}</Text>
+          <Text style= {styles.overlay} className="text-lg p-2 mt-1 text-white justify-items-center " >{item.text}</Text>
           {/* <Text style={styles.author}>{item.author}</Text> */}
         </View>
       );
@@ -97,7 +97,7 @@ const HomeScreen = ({navigation}) => {
               resizeMode="cover"
               />
               <View className="absolute top-5 left-4 ">
-              <Text className=" font-bold text-lg ml-20 text-neutral-50">{t('welcomeMessage', { lng: language })}</Text>
+              <Text className=" font-bold text-lg ml-18 text-neutral-50">{t('welcomeMessage', { lng: language })}</Text>
               <Text className="mt-2 font-bold text-lg ml-20 text-neutral-50">{t('How are you feeling today', { lng: language })}</Text>
               <View className="flex-row justify-between">
               <View>
@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
+    backgroundColor:'white'
   },
   item: {
     height:120,

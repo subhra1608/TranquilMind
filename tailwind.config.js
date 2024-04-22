@@ -15,6 +15,7 @@ module.exports = {
             "./Components/ButtonComponent.js",
             "./screens/communityScreen/CommunityScreen.js",
             "./screens/exploreScreen/ExploreScreen.js",
+            "./screens/courseHomeScreen/ViewTaskScreen.js",
             "./Components/PostCardComponent.js",
             "./Components/QnAComponent.js",
             ],
