@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../data/baseUrl';
+import Header from '../../Components/HeaderComponent';
 
 const QuestionScreen = ({ route, navigation }) => {
   const { quizName, quizTypeId } = route.params;
@@ -90,18 +91,19 @@ const QuestionScreen = ({ route, navigation }) => {
   
   return (
     <View style={styles.container}>
+      <View>
+        <Header title="Question Screen" onPressBack={() => navigation.goBack()} />
+        </View>
       <FlatList
         data={questions}
         renderItem={renderQuestionItem}
         keyExtractor={item => String(item.quizQuestionId)}
         contentContainerStyle={styles.listContainer}
         ListHeaderComponent={
-          <>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-              <Text style={styles.backButtonText}>Go Back</Text>
-            </TouchableOpacity>
-            <Text style={styles.text}>Questions</Text>
-          </>
+          <Text style={styles.titleText}>
+            Let's take the first step towards understanding your mental wellness. 
+            Answer each question as openly as you can.
+          </Text>
         }
         ListFooterComponent={
           <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
@@ -120,7 +122,8 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: 20,
     marginTop: 30,
-    paddingTop: 60, // Increase padding at the top to make space for the back button
+    // paddingTop: 60, 
+    paddingBottom: 100,
   },
   questionContainer: {
     marginBottom: 30,
@@ -179,6 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     marginBottom: 20,
+    marginBottom: 50,
   },
   submitButtonText: {
     color: '#fff',
@@ -192,6 +196,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: '', // Change this to your preferred font
   },
+  titleText: {
+    fontSize: 18,
+    lineHeight: 24,
+    color: '#9B8BCA',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    marginTop: -10,
+    fontWeight: "bold",
+  }
+
 });
 
 

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../data/baseUrl';
 import { Alert } from 'react-native';
+import Header from '../../Components/HeaderComponent';
 const QuizScreen = ({ navigation }) => {
 
   const [quizzes, setQuizzes] = useState([]);
@@ -55,7 +56,7 @@ const QuizScreen = ({ navigation }) => {
           setQuizzes(response.data);
           
         } catch (error) {
-          console.error("Failed to fetch quizzes:", error);
+          // console.error("Failed to fetch quizzes:", error);
         }
       }
       else {
@@ -63,7 +64,7 @@ const QuizScreen = ({ navigation }) => {
           "Restricted Access",
           "Guest users do not have access to quizzes. Please log in or register to take a quiz.",
           [
-            { text: "OK", onPress: () => navigation.navigate('LoginScreen') }
+            { text: "OK", onPress: () => navigation.navigate('ProfileScreen') }
           ],
         );
       }
@@ -80,14 +81,17 @@ const QuizScreen = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-
-
   return (
     <View style={{ flex: 1, marginTop:8 }}>
-      <TouchableOpacity onPress={() => navigation.goBack() }>
-              <Text style={styles.backButtonText}>{'< Back'}</Text>
-      </TouchableOpacity>
-      <Text style={styles.quizText}>Quizzes</Text>
+        <View>
+        <Header title="Quiz Screen" onPressBack={() => navigation.goBack()} />
+        </View>
+        <Text style = {styles.titleText}>
+        Wellness Check-In
+      </Text>
+      <Text style={styles.descriptionText}>
+        Take a moment to assess your overall well-being. This quiz helps you understand where you stand on your journey to a healthier and happier you.
+      </Text>
       <FlatList
         data={quizzes}
         renderItem={renderQuizItem}
@@ -147,8 +151,23 @@ const styles = StyleSheet.create({
     top: 20,
     bottom: 5,
     left: 20
-    // textShadowOffset: { width: 1, height: 2 },
-    // textShadowRadius: 0.5,
+    
+  },
+  titleText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#9B8BCA',
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  descriptionText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#4A4E69',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    marginBottom: 20,
   }
 });
 

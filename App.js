@@ -26,6 +26,7 @@ import ChatScreen from './screens/chatScreen/ChatScreen';
 import ChatMessage from './screens/chatScreen/ChatMessage';
 import ChatMessageScreen from './screens/chatScreen/ChatMessageScreen';
 import CreateQnAScreen from './screens/createQnAscreen/CreateQnAScreen';
+import PostCardComponent from './Components/PostCardComponent';
 import { useEffect } from 'react';
 const Stack = createNativeStackNavigator();
 
@@ -198,6 +199,14 @@ export default function App() {
           title: 'Awesome app',
         }}
       />  
+      <Stack.Screen
+        name="PostCardComponent"
+        component={PostCardComponent}
+        options={{
+          headerShown:false,
+          title: 'Login',
+        }}
+      />
     </Stack.Navigator>
   </NavigationContainer>
     </SafeAreaView>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../data/baseUrl';
-
+import Header from '../../Components/HeaderComponent';
 
 const CreateQnAScreen = ({ navigation }) => {
   const [postContent, setPostContent] = useState('');
@@ -33,7 +33,7 @@ const CreateQnAScreen = ({ navigation }) => {
   console.log(requestBody);
 
   try {
-    const response = await fetch(`${baseURL}/api/question/add-question`, {
+    const response = await fetch(`${baseUrl}/api/question/add-question`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const CreateQnAScreen = ({ navigation }) => {
     });
   
     console.log(response.status);
-    if (response.ok) {
+    if (response.status==200) {
         const responseData = await response.json();
         alert('Your question has been submitted successfully!');
         console.log('Response data:', responseData);
@@ -55,8 +55,9 @@ const CreateQnAScreen = ({ navigation }) => {
         alert(`Failed to submit your question. Status: ${response.status} - ${errorData}`);
       }
     } catch (error) {
-      console.error('Error submitting question:', error);
-      alert('An error occurred. Please try again.');
+      // console.error('Error submitting question:', error);
+      // alert('An error occurred. Please try again.');
+        
     }
 
   };
@@ -66,10 +67,11 @@ const CreateQnAScreen = ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
+      <View>
+        <Header title="Ask Questions" onPressBack={() => navigation.goBack()} />
+        </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>Go Back</Text>
-        </TouchableOpacity>
+        
         <Text style={styles.headerText}>Unlocking Peace of Mind : Your Questions Matter</Text>
         <View style={styles.inputBox}>
           

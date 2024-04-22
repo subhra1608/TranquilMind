@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Image } from 'react-native';
-// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../data/baseUrl';
+import Header from '../../Components/HeaderComponent';
 
 
-const CreatePostScreen = ({ navigation }) => {
+const CreatePostScreen = ({ route, navigation }) => {
   const [postTitle, setPostTitle] = useState('');
   const [postContent, setPostContent] = useState('');
   const [imageUri, setImageUri] = useState(null);
+
 
   const getCurrentTimestamp = () => {
     return new Date().toISOString();
@@ -74,11 +75,14 @@ const CreatePostScreen = ({ navigation }) => {
       },
       body: JSON.stringify(requestBody),
     });
-
+    
     const responseData = await response.json();
 
     if (response.ok) {
       alert('Post submitted successfully!');
+      if (route.params?.onPostAdded) {
+        route.params.onPostAdded(); // Call the refresh function passed via params
+      }
       console.log('Response data:', responseData);
       navigation.goBack();
     } else {
@@ -97,10 +101,11 @@ const CreatePostScreen = ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
+      <View>
+        <Header title="Create Post" onPressBack={() => navigation.goBack()} />
+        </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>Go Back</Text>
-        </TouchableOpacity>
+
         <Text style={styles.headerText}>Share Your Thoughts And Inspire The Community</Text>
         <View style={styles.inputBox}>
           
@@ -189,10 +194,10 @@ const styles = StyleSheet.create({
     marginBottom: 20, // Ensure spacing below the box, especially important if you have more content below
   },
   headerText: {
-    fontSize: 22, // Large, readable size
-    fontWeight: 'bold', // Make it pop
-    color: '#4A4E69', // A sophisticated, dark shade of blue
-    textAlign: 'center', // Center-align text
+    fontSize: 22, 
+    fontWeight: 'bold',
+    color: '#4A4E69', 
+    textAlign: 'center', 
     marginTop: 20, // Add space on the top
     marginBottom: 20, // Add space at the bottom
     paddingHorizontal: 10, // Prevents text from touching the screen edges
@@ -210,26 +215,26 @@ const styles = StyleSheet.create({
     padding: 10, // Padding inside the background
   },
   input: {
-    backgroundColor: '#FFFFFF', // Lighter background for better contrast and a clean look
-    borderColor: '#DDD', // Add a border to define the input area more clearly
-    borderWidth: 1, // Border width
-    borderRadius: 8, // Soften the edges
-    padding: 15, // Comfortable padding
-    marginBottom: 20, // Space out elements
-    fontSize: 16, // Readable text size
-    color: '#333', // Dark text for readability
-    shadowColor: '#000', // Subtle shadow for depth
+    backgroundColor: '#FFFFFF', 
+    borderColor: '#DDD', 
+    borderWidth: 1, 
+    borderRadius: 8, 
+    padding: 15, 
+    marginBottom: 20, 
+    fontSize: 16, 
+    color: '#333', 
+    shadowColor: '#000', 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2, // Android shadow
   },
   textArea: {
-    height: 150, // Enough space to write longer posts
-    textAlignVertical: 'top', // Start text from the top
+    height: 150, 
+    textAlignVertical: 'top', 
   },
   imageSelectButton: {
-    backgroundColor: '#D8BFD8', // Use the same purple for consistency but a bit lighter
+    backgroundColor: '#D8BFD8', 
     padding: 15,
     borderRadius: 8,
     marginBottom: 20,
@@ -276,19 +281,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 20,
   },
-  // previewImage: {
-  //   width: '100%', // or a fixed size like 300
-  //   height: 200, // or a fixed size like 200
-  //   borderRadius: 8,
-  // },
+
   imageUploadedText: {
     color: 'green',
     textAlign: 'center',
     marginTop: 8,
   },
   imagePlaceholder: {
-    width: '100%', // or a fixed size like 300
-    height: 100, // or a fixed size like 200
+    width: '100%', 
+    height: 100, 
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#CCC',
