@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore} from "firebase/firestore";
 import { getAuth, signInAnonymously,onAuthStateChanged} from "firebase/auth";
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Cookies from 'universal-cookie';
 
 
@@ -17,7 +19,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication
-export const auth = getAuth(app);
+// export const auth = getAuth(app);
+// Initialize Firebase Auth with React Native persistence
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage)
+});
 
 export const db=getFirestore(app);
 
@@ -65,12 +71,12 @@ export const signInAnonymouslyIfNeeded = async () => {
       unsubscribe(); // Unsubscribe to avoid memory leaks
       console.log(unsubscribe);
       if (user) {
-        console.log("User is already authenticated:", user);
+        // console.log("User is already authenticated:", user);
         resolve(auth);
       } else {
         signInAnonymously(auth)
           .then(() => {
-            console.log("Anonymous user signed in:", auth.currentUser);
+            // console.log("Anonymous user signed in:", auth.currentUser);
             resolve(auth);
           })
           .catch((error) => {
@@ -83,10 +89,10 @@ export const signInAnonymouslyIfNeeded = async () => {
     // Handle the case where the initial authentication state check takes too long
     setTimeout(() => {
       unsubscribe(); // Unsubscribe if the check takes too long
-      console.log("Initial authentication state check timed out");
+      // console.log("Initial authentication state check timed out");
       signInAnonymously(auth)
         .then(() => {
-          console.log("Anonymous user signed in:", auth.currentUser);
+          // console.log("Anonymous user signed in:", auth.currentUser);
           resolve(auth);
         })
         .catch((error) => {

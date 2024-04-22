@@ -8,12 +8,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../data/baseUrl';
 
 
-const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
+const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation}) => {
   
   const [commentInput, setCommentInput] = useState('');
   const [showComments, setShowComments] = useState(false);
   const [isLoading,setIsLoading]=useState(false);
   const [userId,setUserId] =useState(null);
+  const [isGuest, setIsGuest] = useState(false);
+
+  useEffect(() => {
+    // Check if the user is a guest
+    const checkIfGuest = async () => {
+      const guestStatus = await AsyncStorage.getItem('isGuest');
+      setIsGuest(guestStatus === 'true');
+    };
+    
+    checkIfGuest();
+  }, []);
 
   const handleFlag = async (postId, flag) => {
     try {
@@ -56,6 +67,17 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
   const handleSubmitComment = async() => {
 
     setIsLoading(true);
+    if (isGuest) {
+      // Alert the guest user and navigate to the login screen
+      Alert.alert(
+        "Restricted Action",
+        "You must be logged in to post comments. Would you like to log in or register?",
+        [
+          { text: "Yes", onPress: () => navigation.navigate('ProfileScreen') },
+          { text: "No" }
+        ]
+      );
+    } else {
     const token = await  AsyncStorage.getItem('token');
     if(commentInput.length<5)
     {
@@ -92,7 +114,7 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
       console.error('Error Getting details:', error);
     }    
    setIsLoading(false);
-   
+  }
   };
 
   function formatDate(timestamp) {
@@ -194,10 +216,18 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
               multiline
               value={commentInput}
               onChangeText={setCommentInput}
+              editable={!isGuest} // Disable input if user is a guest
               />
+              <TouchableOpacity
+                onPress={handleSubmitComment}
+                disabled={isGuest}
+                style={isGuest ? [styles.submitButton, styles.submitButtonDisabled] : styles.submitButton}
+              >
+                <Text style={{ color: isGuest ? '#8E8E8E' : 'white' }}>Submit</Text>
+              </TouchableOpacity>
             </View>
             <View>
-              <Button title="Submit" onPress={()=>(handleSubmitComment())} />
+              {/* <Button title="Submit" onPress={()=>(handleSubmitComment()) } /> */}
             </View>
           </View>
         </View>
@@ -206,7 +236,7 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
   );
 };
 
-export default PostCardComponent;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -279,5 +309,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginRight: 4,
   },
+  submitButton: {
+    backgroundColor: '#9B8BCA', // A pleasant purple shade for the button
+    color: 'white',              // White text color
+    paddingVertical: 10,         // Vertical padding for button height
+    paddingHorizontal: 20,       // Horizontal padding for button width
+    borderRadius: 5,             // Rounded corners
+    overflow: 'hidden',          // Prevent any child component from going outside the bounds
+    textAlign: 'center',         // Center the text inside the button
+    fontSize: 16,                // Reasonable font size for the button text
+    fontWeight: '600',           // Medium font weight for a bit of emphasis
+    elevation: 2,                // Subtle shadow for an elevated effect on Android
+    shadowColor: 'black',        // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // X, Y offset for the shadow
+    shadowOpacity: 0.25,         // Shadow opacity
+    shadowRadius: 3.84,          // Shadow blur radius
+    marginTop: 10,               // Margin on top to separate from other components
+  },
+  submitButtonDisabled: {
+    backgroundColor: '#CDCDCD',  // A grayish color to indicate the button is disabled
+    color: '#8E8E8E',            // A darker gray for the text
+  }
 });
 
+export default PostCardComponent;

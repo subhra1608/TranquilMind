@@ -66,7 +66,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
             return () => unsubscribe();
         }
     }, [patientId, doctorId]);
-    console.log(messages);
+    // console.log(messages);
     const handleSend = async () => {
       if (newMessage.trim().length > 0 && patientId && doctorId) {
         const messagesRef = collection(db, 'Messages');
