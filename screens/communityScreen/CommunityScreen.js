@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../../data/baseUrl';
 import QnAComponent from '../../Components/QnAComponent';
+import i18n from '../../i18';
+import translations from '../homeScreen/translations';
 
 const { width } = Dimensions.get('window');
 const segmentWidth = width / 2; 
@@ -18,10 +20,21 @@ const segmentWidth = width / 2;
   const [isLoading,setIsLoading]=useState(true);
   const indicatorAnim = useRef(new Animated.Value(0)).current;
   const [isRefresh,setIsRefresh]=useState(false);
+  const [language,setLanguage]=useState("");
+  const t = i18n.t;
 
   useEffect(() => {
     fetchPosts();
+    setLanguageFromAsyncStorage();
   }, [isRefresh])
+  const setLanguageFromAsyncStorage = async ()=>
+  {
+      const getSelectedLanguage = await AsyncStorage.getItem('language');
+      if(getSelectedLanguage===null)
+      {setLanguage('en');}
+      else
+      {setLanguage(getSelectedLanguage);}
+  }
 
   const fetchPosts = async() => {
 
@@ -94,7 +107,7 @@ const segmentWidth = width / 2;
             },
           ]}
         />
-        {['View Posts', 'View Questions'].map((segment, index) => (
+        {[t('viewPosts', { lng: language }), t('viewQuestions', { lng: language })].map((segment, index) => (
           <TouchableOpacity
             key={segment}
             onPress={() => handleSelectSegment(index)}
@@ -110,7 +123,7 @@ const segmentWidth = width / 2;
         {isViewPostsSelected && !isLoading && 
         ( <View>
           <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
-          <Text style={styles.addButtonText}>+ Add Post</Text>
+          <Text style={styles.addButtonText}>{t('addPost', { lng: language })}</Text>
         </TouchableOpacity>
         <View className=" h-5/6">
         <FlatList
