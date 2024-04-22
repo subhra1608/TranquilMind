@@ -22,6 +22,10 @@ import YouTubeScreen from './screens/youTubeScreen/YouTubeScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SafeViewAndroid from './Components/SafeViewAndroid';
 import ViewTaskScreen from './screens/courseHomeScreen/ViewTaskScreen';
+import ChatScreen from './screens/chatScreen/ChatScreen';
+import ChatMessage from './screens/chatScreen/ChatMessage';
+import ChatMessageScreen from './screens/chatScreen/ChatMessageScreen';
+import CreateQnAScreen from './screens/createQnAscreen/CreateQnAScreen';
 import { useEffect } from 'react';
 const Stack = createNativeStackNavigator();
 
@@ -39,7 +43,7 @@ export default function App() {
           headerShown:false
         }}
         
-        initialRouteName="LandingScreen" >
+        initialRouteName="LoginScreen" >
         <Stack.Screen
         name="OnboardingScreen"
         component={OnboardingScreen}
@@ -165,6 +169,30 @@ export default function App() {
       <Stack.Screen
         name="CreatePostScreen"
         component={CreatePostScreen}
+        options={{
+          headerShown:false,
+          title: 'Awesome app',
+        }}
+      />  
+      <Stack.Screen
+        name="CreateQnAScreen"
+        component={CreateQnAScreen}
+        options={{
+          headerShown:false,
+          title: 'Awesome app',
+        }}
+      />  
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{
+          headerShown:false,
+          title: 'Awesome app',
+        }}
+      />  
+      <Stack.Screen
+        name="ChatMessageScreen"
+        component={ChatMessageScreen}
         options={{
           headerShown:false,
           title: 'Awesome app',

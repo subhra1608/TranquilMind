@@ -136,8 +136,8 @@ const segmentWidth = width / 2;
       
       { !isLoading && !isViewPostsSelected && (
       <View>
-        <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
-          <Text style={styles.addButtonText}>{t('addQuestion', { lng: language })}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('CreateQnAScreen')} style={styles.addButton}>
+          <Text style={styles.addButtonText}> + Add Question</Text>
         </TouchableOpacity>
         <View  className=" h-5/6">
         <FlatList

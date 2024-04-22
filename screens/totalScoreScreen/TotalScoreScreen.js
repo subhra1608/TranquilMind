@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { baseUrl } from '../../data/baseUrl';
 
 const TotalScoreScreen = ({ route, navigation }) => {
   const { score } = route.params;

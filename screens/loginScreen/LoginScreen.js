@@ -32,7 +32,11 @@ const LoginScreen = ({ navigation }) => {
       {setLanguage(getSelectedLanguage);}
       console.log("selectedLanguage",selectedLanguage)
   }
-
+  const handleGuestLogin = async () => {
+    // Perform guest login actions, e.g., navigate to a different screen, set a guest token, etc.
+    await AsyncStorage.setItem('isGuest', 'true'); // This is an example of setting guest status.
+    navigation.navigate('LandingScreen'); // Navigate to the main landing screen as a guest.
+  };
   const handleLogin = async() => {
     
     setIsLoading(true);
@@ -124,10 +128,19 @@ const LoginScreen = ({ navigation }) => {
       <View className="flex flex-row justify-center">
       <TouchableOpacity className="  justify-center items-center rounded-xl mt-3 bg-[#9B8BCA] h-10 w-2/6 " onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text className="text-lg text-neutral-50">{t('registerButton', { lng: language })}</Text></TouchableOpacity>
       </View>
+      <View className="flex flex-row justify-center">
+      <TouchableOpacity
+        className="justify-center items-center rounded-xl mt-3 bg-[#9B8BCA] h-10 w-3/6"
+        onPress={handleGuestLogin}
+      >
+        <Text className="text-lg text-neutral-50">Guest Login</Text>
+      </TouchableOpacity>
+     </View>
       {/* <View className="flex flex-row justify-end mr-4">
       <TouchableOpacity onPress={()=>{navigation.navigate('RegistrationScreen')}}><Text className="text-lg">Register Now</Text></TouchableOpacity>
       </View> */}
     </View>
+    
   );
 };
 
