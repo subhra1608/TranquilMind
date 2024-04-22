@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Animated, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Animated, Dimensions, ActivityIndicator, Alert } from 'react-native';
 import PostCardComponent from '../../Components/PostCardComponent';
 import { postData } from '../../data/postData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -21,8 +21,16 @@ const segmentWidth = width / 2;
   const indicatorAnim = useRef(new Animated.Value(0)).current;
   const [isRefresh,setIsRefresh]=useState(false);
   const [language,setLanguage]=useState("");
+  const [isGuest, setIsGuest] = useState(false);
   const t = i18n.t;
-
+  useEffect(() => {
+    const checkGuestStatus = async () => {
+      const guestStatus = await AsyncStorage.getItem('isGuest');
+      setIsGuest(guestStatus === 'true'); // Update the state based on the guest status
+    };
+    checkGuestStatus();
+    // ... other code
+  }, []);
   useEffect(() => {
     fetchPosts();
     setLanguageFromAsyncStorage();
@@ -59,6 +67,22 @@ const segmentWidth = width / 2;
    
   };
 
+  const handleAddPostPress = async () => {
+    if (isGuest) {
+      Alert.alert(
+        "Restricted Access",
+        "Guest users cannot add posts. Please log in or register to contribute.",
+        [
+          { text: "OK", onPress: () => navigation.navigate('ProfileScreen') }
+        ],
+      );
+    } else {
+      navigation.navigate('CreatePostScreen', { onPostAdded: fetchPosts });
+    }
+  };
+  useEffect(() => {
+    fetchPosts();
+  }, [isRefresh]); 
   const handleSelectSegment = (index) => {
     Animated.timing(indicatorAnim, {
       toValue: index * segmentWidth,
@@ -122,9 +146,13 @@ const segmentWidth = width / 2;
       <>
         {isViewPostsSelected && !isLoading && 
         ( <View>
-          <TouchableOpacity onPress={() => navigation.navigate('CreatePostScreen')} style={styles.addButton}>
-          <Text style={styles.addButtonText}>{t('addPost', { lng: language })}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity 
+              onPress={handleAddPostPress} 
+              style={styles.addButton}
+              // disabled={isGuest} // Use the state to disable the button
+            >
+              <Text style={styles.addButtonText}>{t('addPost', { lng: language })}</Text>
+            </TouchableOpacity>
         <View className=" h-5/6">
         <FlatList
           data={post}
