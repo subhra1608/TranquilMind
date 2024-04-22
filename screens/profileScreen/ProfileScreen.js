@@ -21,6 +21,20 @@ const ProfileScreen = ({ navigation }) => {
   const [isLoading,setIsLoading]=useState(true);
   const [email,setEmail]=useState("");
   const [responseData, setResponseData]=useState({});
+  const [isGuest, setIsGuest] = useState(false);
+
+  useEffect(() => {
+    checkIfGuestUser();
+    // Only call getUserDetails if not a guest user
+    if (!isGuest) {
+      getUserDetails();
+    }
+  }, [isGuest]);
+
+  const checkIfGuestUser = async () => {
+    const guestStatus = await AsyncStorage.getItem('isGuest');
+    setIsGuest(guestStatus === 'true');
+  };
   
   const updateUserDetails = async() => {
 
@@ -106,10 +120,27 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate('LoginScreen');
   };
 
+  const handleClearFlagsForGuest = async () => {
+    await AsyncStorage.removeItem('isGuest');
+    navigation.navigate('LoginScreen');
+  };
+
+  if (isGuest) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.guestMessage}>You are currently logged in as a guest.</Text>
+        <TouchableOpacity style={styles.loginButton} onPress={handleClearFlagsForGuest}>
+          <Text style={styles.loginButtonText}>Login or Register</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
   return (
+    
       <ScrollView>
         <KeyboardAvoidingView>
-          
+        
+      {!isGuest && (    
       <View style={styles.container}>
       {isLoading && (<ActivityIndicator color='purple' size={30}/>)}
 
@@ -164,9 +195,10 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      )}
         </KeyboardAvoidingView>
       </ScrollView>
-    
+
   );
 };
 
@@ -218,6 +250,27 @@ const styles = StyleSheet.create({
   paddingHorizontal: 5,
   marginBottom: 20,
   fontSize: 20,
+  },
+  guestContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  guestMessage: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  loginButton: {
+    backgroundColor: '#9B8BCA',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
   accountDetailsText:{
     marginTop:2,

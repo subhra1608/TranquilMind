@@ -139,6 +139,9 @@ const BookAppointmentScreen = ({navigation}) => {
           "Content-Type":"application/json"
         },
       });
+      await AsyncStorage.setItem('doctorId', String(param.userId));
+      const storedDoctorId = await AsyncStorage.getItem('doctorId');
+      console.log("Retrieved doctorId from AsyncStorage:", storedDoctorId);
       return Alert.alert(
         'Appointment Booked Successfully',
         `Date :- ${selectedDate} \n Time :- ${selectedTime}`,
@@ -153,7 +156,7 @@ const BookAppointmentScreen = ({navigation}) => {
         ],
         { cancelable: true }
       );
-    
+      
 
     } catch (error) {
       console.log("API error",error);

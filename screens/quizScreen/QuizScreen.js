@@ -2,23 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { baseUrl } from '../../data/baseUrl';
 const QuizScreen = ({ navigation }) => {
 
   const [quizzes, setQuizzes] = useState([]);
   const [token, setToken] = useState([]);
+  const [isGuest, setIsGuest] = useState(false);
   
   useEffect(() => {
     // Function to retrieve the token from AsyncStorage
+    const checkGuestStatus = async () => {
+      const guestStatus = await AsyncStorage.getItem('isGuest');
+      setIsGuest(guestStatus === 'true');
+    };
+    checkGuestStatus();
     const retrieveToken = async () => {
       try {
-        const retrievedToken = await AsyncStorage.getItem('token');
+        const token = await AsyncStorage.getItem('token');
         // console.log(retrievedToken);
-        setToken(retrievedToken); // Set the token in state
-        // You may now use the token to perform actions that require authentication
+        if (token) {
+          setToken(token);
+        } 
+        console.log(token);
       } catch (error) {
         console.error("Failed to retrieve the token:", error);
-        // Handle the error, perhaps navigate to login screen
+
       }
     };
     retrieveToken();
@@ -26,22 +34,33 @@ const QuizScreen = ({ navigation }) => {
   // console.log(token);
   useEffect(() => {
     const fetchQuizzes = async () => {
-      if (token) {  // Check if token is available
+      if (token && !isGuest) {  // Check if token is available
         try {
           const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           };
-          const response = await axios.get('http://10.0.2.2:8082/api/quiz/quiz-types', { headers });
+          console.log('Authorization Header:', `Bearer ${token}`);
+          const response = await axios.get(`${baseUrl}/api/quiz/quiz-types`, { headers });
+          // console.log(response);
           setQuizzes(response.data);
           console.log(response.data);
         } catch (error) {
           console.error("Failed to fetch quizzes:", error);
         }
       }
+      else {
+        Alert.alert(
+          "Restricted Access",
+          "Guest users do not have access to quizzes. Please log in or register to take a quiz.",
+          [
+            { text: "OK", onPress: () => navigation.navigate('LoginScreen') }
+          ],
+        );
+      }
     };
     fetchQuizzes();
-  }, [token]);  // Depend on token state
+  }, [token, isGuest]);  // Depend on token state
   
 
   const renderQuizItem = ({ item }) => (

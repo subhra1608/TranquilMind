@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { baseUrl } from '../../data/baseUrl';
 
 const QuestionScreen = ({ route, navigation }) => {
   const { quizName, quizTypeId } = route.params;
@@ -16,7 +17,7 @@ const QuestionScreen = ({ route, navigation }) => {
         const headers = {
           Authorization: `Bearer ${token}`,
         };
-        const response = await axios.get(`http://10.0.2.2:8082/api/quiz-question/get-questions/${quizName}`, { headers });
+        const response = await axios.get(`${baseUrl}/api/quiz-question/get-questions/${quizName}`, { headers });
         setQuestions(response.data);
       } catch (error) {
         console.error("Failed to fetch questions:", error);
@@ -78,7 +79,7 @@ const QuestionScreen = ({ route, navigation }) => {
         'Authorization': `Bearer ${token}`,
       };
   
-      const response = await axios.post('http://10.0.2.2:8082/api/quiz/new', quizScoresData, { headers });
+      const response = await axios.post(`${baseUrl}/api/quiz/new`, quizScoresData, { headers });
       console.log('Quiz scores submitted:', response.data);
     navigation.navigate('TotalScoreScreen', { score: totalScore });
     }catch (error) {

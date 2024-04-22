@@ -1,47 +1,19 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Image } from 'react-native';
-// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../data/baseUrl';
 
 
-const CreatePostScreen = ({ navigation }) => {
-  const [postTitle, setPostTitle] = useState('');
+const CreateQnAScreen = ({ navigation }) => {
   const [postContent, setPostContent] = useState('');
-  const [imageUri, setImageUri] = useState(null);
 
   const getCurrentTimestamp = () => {
     return new Date().toISOString();
   };
   
 
-  const handleSelectImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      alert("You've refused to allow this app to access your photos!");
-      return;
-    }
-
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      allowsEditing: true,
-      aspect: [1, 1],
-    });
-
-    if (!pickerResult.cancelled && pickerResult.assets) {
-      setImageUri(pickerResult.assets[0].uri); // Access the uri from the assets array
-    } else {
-      setImageUri(null);
-    }
-  };
-
-
-  const handleSubmit = async () => {
-    // Check if the title, content, or imageUri is not empty
-  if (!postTitle || !postContent) {
+    const handleSubmit = async () => {
+   if (!postContent) {
     alert('Please fill in all fields.');
     return;
   }
@@ -51,22 +23,17 @@ const CreatePostScreen = ({ navigation }) => {
     alert('No user ID found. Please login again.');
     return;
   }
-  let imageBase64 = "";
-    if (imageUri) {
-      imageBase64 = await FileSystem.readAsStringAsync(imageUri, { encoding: 'base64' });
-    }
   // Construct the request body
   let requestBody = {
-    title: postTitle,
-      description: postContent,
-      postedBy: parseInt(userId, 10),
-      uploadedAt: getCurrentTimestamp(),
-      image: imageBase64 ? `data:image/jpeg;base64,${imageBase64}` : "",
-      flagged: 0,
+      question: postContent,
+      questionBy: parseInt(userId, 10),
+      uploadedAt: getCurrentTimestamp()
   };
 
+  console.log(requestBody);
+
   try {
-    const response = await fetch(`${baseUrl}/api/post/add-post`, {
+    const response = await fetch(`${baseURL}/api/question/add-question`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -74,21 +41,23 @@ const CreatePostScreen = ({ navigation }) => {
       },
       body: JSON.stringify(requestBody),
     });
-
-    const responseData = await response.json();
-
+  
+    console.log(response.status);
     if (response.ok) {
-      alert('Post submitted successfully!');
-      console.log('Response data:', responseData);
-      navigation.goBack();
-    } else {
-      alert('Failed to submit post. Please try again.');
-      console.log('Response error:', responseData);
+        const responseData = await response.json();
+        alert('Your question has been submitted successfully!');
+        console.log('Response data:', responseData);
+        navigation.goBack();
+      } else {
+        const errorData = await response.text(); // or response.json() if the server responds with JSON format
+        console.log('Response status:', response.status);
+        console.log('Error Response data:', errorData);
+        alert(`Failed to submit your question. Status: ${response.status} - ${errorData}`);
+      }
+    } catch (error) {
+      console.error('Error submitting question:', error);
+      alert('An error occurred. Please try again.');
     }
-  } catch (error) {
-    console.error('Submit post error:', error);
-    alert('An error occurred. Please try again.');
-  }
 
   };
 
@@ -101,36 +70,19 @@ const CreatePostScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Text style={styles.backButtonText}>Go Back</Text>
         </TouchableOpacity>
-        <Text style={styles.headerText}>Share Your Thoughts And Inspire The Community</Text>
+        <Text style={styles.headerText}>Unlocking Peace of Mind : Your Questions Matter</Text>
         <View style={styles.inputBox}>
           
-          
-          <TextInput
-            style={styles.input}
-            placeholder="Title"
-            value={postTitle}
-            onChangeText={setPostTitle}
-          />
           <TextInput
             style={[styles.input, styles.textArea]}
-            placeholder="What's on your mind?"
+            placeholder="Ask the Questions you are holding inside."
             value={postContent}
             onChangeText={setPostContent}
             multiline={true}
           />
-          <TouchableOpacity onPress={handleSelectImage} style={styles.imageSelectButton}>
-            <Text style={styles.imageSelectButtonText}>+ Add Image</Text>
-          </TouchableOpacity>
-          {imageUri ? (
-          <Image source={{ uri: imageUri }} style={styles.previewImage} />
-        ) : (
-          <View style={styles.imagePlaceholder}>
-            <Text style={styles.imagePlaceholderText}>No image selected</Text>
-          </View>
-        )}
-       
+                
           <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
-            <Text style={styles.submitButtonText}>Submit Post</Text>
+            <Text style={styles.submitButtonText}>Submit Question</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -228,24 +180,7 @@ const styles = StyleSheet.create({
     height: 150, // Enough space to write longer posts
     textAlignVertical: 'top', // Start text from the top
   },
-  imageSelectButton: {
-    backgroundColor: '#D8BFD8', // Use the same purple for consistency but a bit lighter
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 20,
-    shadowColor: '#7f3db5',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  imageSelectButtonText: {
-    color: '#5e2d79', // White text for contrast
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  submitButton: {
+    submitButton: {
     backgroundColor: '#9B8BCA', // A slightly darker purple to draw attention to the action button
     padding: 15,
     borderRadius: 8,
@@ -270,37 +205,6 @@ const styles = StyleSheet.create({
     borderWidth: 1, // Define the boundary of the image
     borderColor: '#EEE', // Light border color
   },
-  
-  imagePreviewContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  // previewImage: {
-  //   width: '100%', // or a fixed size like 300
-  //   height: 200, // or a fixed size like 200
-  //   borderRadius: 8,
-  // },
-  imageUploadedText: {
-    color: 'green',
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  imagePlaceholder: {
-    width: '100%', // or a fixed size like 300
-    height: 100, // or a fixed size like 200
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#CCC',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F0F0F0',
-    marginBottom: 20,
-  },
-  imagePlaceholderText: {
-    color: '#999',
-  },
+ });
 
-});
-
-export default CreatePostScreen;
+export default CreateQnAScreen;

@@ -14,11 +14,33 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
   const [showComments, setShowComments] = useState(false);
   const [isLoading,setIsLoading]=useState(false);
   const [userId,setUserId] =useState(null);
-  
-  const handleLike = () => {
-    console.log('Liked!');
-  };
 
+  const handleFlag = async (postId, flag) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.put(`${baseUrl}/api/post/flag/${postId}`, flag, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      flagged=response.data.flagged;
+      // Handle successful flagging
+      console.log(response.data);
+    } catch (error) {
+      // Handle error in flagging
+      console.error('Error flagging post:', error.response || error);
+    }
+  };
+  const handleLike = () => {
+    const postId = item.id; // Assuming `item` is the post object that has an id
+    const shouldFlag = true; // or some condition to determine if you should flag or unflag
+    handleFlag(postId, shouldFlag);
+    console.log('Flagged!');
+  };
+  const isFlaggedByUser = (flagged) => {
+    return flagged>0; // Assuming `flagged` is the number of times the post has been flagged
+  };
 
   useEffect(() => {
     setUserFromAsyncStorage();
@@ -103,16 +125,25 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh}) => {
         <Text style={styles.postedOn}>{formatDate(item.uploadedAt)}</Text>
       </View>
       {
-        item.image !== null && <Image source={{ uri: item.image}} style={styles.image} resizeMode="cover" />
+        item.image && <Image source={{ uri: item.image}} style={styles.image} resizeMode="contain" />
       }
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.description}>{item.description}</Text>
       <View style={styles.interactions}>
         {
           (!(item.isApproved))&&(
-          <TouchableOpacity style={styles.interaction} onPress={handleLike}>
-            <Text style={styles.interactionText}>{item.flagged}</Text>
-            <Image source={{uri:'https://png.pngtree.com/png-vector/20210228/ourmid/pngtree-fluttering-red-flag-png-image_2986748.jpg'}} style={styles.icon} />
+          // <TouchableOpacity style={styles.interaction} onPress={() => handleLike(item.id)}>
+          //   <Text style={styles.interactionText}>{item.flagged}</Text>
+
+          //   <Image source={{uri:'https://png.pngtree.com/png-vector/20210228/ourmid/pngtree-fluttering-red-flag-png-image_2986748.jpg'}} style={styles.icon} />
+          // </TouchableOpacity>
+          <TouchableOpacity style={styles.interaction} onPress={() => handleLike(item.id)}>
+            <Ionicons
+              name={isFlaggedByUser(item.flagged) ? 'flag' : 'flag-outline'}
+              size={24}
+              color={isFlaggedByUser(item.flagged) ? '#FF0000' : '#000000'} // Red if flagged, black otherwise
+            />
+            {isFlaggedByUser(item.flagged) && <Text style={styles.interactionText}>Flagged</Text>}
           </TouchableOpacity>
           )
         }
@@ -231,6 +262,7 @@ const styles = StyleSheet.create({
   interactionText: {
     fontSize: 14,
     marginRight: 4,
+    marginLeft: 4,
   },
   icon: {
     width: 20,

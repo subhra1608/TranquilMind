@@ -1,9 +1,10 @@
 import React, { useState ,useEffect} from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Button } from 'react-native';
 import Header from '../../Components/HeaderComponent';
 import { baseUrl } from '../../data/baseUrl';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
+import  {signInAnonymouslyIfNeeded} from '../../firebase-config';
 
 
 
@@ -50,6 +51,15 @@ const AppointmentScreen = ({navigation}) => {
     ? appointments.filter(appointment => new Date(appointment.date) < new Date())
     : appointments.filter(appointment => new Date(appointment.date) >= new Date());
 
+    const handleChatPress = async () => {
+      try {
+        await signInAnonymouslyIfNeeded();
+        navigation.navigate('ChatMessageScreen');
+      } catch (error) {
+        console.error('Error signing in anonymously:', error);
+      }
+    };
+
   return (
     
       <View style={styles.container}>
@@ -74,6 +84,10 @@ const AppointmentScreen = ({navigation}) => {
                 <Text style={styles.appointmentText}>Date: {item.date}  Start Time : {item.startTime}</Text>
                 <Text style={styles.appointmentText}>Doctor: {item.doctor}</Text>
                 <Text style={styles.appointmentText}>Reason : {item.description}</Text>
+                <Button
+                title="Chat"
+                onPress={() => handleChatPress()}
+            />
             </View>
             )}
         />
