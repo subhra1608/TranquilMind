@@ -5,12 +5,9 @@ import InputComponent from '../../Components/InputComponent';
 import { baseUrl } from '../../data/baseUrl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native';
 const ProfileScreen = ({ navigation }) => {
 
-  useEffect(() => {
-    getUserDetails();
-  }, []);
 
   const [age,setAge]=useState(0);
   const [firstName,setFirstName] = useState("");
@@ -26,14 +23,18 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     checkIfGuestUser();
     // Only call getUserDetails if not a guest user
-    if (!isGuest) {
-      getUserDetails();
-    }
+   
   }, [isGuest]);
 
   const checkIfGuestUser = async () => {
+    setIsLoading(true);
     const guestStatus = await AsyncStorage.getItem('isGuest');
+    //console.log(guestStatus);
     setIsGuest(guestStatus === 'true');
+    if (guestStatus !== 'true') {
+      getUserDetails();
+    }
+    setIsLoading(true);
   };
   
   const updateUserDetails = async() => {
@@ -81,7 +82,7 @@ const ProfileScreen = ({ navigation }) => {
 
 
   const getUserDetails = async () => {
-
+    //console.log("In use rdetail")
     setIsLoading(true);
 
     const token = await  AsyncStorage.getItem('token');
@@ -116,20 +117,21 @@ const ProfileScreen = ({ navigation }) => {
 
   const [showAccountDetails, setShowAccountDetails] = useState(false);
   
-  const handleLogout = () => {
+  const handleLogout = async() => {
+
+    await AsyncStorage.removeItem('isGuest');
+    await AsyncStorage.removeItem('token');
     navigation.navigate('LoginScreen');
+
   };
 
-  const handleClearFlagsForGuest = async () => {
-    await AsyncStorage.removeItem('isGuest');
-    navigation.navigate('LoginScreen');
-  };
+
 
   if (isGuest) {
     return (
       <View style={styles.container}>
         <Text style={styles.guestMessage}>You are currently logged in as a guest.</Text>
-        <TouchableOpacity style={styles.loginButton} onPress={handleClearFlagsForGuest}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogout}>
           <Text style={styles.loginButtonText}>Login or Register</Text>
         </TouchableOpacity>
       </View>
@@ -155,7 +157,9 @@ const ProfileScreen = ({ navigation }) => {
         </View>
       </View>)}
 
-      <View classname=" flex-1">
+      {
+        !isLoading && (
+          <View classname=" flex-1">
         <View classname=" flex-1 bg-slate-600">
           <TouchableOpacity onPress={()=>navigation.navigate('AppointmentScreen')}>
             
@@ -194,7 +198,10 @@ const ProfileScreen = ({ navigation }) => {
             <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
         </View>
-      </View>
+        )
+
+      }
+    </View>
       )}
         </KeyboardAvoidingView>
       </ScrollView>

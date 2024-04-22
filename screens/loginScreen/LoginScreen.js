@@ -12,8 +12,8 @@ import {Picker} from '@react-native-picker/picker';
 const LoginScreen = ({ navigation }) => {
 
   const t = i18n.t;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("example@example.com");
+  const [password, setPassword] = useState('examplepassword');
   const [user,setUser]= useState({});
   const [selectedLanguage, setSelectedLanguage] = useState("en"); 
   const [isLoading,setIsLoading]=useState(false);
@@ -67,7 +67,7 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert('Error',"Credentials are invalid");
     }
 
-    navigation.navigate('LandingScreen');
+    // navigation.navigate('LandingScreen');
     setIsLoading(false);
    
   };
