@@ -29,6 +29,7 @@ const ExploreScreen = ({ navigation }) => {
       });;        
       //console.log(response.data);
       setCourseData(response.data);
+      
 ;    } catch (error) {
       
       console.error('Error Getting details:', error);
@@ -47,7 +48,7 @@ const ExploreScreen = ({ navigation }) => {
         id ={item.courseId}
         title={item.category}
         description={item.description}
-        imageSource="https://img.freepik.com/premium-vector/flat-valentine-s-day-illustration_52683-157836.jpg"
+        imageSource={item.courseImage?item.courseImage:"https://img.freepik.com/premium-vector/flat-valentine-s-day-illustration_52683-157836.jpg"}
       />
       </TouchableOpacity>  
     );
@@ -70,7 +71,7 @@ const ExploreScreen = ({ navigation }) => {
         (<FlatList
         data={courseData}
         renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => item.courseId.toString()}
         numColumns={2}
         horizontal={false}
         />)

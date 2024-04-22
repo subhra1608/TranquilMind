@@ -36,7 +36,6 @@ const CourseHomeScreen = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       setCourseMaterial(response.data.tasksByWeek);
 ;    } catch (error) {
 
@@ -51,7 +50,8 @@ const CourseHomeScreen = ({ navigation }) => {
   }
 
 
-  const renderCourseCard = ({item}) => {
+  const renderTaskCard = ({item}) => {
+    //console.log(item);
     return (
       <TouchableOpacity className=" mt-6 ml-3 mr-3"onPress={()=>{handleCardPress(item)}}>
         <CoursesCardComponent item={item} />
@@ -110,7 +110,7 @@ const CourseHomeScreen = ({ navigation }) => {
           {!isLoading && (
             <FlatList
             data={selectedTask}
-            renderItem={({ item}) => renderCourseCard(item={item})}
+            renderItem={({ item}) => renderTaskCard(item={item})}
             keyExtractor={item => item.taskId}
             horizontal={false}
         />
