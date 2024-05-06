@@ -28,6 +28,8 @@ import ChatMessageScreen from './screens/chatScreen/ChatMessageScreen';
 import CreateQnAScreen from './screens/createQnAscreen/CreateQnAScreen';
 import PostCardComponent from './Components/PostCardComponent';
 import { useEffect } from 'react';
+import MyPostScreen from './screens/profileScreen/MyPostScreen';
+
 const Stack = createNativeStackNavigator();
 
 
@@ -44,7 +46,7 @@ export default function App() {
           headerShown:false
         }}
         
-        initialRouteName="LoginScreen" >
+        initialRouteName="LandingScreen" >
         <Stack.Screen
         name="OnboardingScreen"
         component={OnboardingScreen}
@@ -84,6 +86,15 @@ export default function App() {
           title: 'LandingScreen',
         }}
       />
+      <Stack.Screen
+        name="MyPostsScreen"
+        component={MyPostScreen}
+        options={{
+          headerShown:false,
+          title: 'PostScreen',
+        }}
+      />
+      
       <Stack.Screen
         name="YouTubeScreen"
         component={YouTubeScreen}

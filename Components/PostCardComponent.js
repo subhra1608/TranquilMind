@@ -6,25 +6,82 @@ import { Ionicons } from '@expo/vector-icons'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../data/baseUrl';
+import translate from 'translate-google-api';
 
 
-const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation}) => {
+const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLanguage}) => {
   
   const [commentInput, setCommentInput] = useState('');
   const [showComments, setShowComments] = useState(false);
   const [isLoading,setIsLoading]=useState(false);
   const [userId,setUserId] =useState(null);
   const [isGuest, setIsGuest] = useState(false);
+  const [title,setTitle]=useState("");
+  const [description,setDescription]=useState("");
+  const [name,setName]=useState("");
 
   useEffect(() => {
     // Check if the user is a guest
     const checkIfGuest = async () => {
+      await convertSelectedLanguageName(item.name)
+      await convertSelectedLanguage(item.title);
+      await convertSelectedLanguageDescription(item.description);
       const guestStatus = await AsyncStorage.getItem('isGuest');
       setIsGuest(guestStatus === 'true');
     };
-    
+    // convertSelectedLanguage("this is me");
     checkIfGuest();
   }, []);
+
+
+  const convertSelectedLanguage = async(text)=>{
+    // console.log(text);
+    let result=text;
+      if(selectedLanguage==='hi')
+      {
+        result = await translate(text, {
+          from:"en",
+          to: "hi",
+        });
+        setTitle(result[0]);    
+        return;
+      }
+      setTitle(text);
+      // console.log(result[0])
+  }
+
+  const convertSelectedLanguageDescription = async(text)=>{
+    // console.log(text);
+    let result=text;
+      if(selectedLanguage==='hi')
+      {
+        result = await translate(text, {
+          from:"en",
+          to: "hi",
+        });
+        setDescription(result[0]);
+        return;
+      }
+      setDescription(text);
+      // console.log(result[0])
+          
+  }
+
+  const convertSelectedLanguageName = async(text)=>{
+    // console.log(text);
+    let result=text;
+      if(selectedLanguage==='hi')
+      {
+        result = await translate(text, {
+          from:"en",
+          to: "hi",
+        });
+        setName(result[0]);
+      }
+      // console.log(result[0])
+      setName(text);
+      return;
+    }
 
   const handleFlag = async (postId, flag) => {
     try {
@@ -142,23 +199,25 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation}) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Avatar.Text size={30} label={item.name.charAt(0).toUpperCase()}/> 
-        <Text style={styles.username}>{item.name}</Text>
+        <Text style={styles.username}>{name}</Text>
 
         <Text style={styles.postedOn}>{formatDate(item.uploadedAt)}</Text>
       </View>
       {
         item.image && <Image source={{ uri: item.image}} style={styles.image} resizeMode="contain" />
       }
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.description}>{item.description}</Text>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.description}>{description}</Text>
       <View style={styles.interactions}>
         {
           (!(item.isApproved))&&(
+
           // <TouchableOpacity style={styles.interaction} onPress={() => handleLike(item.id)}>
           //   <Text style={styles.interactionText}>{item.flagged}</Text>
 
           //   <Image source={{uri:'https://png.pngtree.com/png-vector/20210228/ourmid/pngtree-fluttering-red-flag-png-image_2986748.jpg'}} style={styles.icon} />
           // </TouchableOpacity>
+
           <TouchableOpacity style={styles.interaction} onPress={() => handleLike(item.id)}>
             <Ionicons
               name={isFlaggedByUser(item.flagged) ? 'flag' : 'flag-outline'}

@@ -160,13 +160,13 @@ const ProfileScreen = ({ navigation }) => {
       {
         !isLoading && (
           <View classname=" flex-1">
-        <View classname=" flex-1 bg-slate-600">
-          <TouchableOpacity onPress={()=>navigation.navigate('AppointmentScreen')}>
-            
-            <View style={styles.section}>
-            <Text style={styles.sectionTitle}>My Appointments</Text>
-            </View>
-          </TouchableOpacity>
+            <View classname=" flex-1 bg-slate-600">
+            <TouchableOpacity onPress={()=>navigation.navigate('AppointmentScreen')}>
+              
+              <View style={styles.section}>
+              <Text style={styles.sectionTitle}>My Appointments</Text>
+              </View>
+            </TouchableOpacity>
         </View>
         
         <View>
@@ -191,7 +191,18 @@ const ProfileScreen = ({ navigation }) => {
           </View>
           
         )}
+        <View classname=" flex-1 bg-slate-600">
+            <TouchableOpacity onPress={()=>navigation.navigate('MyPostsScreen')}>
+              
+              <View style={styles.section}>
+              <Text style={styles.sectionTitle}>My Posts and Questions</Text>
+              </View>
+            </TouchableOpacity>
+        </View>
+        
+        
       </View>
+      
           
           <TouchableOpacity 
           style={styles.logoutButton} onPress={()=>handleLogout()}>

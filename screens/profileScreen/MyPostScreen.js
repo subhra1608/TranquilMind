@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Animated, Dimensions, ActivityIndicator, Alert } from 'react-native';
 import PostCardComponent from '../../Components/PostCardComponent';
-import { postData } from '../../data/postData';
+// import { postData } from '../../data/postData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../../data/baseUrl';
@@ -11,7 +11,7 @@ import i18n from '../../i18';
 const { width } = Dimensions.get('window');
 const segmentWidth = width / 2; 
 
-  const CommunityScreen = ({ navigation }) => {
+  const MyPostScreen = ({ navigation }) => {
 
   const [selectedSegmentIndex, setSelectedSegmentIndex] = useState(0);
   const [isViewPostsSelected,setIsViewPostsSelected]=useState(true);
@@ -48,8 +48,10 @@ const segmentWidth = width / 2;
 
     setIsLoading(true);
     const token = await  AsyncStorage.getItem('token');
+    const userId = await  AsyncStorage.getItem('userId');
+
     try {
-      const response = await axios.get(`${baseUrl}/api/post/get-posts`,{
+      const response = await axios.get(`${baseUrl}/api/patient/my-posts/${userId}`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -57,7 +59,7 @@ const segmentWidth = width / 2;
       setPost(response.data);
       setIsRefresh(true);
 
-;    } catch (error) {
+  } catch (error) {
 
       console.log(error.message);
       console.error('Error Getting details:', error);
@@ -106,7 +108,7 @@ const segmentWidth = width / 2;
 
   const renderItemQnA = ({ item }) => {
     return(
-      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} isMyquestion={false} />
+      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} isMyQuestion={true} />
     );
   }
   
@@ -240,7 +242,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CommunityScreen;
+export default MyPostScreen;
 
 
 
