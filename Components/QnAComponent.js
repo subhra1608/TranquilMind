@@ -2,11 +2,30 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 
-const QnAComponent = ({item}) => {
+const QnAComponent = ({item,isMyquestion}) => {
+
+  
+
+  const deleteMyQuestions=(item)=>{
+    
+
+  }
 
   return (
     <View className="flex flex-1 content-center justify-center shadow-lg m-2 bg-red-300 rounded-xl p-3">
-      <Text className="text-xl font-bold">Q:  {item.question}</Text> 
+      <View className="flexx flex-row justify-between">
+          <View>
+          <Text className="text-xl font-bold">Q:  {item.question}</Text> 
+          </View>
+            <View>
+            {isMyquestion===undefined && (
+            <TouchableOpacity>
+              <Ionicons name="trash" size={25} color="white" />
+            </TouchableOpacity>
+            )}
+          </View>
+          
+      </View>
       <Text className=" text-xl w-4/5">Ans:  {item.answer}</Text> 
       <Text className="text-lg">{item.userName}</Text> 
       <View className="flex flex-row justify-between mt-4">

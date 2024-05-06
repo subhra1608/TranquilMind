@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../../data/baseUrl';
+import { Alert } from 'react-native';
 import Header from '../../Components/HeaderComponent';
 const QuizScreen = ({ navigation }) => {
 
@@ -13,29 +14,37 @@ const QuizScreen = ({ navigation }) => {
   useEffect(() => {
     // Function to retrieve the token from AsyncStorage
     const checkGuestStatus = async () => {
+
       const guestStatus = await AsyncStorage.getItem('isGuest');
       setIsGuest(guestStatus === 'true');
-    };
-    checkGuestStatus();
-    const retrieveToken = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        // console.log(retrievedToken);
-        if (token) {
-          setToken(token);
-        } 
-        console.log(token);
-      } catch (error) {
-        console.error("Failed to retrieve the token:", error);
+      const token = await AsyncStorage.getItem('token');
 
+      if (token) {
+        setToken(token);
+      } 
+
+      if(guestStatus !== 'true')
+      {
+        await fetchQuizzes(token,guestStatus);
+      }
+      else{
+        return Alert.alert(
+          "Restricted Access",
+          "Guest users do not have access to quizzes. Please log in or register to take a quiz.",
+          [
+            { text: "OK", onPress: () => navigation.navigate('LoginScreen') }
+          ],
+        );
       }
     };
-    retrieveToken();
+
+    checkGuestStatus();
   }, []);
-  // console.log(token);
-  useEffect(() => {
-    const fetchQuizzes = async () => {
-      if (token && !isGuest) {  // Check if token is available
+
+
+    const  fetchQuizzes= async (token,isGuestString) => {
+      
+      if (token && isGuestString !=='true') {  // Check if token is available
         try {
           const headers = {
             'Content-Type': 'application/json',
@@ -45,7 +54,7 @@ const QuizScreen = ({ navigation }) => {
           const response = await axios.get(`${baseUrl}/api/quiz/quiz-types`, { headers });
           // console.log(response);
           setQuizzes(response.data);
-          console.log(response.data);
+          
         } catch (error) {
           // console.error("Failed to fetch quizzes:", error);
         }
@@ -60,8 +69,7 @@ const QuizScreen = ({ navigation }) => {
         );
       }
     };
-    fetchQuizzes();
-  }, [token, isGuest]);  // Depend on token state
+  // Depend on token state
   
 
   const renderQuizItem = ({ item }) => (

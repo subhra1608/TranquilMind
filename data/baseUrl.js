@@ -1,2 +1,1 @@
-// export const baseUrl = "http://192.168.198.236:8082";
-export const baseUrl = "http://10.0.2.2:8082";
+export const baseUrl = "https://3865-103-156-19-229.ngrok-free.app";

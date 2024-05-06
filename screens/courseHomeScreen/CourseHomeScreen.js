@@ -20,7 +20,6 @@ const CourseHomeScreen = ({ navigation }) => {
   const [selectedTask,setSelectedTask] =useState({});
  
 
-
   useEffect(() => {
     fetchCoursesByWeek();
   }, [])
@@ -36,6 +35,7 @@ const CourseHomeScreen = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response.data.tasksByWeek);
       setCourseMaterial(response.data.tasksByWeek);
 ;    } catch (error) {
 
@@ -46,7 +46,7 @@ const CourseHomeScreen = ({ navigation }) => {
    
   };
   const handleCardPress = (item) => {
-    navigation.navigate('ViewTaskScreen',{ param1: item});
+    navigation.navigate('ViewTaskScreen',{ taskData: item});
   }
 
 
@@ -54,7 +54,7 @@ const CourseHomeScreen = ({ navigation }) => {
     //console.log(item);
     return (
       <TouchableOpacity className=" mt-6 ml-3 mr-3"onPress={()=>{handleCardPress(item)}}>
-        <CoursesCardComponent item={item} />
+        <CoursesCardComponent item={item} courseId = {param1} />
       </TouchableOpacity>
     )
   }
@@ -82,7 +82,7 @@ const CourseHomeScreen = ({ navigation }) => {
                 </View>
                 <View className="flex flex-row content-center">
                   <View className=" w-11/12">
-                    <ProgressBar  progress={0.50}  color='purple' />
+                    <ProgressBar  progress={0.25}  color='purple' />
                   </View>
                 </View>
             </View>
@@ -91,7 +91,7 @@ const CourseHomeScreen = ({ navigation }) => {
         <View className="mt-2 rounded-lg basis-16 m-2 justify-center">
           <View className="flex flex-row justify-around">
             {
-              Object.keys(courseMaterial).map(key=>(
+              Object.keys(courseMaterial).map(key =>(
                 <View>
                 <Button 
                   title={`Week ${key}`} 

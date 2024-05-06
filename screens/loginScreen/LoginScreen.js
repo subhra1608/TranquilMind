@@ -12,8 +12,8 @@ import {Picker} from '@react-native-picker/picker';
 const LoginScreen = ({ navigation }) => {
 
   const t = i18n.t;
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("sbj@gmail.com");
+  const [password, setPassword] = useState('Dell@123');
   const [user,setUser]= useState({});
   const [selectedLanguage, setSelectedLanguage] = useState("en"); 
   const [isLoading,setIsLoading]=useState(false);
@@ -33,9 +33,8 @@ const LoginScreen = ({ navigation }) => {
       console.log("selectedLanguage",selectedLanguage)
   }
   const handleGuestLogin = async () => {
-    // Perform guest login actions, e.g., navigate to a different screen, set a guest token, etc.
-    await AsyncStorage.setItem('isGuest', 'true'); // This is an example of setting guest status.
-    navigation.navigate('LandingScreen'); // Navigate to the main landing screen as a guest.
+    await AsyncStorage.setItem('isGuest', 'true'); 
+    navigation.navigate('LandingScreen');
   };
   const handleLogin = async() => {
     
@@ -66,9 +65,9 @@ const LoginScreen = ({ navigation }) => {
       console.error('Invalid Credentials:', error.message);
       Alert.alert('Error',"Credentials are invalid");
     }
-
-    // navigation.navigate('LandingScreen');
     setIsLoading(false);
+
+    navigation.navigate('LandingScreen');
    
   };
 
