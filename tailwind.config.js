@@ -18,6 +18,7 @@ module.exports = {
             "./screens/courseHomeScreen/ViewTaskScreen.js",
             "./Components/PostCardComponent.js",
             "./Components/QnAComponent.js",
+            "./Components/CardComponent.js",
             ],
   theme: {
     extend: {},

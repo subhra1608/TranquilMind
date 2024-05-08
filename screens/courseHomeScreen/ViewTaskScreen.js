@@ -13,7 +13,7 @@ const ViewTaskScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header title={param1.taskId} onPressBack={null} />
+      <Header title={param1.taskId} onPressBack={() => navigation.goBack()} />
       <View style={styles.descriptionContainer}>
         <Text className="font-extrabold text-white text-center text-5xl mb-5">{param1.taskId}</Text>
         <Text style={styles.descriptionText}>{param1.description}</Text>
