@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Linking } from 'react-native';
 import InputComponent from '../../Components/InputComponent';
 import { baseUrl } from '../../data/baseUrl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -36,6 +36,20 @@ const ProfileScreen = ({ navigation }) => {
     }
     setIsLoading(true);
   };
+  const formatPhoneNumber = (phoneNumberString) => {
+    const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+    return cleaned;
+  };
+  const handleOpenDialer = () => {
+    const phoneNumber = '9409548048';  // This should be your actual emergency contact number
+    const formattedNumber = formatPhoneNumber(phoneNumber);
+    
+    Linking.openURL(`tel:${formattedNumber}`)
+      .catch(err => {
+        console.error('Failed to open dialer:', err);
+        alert("Failed to open dialer. Please try again later."); // Using native alert if AlertPro is not set up here
+      });
+};
   
   const updateUserDetails = async() => {
 
@@ -198,12 +212,15 @@ const ProfileScreen = ({ navigation }) => {
               <Text style={styles.sectionTitle}>My Posts and Questions</Text>
               </View>
             </TouchableOpacity>
-        </View>
-        
-        
+        </View>      
       </View>
       
-          
+      <TouchableOpacity 
+          onPress={handleOpenDialer}
+          style={styles.dialerButton}
+        >
+          <Text style={styles.dialerButtonText}>Call Emergency Services</Text>
+        </TouchableOpacity>
           <TouchableOpacity 
           style={styles.logoutButton} onPress={()=>handleLogout()}>
             <Text style={styles.logoutButtonText}>Logout</Text>
@@ -294,6 +311,21 @@ const styles = StyleSheet.create({
     marginTop:2,
     fontSize: 18,
 
+  },
+  dialerButton: {
+    backgroundColor: '#f44336', // A bright red color for emergency
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20, // Add some top margin for spacing from other content
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%', // Use full width to make it more prominent
+    marginBottom: 20,
+  },
+  dialerButtonText: {
+    color: '#fff', // White text for better contrast and readability
+    fontSize: 18,
+    fontWeight: 'bold', // Bold text to make it more noticeable
   }
 });
 

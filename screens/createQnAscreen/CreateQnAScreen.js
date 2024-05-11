@@ -42,8 +42,8 @@ const CreateQnAScreen = ({ navigation }) => {
       body: JSON.stringify(requestBody),
     });
   
-    console.log(response.status);
-    if (response.status==200) {
+    // console.log(response.status);
+    if (response.ok) {
         const responseData = await response.json();
         alert('Your question has been submitted successfully!');
         console.log('Response data:', responseData);
@@ -55,8 +55,8 @@ const CreateQnAScreen = ({ navigation }) => {
         alert(`Failed to submit your question. Status: ${response.status} - ${errorData}`);
       }
     } catch (error) {
-      // console.error('Error submitting question:', error);
-      // alert('An error occurred. Please try again.');
+      console.error('Error submitting question:', error);
+      alert('An error occurred. Please try again.');
         
     }
 
