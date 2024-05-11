@@ -21,6 +21,8 @@ const segmentWidth = width / 2;
   const [isRefresh,setIsRefresh]=useState(false);
   const [language,setLanguage]=useState("");
   const [isGuest, setIsGuest] = useState(false);
+  const [questions, setQuestions] = useState({});
+
   const t = i18n.t;
   
   useEffect(() => {
@@ -66,6 +68,33 @@ const segmentWidth = width / 2;
    setIsLoading(false);
    
   };
+  useEffect(() => {
+    fetchQuestions();  // Example: Ensure fetchQuestions sets all necessary properties
+}, []);
+
+  const fetchQuestions = async () => {
+    setIsLoading(true);
+    const token = await AsyncStorage.getItem('token');
+    try {
+        const response = await axios.get(`${baseUrl}/api/question/approved-questions`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.data && Array.isArray(response.data)) {
+            const questions = response.data.map(question => ({
+                ...question,
+                id: question.id || Date.now() + Math.random()  // Ensuring all questions have an id
+            })).sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+            setQuestions(questions);
+        }
+        setIsRefresh(false);
+    } catch (error) {
+        console.error('Failed to fetch questions:', error);
+        setIsRefresh(false);
+    } finally {
+        setIsLoading(false);
+    }
+};
+
 
   const handleAddPostPress = async () => {
     if (isGuest) {
@@ -104,20 +133,21 @@ const segmentWidth = width / 2;
     );
   }
 
+
   const renderItemQnA = ({ item }) => {
     return(
-      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} isMyquestion={false} />
+      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} />
     );
   }
   
-  const qnaData=[
-    {id:1,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-    {id:2,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-    {id:3,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-    {id:4,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-    {id:5,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-    {id:6,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-  ]
+  // const qnaData=[
+  //   {id:1,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+  //   {id:2,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+  //   {id:3,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+  //   {id:4,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+  //   {id:5,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+  //   {id:6,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
+  // ]
 
   return (
     <View style={styles.container}>
@@ -163,15 +193,15 @@ const segmentWidth = width / 2;
         </View>
         </View>)}
       
-      { !isLoading && !isViewPostsSelected && (
+      { !isLoading && (
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('CreateQnAScreen')} style={styles.addButton}>
           <Text style={styles.addButtonText}> + Add Question</Text>
         </TouchableOpacity>
         <View  className=" h-5/6">
         <FlatList
-          data={qnaData}
-          keyExtractor={(item) => item.id.toString()}
+          data={questions} // Use the fetched questions
+          keyExtractor={(item) => item.id ? item.id.toString() : 'fallback-' + Date.now().toString()}
           renderItem={renderItemQnA}
         />
         </View>
