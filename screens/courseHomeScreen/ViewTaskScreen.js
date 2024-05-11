@@ -5,20 +5,20 @@ import Header from '../../Components/HeaderComponent';
 
 const ViewTaskScreen = ({ navigation }) => {
   const route = useRoute();
-  const { param1 } = route.params;
+  const { taskData} = route.params;
   
   const handleLinkPress = () => {
-    Linking.openURL(param1.link);
+    Linking.openURL(taskData.link);
   };
 
   return (
     <View style={styles.container}>
-      <Header title={param1.taskId} onPressBack={() => navigation.goBack()} />
+      <Header title={taskData.taskId} onPressBack={() => navigation.goBack()} />
       <View style={styles.descriptionContainer}>
-        <Text className="font-extrabold text-white text-center text-5xl mb-5">{param1.taskId}</Text>
-        <Text style={styles.descriptionText}>{param1.description}</Text>
+        <Text className="font-extrabold text-white text-center text-5xl mb-5">{taskData.taskId}</Text>
+        <Text style={styles.descriptionText}>{taskData.description}</Text>
         <TouchableOpacity onPress={handleLinkPress}>
-          <Text style={styles.linkText}>Link to resources: {param1.link}</Text>
+          <Text style={styles.linkText}>Link to resources: {taskData.link}</Text>
         </TouchableOpacity>
       </View>
     </View>

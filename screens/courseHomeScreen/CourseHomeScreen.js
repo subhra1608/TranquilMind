@@ -11,7 +11,7 @@ import { baseUrl } from '../../data/baseUrl';
 
 const CourseHomeScreen = ({ navigation }) => {
   const route = useRoute();
-
+ 
   const { param1,param2,param3 } = route.params;
 
   const [selectedWeek, setSelectedWeek] = useState(1);
@@ -35,23 +35,30 @@ const CourseHomeScreen = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data.tasksByWeek);
+      // console.log(response.data.tasksByWeek);
       setCourseMaterial(response.data.tasksByWeek);
+      setSelectedTask(response.data.tasksByWeek[selectedWeek]);
+
 ;    } catch (error) {
 
-      console.log(error.message);
+      // console.log(error.message);
       console.error('Error Getting details:', error);
     }    
    setIsLoading(false);
    
   };
+  
   const handleCardPress = (item) => {
+    // console.log("Inside component handleCardPress");
+    // console.log(item);
     navigation.navigate('ViewTaskScreen',{ taskData: item});
+    // navigation.navigate('CourseHomeScreen',{ param1: item.courseId, param2: item.courseName,param3: item.category })
+
   }
 
 
   const renderTaskCard = ({item}) => {
-    //console.log(item);
+    // console.log(item);
     return (
       <TouchableOpacity className=" mt-6 ml-3 mr-3"onPress={()=>{handleCardPress(item)}}>
         <CoursesCardComponent item={item} courseId = {param1} />
@@ -97,7 +104,7 @@ const CourseHomeScreen = ({ navigation }) => {
                   title={`Week ${key}`} 
                   onPress={() => handleWeekButtonClick(parseInt(key))} 
                   color={selectedWeek === parseInt(key) ? 'blue' : 'gray'}
-                  accessibilityLabel="Select Week 1"
+                  // accessibilityLabel="Select Week 1"
                 />
               </View>
               ))
@@ -111,7 +118,7 @@ const CourseHomeScreen = ({ navigation }) => {
             <FlatList
             data={selectedTask}
             renderItem={({ item}) => renderTaskCard(item={item})}
-            keyExtractor={item => item.taskId}
+            keyExtractor={(item,index) => index}
             horizontal={false}
         />
           )}

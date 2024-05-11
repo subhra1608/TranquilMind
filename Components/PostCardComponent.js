@@ -9,8 +9,9 @@ import { baseUrl } from '../data/baseUrl';
 import translate from 'translate-google-api';
 
 
-const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLanguage}) => {
+const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLanguage,isMyPost}) => {
   
+
   const [commentInput, setCommentInput] = useState('');
   const [showComments, setShowComments] = useState(false);
   const [isLoading,setIsLoading]=useState(false);
@@ -31,7 +32,9 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLa
     };
     // convertSelectedLanguage("this is me");
     checkIfGuest();
-  }, []);
+    setUserFromAsyncStorage();
+  }, [isLoading]);
+
 
 
   const convertSelectedLanguage = async(text)=>{
@@ -110,9 +113,6 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLa
     return flagged>0; // Assuming `flagged` is the number of times the post has been flagged
   };
 
-  useEffect(() => {
-    setUserFromAsyncStorage();
-  }, []);
 
   const setUserFromAsyncStorage = async ()=>
   {
@@ -195,6 +195,29 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLa
   }
   
 
+  const onDeletePostHandler = async() => {
+
+    setIsLoading(true);
+    const token = await  AsyncStorage.getItem('token');
+    try {
+      console.log(`${baseUrl}/api/post/delete/${item.id}`)
+      const response = await axios.delete(`${baseUrl}/api/post/delete/${item.id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response);
+      // setCourseMaterial(response.data.tasksByWeek);
+
+;    } catch (error) {
+
+      console.log(error.message);
+      console.error('Error Getting details:', error);
+    }    
+   setIsLoading(false);
+   
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -208,33 +231,42 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLa
       }
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
-      <View style={styles.interactions}>
-        {
-          (!(item.isApproved))&&(
 
-          // <TouchableOpacity style={styles.interaction} onPress={() => handleLike(item.id)}>
-          //   <Text style={styles.interactionText}>{item.flagged}</Text>
+      <View className="flex-row justify-between">
+        <View style={styles.interactions}>
+          {
+            (!(item.isApproved))&&(
 
-          //   <Image source={{uri:'https://png.pngtree.com/png-vector/20210228/ourmid/pngtree-fluttering-red-flag-png-image_2986748.jpg'}} style={styles.icon} />
-          // </TouchableOpacity>
+            // <TouchableOpacity style={styles.interaction} onPress={() => handleLike(item.id)}>
+            //   <Text style={styles.interactionText}>{item.flagged}</Text>
 
-          <TouchableOpacity style={styles.interaction} onPress={() => handleLike(item.id)}>
-            <Ionicons
-              name={isFlaggedByUser(item.flagged) ? 'flag' : 'flag-outline'}
-              size={24}
-              color={isFlaggedByUser(item.flagged) ? '#FF0000' : '#000000'} // Red if flagged, black otherwise
-            />
-            {isFlaggedByUser(item.flagged) && <Text style={styles.interactionText}>Flagged</Text>}
+            //   <Image source={{uri:'https://png.pngtree.com/png-vector/20210228/ourmid/pngtree-fluttering-red-flag-png-image_2986748.jpg'}} style={styles.icon} />
+            // </TouchableOpacity>
+
+            <TouchableOpacity style={styles.interaction} onPress={() => handleLike(item.id)}>
+              <Ionicons
+                name={isFlaggedByUser(item.flagged) ? 'flag' : 'flag-outline'}
+                size={24}
+                color={isFlaggedByUser(item.flagged) ? '#FF0000' : '#000000'} // Red if flagged, black otherwise
+              />
+              {isFlaggedByUser(item.flagged) && <Text style={styles.interactionText}>Flagged</Text>}
+            </TouchableOpacity>
+            )
+          }
+          <TouchableOpacity
+            style={styles.interaction}
+            onPress={() => setShowComments(!showComments)}
+          >
+            <Ionicons size={15} name='chatbox-outline'></Ionicons><Text className=" ml-1" style={styles.interactionText}>{showComments ? 'Hide Comments' : 'View Comments'}</Text>
           </TouchableOpacity>
-          )
-        }
-
-        <TouchableOpacity
-          style={styles.interaction}
-          onPress={() => setShowComments(!showComments)}
-        >
-          <Ionicons size={15} name='chatbox-outline'></Ionicons><Text className=" ml-1" style={styles.interactionText}>{showComments ? 'Hide Comments' : 'View Comments'}</Text>
-        </TouchableOpacity>
+        </View>
+        <View>
+            {isMyPost === true && (
+              <TouchableOpacity onPress={onDeletePostHandler}>
+                <Ionicons name="trash" size={25} color="black" />
+              </TouchableOpacity>
+            )}
+        </View>
       </View>
       {showComments &&  (
         <View style={styles.comments}>
@@ -266,7 +298,7 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLa
             </View>
           ))}
 
-          <View className="flex flex-row justify-between mt-2">
+          <View className="flex flex-row justify-between">
             <View >
               <TextInput
                className="border-black rounded-lg pl-4 h-12 border-2 w-72  "
@@ -277,16 +309,16 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLa
               onChangeText={setCommentInput}
               editable={!isGuest} // Disable input if user is a guest
               />
-              <TouchableOpacity
+            </View>
+            
+            <View>
+            <TouchableOpacity
                 onPress={handleSubmitComment}
                 disabled={isGuest}
                 style={isGuest ? [styles.submitButton, styles.submitButtonDisabled] : styles.submitButton}
               >
                 <Text style={{ color: isGuest ? '#8E8E8E' : 'white' }}>Submit</Text>
               </TouchableOpacity>
-            </View>
-            <View>
-              {/* <Button title="Submit" onPress={()=>(handleSubmitComment()) } /> */}
             </View>
           </View>
         </View>
@@ -383,7 +415,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 }, // X, Y offset for the shadow
     shadowOpacity: 0.25,         // Shadow opacity
     shadowRadius: 3.84,          // Shadow blur radius
-    marginTop: 10,               // Margin on top to separate from other components
+    marginTop: 4,               // Margin on top to separate from other components
   },
   submitButtonDisabled: {
     backgroundColor: '#CDCDCD',  // A grayish color to indicate the button is disabled
