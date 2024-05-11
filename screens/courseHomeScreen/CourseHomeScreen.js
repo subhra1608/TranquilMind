@@ -103,7 +103,7 @@ const CourseHomeScreen = ({ navigation }) => {
                 <Button 
                   title={`Week ${key}`} 
                   onPress={() => handleWeekButtonClick(parseInt(key))} 
-                  color={selectedWeek === parseInt(key) ? 'blue' : 'gray'}
+                  color={selectedWeek === parseInt(key) ? '#0C6980' : 'gray'}
                   // accessibilityLabel="Select Week 1"
                 />
               </View>
