@@ -49,9 +49,15 @@ const ExploreScreen = ({ navigation }) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });;        
-      //console.log(response.data);
+      });       
+      // console.log(response.data);
       // setCourseData(response.data);
+      const response1 = await axios.get(`${baseUrl}/api/course/get-courses`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(response1.data);
       
 ;    } catch (error) {
       
@@ -59,6 +65,7 @@ const ExploreScreen = ({ navigation }) => {
     }    
    setIsLoading(false);
   };
+  
 
   const renderItem = ({ item }) => {
     

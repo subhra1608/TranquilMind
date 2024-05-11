@@ -132,7 +132,7 @@ const segmentWidth = width / 2;
 
   const renderItem = ({ item }) => {
     return(
-      <PostCardComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} selectedLanguage={language} />
+      <PostCardComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} selectedLanguage={language} isMyPost={true} />
     );
   }
 
