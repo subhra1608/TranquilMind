@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/homeScreen/HomeScreen';
 import LoginScreen from './screens/loginScreen/LoginScreen';
-import ProfileScreen from './screens/profileScreen/ProfileScreen';
+// import ProfileScreen from './screens/profileScreen/ProfileScreen';
 import OnboardingScreen from './screens/onboardingScreen/OnboardingScreen';
 import LandingScreen from './screens/landingScreen/LandingScreen';
 import ExploreScreen from './screens/exploreScreen/ExploreScreen';
@@ -23,7 +23,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import SafeViewAndroid from './Components/SafeViewAndroid';
 import ViewTaskScreen from './screens/courseHomeScreen/ViewTaskScreen';
 import ChatScreen from './screens/chatScreen/ChatScreen';
-import ChatMessage from './screens/chatScreen/ChatMessage';
+// import ChatMessage from './screens/chatScreen/ChatMessage';
 import ChatMessageScreen from './screens/chatScreen/ChatMessageScreen';
 import CreateQnAScreen from './screens/createQnAscreen/CreateQnAScreen';
 import PostCardComponent from './Components/PostCardComponent';
@@ -32,9 +32,10 @@ import MyPostScreen from './screens/profileScreen/MyPostScreen';
 
 const Stack = createNativeStackNavigator();
 
-
+import { LogBox } from 'react-native';
+// LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+// LogBox.ignoreAllLogs()
 export default function App() {
-  
   
 
   return (
