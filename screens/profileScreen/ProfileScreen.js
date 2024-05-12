@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Linking } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Linking, Alert } from 'react-native';
 import InputComponent from '../../Components/InputComponent';
 import { baseUrl } from '../../data/baseUrl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -163,6 +163,39 @@ const ProfileScreen = ({ navigation }) => {
       </View>
     );
   }
+  const deleteAccount = async () => {
+    Alert.alert(
+        "Delete Account",
+        "Are you sure you want to delete your account? This action cannot be undone.",
+        [
+            { text: "Cancel", style: "cancel" },
+            { text: "Delete", onPress: () => confirmDeleteAccount() }
+        ],
+        { cancelable: false }
+    );
+};
+
+const confirmDeleteAccount = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const userId = await AsyncStorage.getItem('userId');
+
+    try {
+        const response = await axios.delete(`${baseUrl}/api/patient/deletepatient/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.status === 410) { // Assuming status code 410 for 'Gone' as used in ResponseEntity
+            Alert.alert("Account Deleted", "Your account has been successfully deleted.");
+            await AsyncStorage.clear();
+            navigation.replace('LoginScreen'); // Redirect to login screen or home
+        } else {
+            throw new Error("Failed to delete the account.");
+        }
+    } catch (error) {
+        console.error("Deletion failed:", error);
+        Alert.alert("Deletion Failed", "Could not delete the account. Please try again later.");
+    }
+};
   return (
     
       <ScrollView>
@@ -236,6 +269,9 @@ const ProfileScreen = ({ navigation }) => {
           <TouchableOpacity 
           style={styles.logoutButton} onPress={()=>handleLogout()}>
             <Text style={styles.logoutButtonText}>{t('Logout', { lng: language })}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={deleteAccount} style={styles.deleteButton}>
+                    <Text style={styles.deleteButtonText}>Delete Account</Text>
           </TouchableOpacity>
         </View>
         )
@@ -338,7 +374,20 @@ const styles = StyleSheet.create({
     color: '#fff', // White text for better contrast and readability
     fontSize: 18,
     fontWeight: 'bold', // Bold text to make it more noticeable
-  }
+  },
+  deleteButton: {
+    backgroundColor: '#f44336',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+},
+deleteButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold'
+},
 });
 
 export default ProfileScreen;
