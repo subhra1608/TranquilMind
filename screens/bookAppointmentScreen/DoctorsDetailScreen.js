@@ -19,14 +19,15 @@ const DoctorsDetailScreen = ({ navigation }) => {
   const fetchDoctorData = async () => {
     try {
       const token = await  AsyncStorage.getItem('token');
-      // console.log(token);
+      console.log(token);
+      console.log(`${baseUrl}/api/appointment/doctors`);
       const response = await axios.get(`${baseUrl}/api/appointment/doctors`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       
-      console.log(response.data);
+      // console.log(response.data);
       setDoctorData(response.data);
       // Handle the response data as needed
     } catch (error) {

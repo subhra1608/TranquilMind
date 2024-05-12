@@ -11,7 +11,19 @@
     "viewPosts": "पोस्ट देखें",
     "viewQuestions": "प्रश्न देखें",
     "addPost": "+ पोस्ट जोड़ें",
-    "addQuestion": "+ प्रश्न जोड़ें"
+    "addQuestion": "+ प्रश्न जोड़ें",
+    "Take a Quiz":"कोई प्रश्नोत्तरी लें",
+    "Book An Appointment":"एक अपॉइंटमेंट बुक करें",
+    "Welcome to Mindful Modules!":"माइंडफुल मॉड्यूल्स में आपका स्वागत है!",
+    "Enroll into these interesting Modules for working upon yourself !":"स्वयं पर काम करने के लिए इन दिलचस्प मॉड्यूल में नामांकन करें !",
+    "Enroll Now":"दाखिला लें",
+    "Enrolled":"दाखिला लिया",
+    "My Appointments":"मेरी नियुक्तियाँ",
+    "Account Details":"खाता विवरण",
+    "My Posts and Questions":"मेरी पोस्ट और प्रश्न",
+    "Call Emergency Services":"आपातकालीन सेवाओं को कॉल करें",
+    "Logout":"लॉग आउट"
+    
     
     
   }
