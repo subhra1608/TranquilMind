@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Alert, TextInput, KeyboardAvoidingView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -16,6 +16,27 @@ const BookAppointmentScreen = ({ navigation }) => {
   const { param } = useRoute().params;
   const [selectedDate, setSelectedDate] = useState(null);
   const [remark, setRemark] = useState('');
+  const [doctorFullName, setDoctorFullName] = useState('');
+  const [doctorGender, setDoctorGender] = useState('');
+  const [doctorDescription, setDoctorDescription] = useState('');
+
+  useEffect(() => {
+    fetchDoctorDetails();
+  }, [param]);
+
+  const fetchDoctorDetails = async () => {
+    try {
+      const fullName = await AsyncStorage.getItem(`doctorFullName${param.userId}`);
+      const gender = await AsyncStorage.getItem(`doctorGender${param.userId}`);
+      const description = await AsyncStorage.getItem(`doctorDescription${param.userId}`);
+      
+      if (fullName) setDoctorFullName(fullName);
+      if (gender) setDoctorGender(gender);
+      if (description) setDoctorDescription(description);
+    } catch (error) {
+      console.error('Failed to fetch doctor details from AsyncStorage:', error);
+    }
+  };
 
   const getNextSixDates = () => {
     const dates = [];
@@ -65,8 +86,10 @@ const BookAppointmentScreen = ({ navigation }) => {
           "Content-Type": "application/json"
         },
       });
-      
-      Alert.alert('Appointment Booked Successfully', `Date: ${selectedDate.toDateString()}`, [
+      console.log(response.data);
+      Alert.alert('Appointment Booked Successfully', 
+      `Your appointment on ${formatDate(selectedDate)} is confirmed and valid for 3 days.`,
+      [
         { text: 'OK', onPress: () => navigation.goBack() }
       ]);
     } catch (error) {
@@ -93,8 +116,10 @@ const BookAppointmentScreen = ({ navigation }) => {
           source={{ uri: "https://img.freepik.com/free-photo/beautiful-young-female-doctor-looking-camera-office_1301-7807.jpg" }}
           style={{ marginBottom: 10 }}
         />
-        <Text style={styles.doctorDetails}>Name: John Michael Doe</Text>
-        <Text style={styles.doctorDetails}>Age: 42 Gender: Male</Text>
+        <Text style={styles.doctorDetails}>Name: Dr. {doctorFullName}</Text>
+        <Text style={styles.doctorDetails}>Gender: {doctorGender}</Text>
+        <Text style={styles.doctorDetails}>Description: {doctorDescription || 'No description provided'}</Text>
+        
       </View>
       <Text style={styles.title}>Book Your Appointment</Text>
       <FlatList
@@ -200,6 +225,6 @@ export default BookAppointmentScreen;
 
 
 
-const doctorData = {"age": 42, "appointmentList": [{"appointmentId": 1, "date": "2024-03-27", "description": "Regular check-up", "endTime": "11:00:00", "remarks": "Patient is responding well to treatment", "startTime": "10:00:00"}, {"appointmentId": 2, "date": "2024-03-27", "description": "Regular check-up", "endTime": "14:00:00", "remarks": "Patient is responding well to treatment", "startTime": "13:00:00"}, {"appointmentId": 3, "date": "2024-03-28", "description": "Regular check-up", "endTime": "14:00:00", "remarks": "Patient is responding well to treatment", "startTime": "13:00:00"}, {"appointmentId": 4, "date": "2024-03-28", "description": "Regular check-up", "endTime": "14:00:00", "remarks": "Patient is responding well to treatment", "startTime": "13:00:00"}, {"appointmentId": 5, "date": "2024-03-28", "description": "Regular check-up", "endTime": "14:00:00", "remarks": "Patient is responding well to treatment", "startTime": "13:00:00"}], "consultationFee": 100.5, "description": "Dr. John Doe is a qualified and experienced physician specializing in...", "doctorId": 1, "experience": 15, "firstName": "John", "gender": "MALE", "isDisabled": true, "isSenior": true, "lastName": "Doe", "licenceNo": "123456-MD", "middleName": "Michael", "mobileNo": "1234567890", "user": {"accountNonExpired": true, "accountNonLocked": true, "authorities": [[Object]], "credentialsNonExpired": true, "email": "doctor@gmail.com", "enabled": true, "password": "$2a$10$yy8LTDyGQUTdSTLwEim4hOBGDXd3jSNpIbF4E7k6xRWqkX/h7CtZS", "roles": [[Object]], "userId": 5, "username": "doctor@gmail.com"}}
+// const doctorData = {"age": 42, "appointmentList": [{"appointmentId": 1, "date": "2024-03-27", "description": "Regular check-up", "endTime": "11:00:00", "remarks": "Patient is responding well to treatment", "startTime": "10:00:00"}, {"appointmentId": 2, "date": "2024-03-27", "description": "Regular check-up", "endTime": "14:00:00", "remarks": "Patient is responding well to treatment", "startTime": "13:00:00"}, {"appointmentId": 3, "date": "2024-03-28", "description": "Regular check-up", "endTime": "14:00:00", "remarks": "Patient is responding well to treatment", "startTime": "13:00:00"}, {"appointmentId": 4, "date": "2024-03-28", "description": "Regular check-up", "endTime": "14:00:00", "remarks": "Patient is responding well to treatment", "startTime": "13:00:00"}, {"appointmentId": 5, "date": "2024-03-28", "description": "Regular check-up", "endTime": "14:00:00", "remarks": "Patient is responding well to treatment", "startTime": "13:00:00"}], "consultationFee": 100.5, "description": "Dr. John Doe is a qualified and experienced physician specializing in...", "doctorId": 1, "experience": 15, "firstName": "John", "gender": "MALE", "isDisabled": true, "isSenior": true, "lastName": "Doe", "licenceNo": "123456-MD", "middleName": "Michael", "mobileNo": "1234567890", "user": {"accountNonExpired": true, "accountNonLocked": true, "authorities": [[Object]], "credentialsNonExpired": true, "email": "doctor@gmail.com", "enabled": true, "password": "$2a$10$yy8LTDyGQUTdSTLwEim4hOBGDXd3jSNpIbF4E7k6xRWqkX/h7CtZS", "roles": [[Object]], "userId": 5, "username": "doctor@gmail.com"}}
 
 {/* <Avatar.Image size={150} source={{ uri: "https://img.freepik.com/free-photo/beautiful-young-female-doctor-looking-camera-office_1301-7807.jpg" }} /> */}

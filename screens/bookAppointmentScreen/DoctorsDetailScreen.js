@@ -16,25 +16,40 @@ const DoctorsDetailScreen = ({ navigation }) => {
 
   const [doctorData,setDoctorData] = useState([]);
 
+
   const fetchDoctorData = async () => {
     try {
       const token = await  AsyncStorage.getItem('token');
-      console.log(token);
-      console.log(`${baseUrl}/api/appointment/doctors`);
+      // console.log(token);
       const response = await axios.get(`${baseUrl}/api/appointment/doctors`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
-      // console.log(response.data);
-      setDoctorData(response.data);
-      // Handle the response data as needed
+  
+      const enrichedDoctorData = response.data.map(doctor => ({
+        ...doctor,
+        fullName: `${doctor.firstName} ${doctor.lastName}`,
+        gender: doctor.gender,
+        description: doctor.description || 'No description available'
+      }));
+  
+      console.log(enrichedDoctorData);
+      setDoctorData(enrichedDoctorData);
+  
+      // Store each doctor's full name, gender, and description in AsyncStorage
+      enrichedDoctorData.forEach(async doctor => {
+        await AsyncStorage.setItem(`doctorFullName${doctor.userId}`, doctor.fullName);
+        await AsyncStorage.setItem(`doctorGender${doctor.userId}`, doctor.gender);
+        await AsyncStorage.setItem(`doctorDescription${doctor.userId}`, doctor.description);
+      });
+
     } catch (error) {
       console.error('API Error:', error);
       // Handle errors
     }
   };
+  
   
   
 
