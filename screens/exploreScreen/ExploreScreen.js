@@ -6,19 +6,32 @@ import Card from '../../Components/CardComponent';
 import { baseUrl } from '../../data/baseUrl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {ka,en,hi} from '../../data/youTubeData';
+import i18n from '../../i18';
+//import translations from './translations';
 
 const ExploreScreen = ({ navigation }) => {
  
   const [isLoading,setIsLoading]=useState(false);
   const [courseData,setCourseData]= useState([]);
+  const [language,setLanguage]=useState("");
+  const t = i18n.t;
   // const isEnrolled=true;
   const [enrolledCourseId,setEnrolledCourseId]=useState([]);
   const [enroll,setEnroll]=useState(false);
   useEffect(() => {
     fetchCoursesData();
     fetchEnrolledCoursesData();
+    setLanguageFromAsyncStorage();
   }, [enroll])
-  
+  const setLanguageFromAsyncStorage = async ()=>
+    {
+        const getSelectedLanguage = await AsyncStorage.getItem('language');
+        if(getSelectedLanguage===null)
+        {setLanguage('en');}
+        else
+        {setLanguage(getSelectedLanguage);}
+    }
 
   const enrollUser = async(courseId) => {
     setIsLoading(true);
@@ -100,10 +113,10 @@ const ExploreScreen = ({ navigation }) => {
         imageSource={item.courseImage?item.courseImage:"https://img.freepik.com/premium-vector/flat-valentine-s-day-illustration_52683-157836.jpg"}
       />
         {  !enrolledCourseId.includes(item.courseId) &&(<TouchableOpacity onPress={()=>{enrollUser(item.courseId)}} className="flex flex-row rounded-lg mx-6 bg-green-500 justify-center ">
-          <Text className="justify-center text-base "> Enroll Now </Text>
+          <Text className="justify-center text-base ">{t('Enroll Now', { lng: language })}</Text>
         </TouchableOpacity>)}
-        {  enrolledCourseId.includes(item.courseId) &&(<TouchableOpacity disabled className="flex flex-row rounded-lg mx-6 bg-gray-500 justify-center ">
-          <Text className="justify-center text-base "> Enrolled </Text>
+        {  enrolledCourseId.includes(item.courseId) &&(<TouchableOpacity disabled className="flex flex-row rounded-lg mx-6 bg-purple-400 justify-center ">
+          <Text className="justify-center text-base "> {t('Enrolled', { lng: language })}</Text>
         </TouchableOpacity>)}
       </TouchableOpacity>  
 
@@ -114,13 +127,10 @@ const ExploreScreen = ({ navigation }) => {
     <View className="">
       <View>
         <Header title="Mindful Modules" onPressBack={() => navigation.goBack()} />
+        <Text className="text-stone-900 font-semibold text-xl text-center mt-3 mb-2">{t('Welcome to Mindful Modules!', { lng: language })}</Text>
+        <Text  className="text-stone-900 font-semibold text-xl text-center mb-3">{t('Enroll into these interesting Modules for working upon yourself !', { lng: language })}</Text>
         </View>
-        <Button
-          style={styles.shortButton} // Apply the custom style here
-          title="Book an appointment"
-          onPress={() => navigation.push('DoctorsDetailScreen')}
-          color="#9B8BCA"
-        />
+       
       
       {isLoading && <ActivityIndicator  size={40} color='blue'/>}
       

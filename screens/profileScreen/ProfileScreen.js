@@ -6,6 +6,7 @@ import { baseUrl } from '../../data/baseUrl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { ActivityIndicator } from 'react-native';
+import i18n from '../../i18';
 const ProfileScreen = ({ navigation }) => {
 
 
@@ -19,12 +20,23 @@ const ProfileScreen = ({ navigation }) => {
   const [email,setEmail]=useState("");
   const [responseData, setResponseData]=useState({});
   const [isGuest, setIsGuest] = useState(false);
+  const [language,setLanguage]=useState("");
+  const t = i18n.t;
 
   useEffect(() => {
     checkIfGuestUser();
+    setLanguageFromAsyncStorage();
     // Only call getUserDetails if not a guest user
    
   }, [isGuest]);
+  const setLanguageFromAsyncStorage = async ()=>
+    {
+        const getSelectedLanguage = await AsyncStorage.getItem('language');
+        if(getSelectedLanguage===null)
+        {setLanguage('en');}
+        else
+        {setLanguage(getSelectedLanguage);}
+    }
 
   const checkIfGuestUser = async () => {
     setIsLoading(true);
@@ -178,7 +190,7 @@ const ProfileScreen = ({ navigation }) => {
             <TouchableOpacity onPress={()=>navigation.navigate('AppointmentScreen')}>
               
               <View style={styles.section}>
-              <Text style={styles.sectionTitle}>My Appointments</Text>
+              <Text style={styles.sectionTitle}>{t('My Appointments', { lng: language })}</Text>
               </View>
             </TouchableOpacity>
         </View>
@@ -186,7 +198,7 @@ const ProfileScreen = ({ navigation }) => {
         <View>
         <TouchableOpacity onPress={() => setShowAccountDetails(!showAccountDetails)}>
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Account Details</Text>
+            <Text style={styles.sectionTitle}>{t('Account Details', { lng: language })}</Text>
           </View>
         </TouchableOpacity>
         {showAccountDetails && (
@@ -209,7 +221,7 @@ const ProfileScreen = ({ navigation }) => {
             <TouchableOpacity onPress={()=>navigation.navigate('MyPostsScreen')}>
               
               <View style={styles.section}>
-              <Text style={styles.sectionTitle}>My Posts and Questions</Text>
+              <Text style={styles.sectionTitle}>{t('My Posts and Questions', { lng: language })}</Text>
               </View>
             </TouchableOpacity>
         </View>      
@@ -219,11 +231,11 @@ const ProfileScreen = ({ navigation }) => {
           onPress={handleOpenDialer}
           style={styles.dialerButton}
         >
-          <Text style={styles.dialerButtonText}>Call Emergency Services</Text>
+          <Text style={styles.dialerButtonText}>{t('Call Emergency Services', { lng: language })}</Text>
         </TouchableOpacity>
           <TouchableOpacity 
           style={styles.logoutButton} onPress={()=>handleLogout()}>
-            <Text style={styles.logoutButtonText}>Logout</Text>
+            <Text style={styles.logoutButtonText}>{t('Logout', { lng: language })}</Text>
           </TouchableOpacity>
         </View>
         )

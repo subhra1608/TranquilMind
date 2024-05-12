@@ -11,7 +11,19 @@
         "viewPosts": "View Posts",
         "viewQuestions": "View Questions",
         "addPost": "+ Add Post",
-        "addQuestion": "+ Add Question"
+        "addQuestion": "+ Add Question",
+        "Take a Quiz":"Take a Quiz",
+        "Book An Appointment": "Book Appointment",
+        "Welcome to Mindful Modules!" :"Welcome to Mindful Modules!",
+        "Enroll into these interesting Modules for working upon yourself !":"Enroll into these interesting Modules for working upon yourself !",
+        "Enroll Now":"Enroll Now",
+        "Enrolled":"Enrolled",
+        "My Appointments":"My Appointments",
+        "Account Details":"Account Details",
+        "My Posts and Questions":"My Posts and Questions",
+        "Call Emergency Services":"Call Emergency Services",
+        "Logout":"Logout"
+
       }
 
   
