@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, Linking, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Linking, TouchableOpacity, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import Header from '../../Components/HeaderComponent';
@@ -11,24 +11,39 @@ import translate from 'translate-google-api';
 const ViewTaskScreen = ({ navigation }) => {
   const route = useRoute();
 
-  const { taskData,courseId } = route.params;
+  const { taskData,courseId,completedTasks} = route.params;
   
-  const [completedText,setCompletedText]=useState("Mark as Completed")
+  // const [completedText,setCompletedText]=useState("Mark as Completed")
   const [isDisabled,setIsDisabled]=useState(false);
   const [title,setTitle]=useState("");
   const [description,setDescription]=useState("");
-  
+  const [isCompleted,setIsCompleted]=useState();
+
   const handleLinkPress = () => {
     Linking.openURL(taskData.link);
   };
+
+  // console.log(taskData);
+  
   useEffect(() => {
 
     const checkIfGuest = async () => {
       await convertSelectedLanguageDescription(taskData.description);
       await convertSelectedLanguageTitle(taskData.title);
+      
     };
     checkIfGuest()
-  }, [])
+    checkIfTaskCompleted();
+  }, [isCompleted])
+
+  const checkIfTaskCompleted= async()=>{
+    const currentTask = ((taskData['weekNo']- 1) * 2) + taskData['taskNo']
+    
+    if(currentTask<=completedTasks)
+      {
+        setIsCompleted(true);
+      }
+  }
 
   const markAsCompleted = async(taskData)=>{
   
@@ -45,8 +60,14 @@ const ViewTaskScreen = ({ navigation }) => {
       });
       // console.log(response.data);
 
-      setCompletedText("Completed");
-      setIsDisabled(true);
+      // setCompletedText("Completed");
+      // setIsDisabled(true);
+      Alert.alert("Task Completed Successfully"
+        ,"Congratulations on Successfully completing the task!",
+        [{text:"Continue Improving"}]
+      )
+      setIsCompleted(true);
+      navigation.navigate('ExploreScreen')
 
   }catch (error) {
     console.error(error);
@@ -96,16 +117,27 @@ const convertSelectedLanguageTitle = async(text)=>{
       <Header title="Reading Modules" onPressBack={() => navigation.goBack()} />
       <ScrollView>
         <View style={styles.descriptionContainer}>
-          <Text className="font-extrabold text-white text-center text-3xl mb-5 " style={{ textDecorationLine: 'underline', // Underline style
+          <Text className="font-extrabold text-center text-white text-3xl mb-5 " style={{ textDecorationLine: 'underline', // Underline style
 }}>{title}</Text>
           <Text style={styles.descriptionText}>{description}</Text>
           <TouchableOpacity onPress={handleLinkPress}>
             <Text style={styles.linkText}>Link to resources: {taskData.link}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.completeButton} disabled={isDisabled} onPress={() => {markAsCompleted(taskData)}}>
-        <Text style={styles.completeButtonText}>{completedText}</Text>
-      </TouchableOpacity>
+        {
+          !isCompleted && (
+            <TouchableOpacity style={styles.completeButton} onPress={() => {markAsCompleted(taskData)}}>
+            <Text style={styles.completeButtonText}>Mark As Completed</Text>
+          </TouchableOpacity>
+          )
+        }
+        {
+          isCompleted && (
+            <TouchableOpacity style={styles.completeButton} disabled={isCompleted} onPress={() => null}>
+              <Text style={styles.completeButtonText}>Completed</Text>
+            </TouchableOpacity>
+          )
+        }
       </ScrollView>
       
     </View>

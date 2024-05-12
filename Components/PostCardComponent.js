@@ -99,17 +99,20 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLa
       flagged=response.data.flagged;
       // Handle successful flagging
       console.log(response.data);
+      setIsRefresh(!setRefresh)
     } catch (error) {
       // Handle error in flagging
       console.error('Error flagging post:', error.response || error);
     }
   };
+
   const handleLike = () => {
     const postId = item.id; // Assuming `item` is the post object that has an id
     const shouldFlag = true; // or some condition to determine if you should flag or unflag
     handleFlag(postId, shouldFlag);
     console.log('Flagged!');
   };
+
   const isFlaggedByUser = (flagged) => {
     return flagged>0; // Assuming `flagged` is the number of times the post has been flagged
   };
