@@ -146,21 +146,20 @@ const HomeScreen = ({navigation}) => {
               </View>
               
             </View>
-            <View className="flex-row mx-2 p-2 h-20 rounded-3xl" style={{backgroundColor:"#8155BA"}}>
-              <View className="flex-row w-10/12">
-                <View className="flex-col flex-1 justify-between">
-                  <View className="flex-1">
-                    <Text  className=" text-lg mx-1  text-white ">{t('engageInQuizzes', { lng: language })} </Text>
-                  </View>
-                </View>
-   
-              </View>
-              <View className="flex flex-col justify-center ">
-                  <TouchableOpacity onPress={() =>{seeAll()} } >
-                      <Ionicons name="chevron-forward-outline" size={64} color="white" ></Ionicons>
-                  </TouchableOpacity>
-                </View>
+            <View className="flex-row mx-2 p-2 mb-4 ">
+            <View className="w-1/2 p-1 ">
+              <TouchableOpacity onPress={() => { seeAll() }} style={{backgroundColor: '#8155BA', height: 120, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{ color: 'white', fontSize: 18, textAlign:"center" }}>{t('Take a Quiz', { lng: language })}</Text>
+              </TouchableOpacity>
             </View>
+            <View className="w-1/2 p-1">
+              <TouchableOpacity onPress={() => navigation.navigate('DoctorsDetailScreen')} style={{backgroundColor: '#8155BA', height:120, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{ color: 'white', fontSize: 18 , textAlign: 'center'}}>{t('Book Appointment', { lng: language })}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+
             <Text className=" mt-2 ml-3 mb-2 text-lg">{t('exploreQuotes', { lng: language })}</Text>
             
             <View className="flex-1 h-32  mx-1  rounded-3xl ">
