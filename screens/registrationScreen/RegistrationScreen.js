@@ -251,74 +251,6 @@ const RegistrationScreen = ({navigation}) => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingHorizontal: 30,
-//     backgroundColor: '#f0f0f0',
-//     // justifyContent: 'space-between', 
-
-//   },
-//   backButton: {
-//     position: 'absolute',
-//     top: 10,
-//     left: 10,
-//     padding: 10, 
-//     borderRadius: 5, 
-//   },
-//   backButtonText: {
-//     fontSize: 20,
-//     bottom: -1,
-//     right: 10,
-//     color: '#7f3db5', // Blue color
-//   },
-//   title: {
-//     fontSize: 30,
-//     fontWeight: 'bold',
-//     marginBottom: 20,
-//     textAlign: 'center',
-//     color: '#7f3db5'
-//   },
-//   inputContainer: {
-//     marginBottom: 10,
-//   },
-//   input: {
-//     padding: 15,
-//     marginBottom: 10,
-//     backgroundColor: '#fff',
-//     borderRadius: 5,
-//     fontSize: 16,
-//   },
-//   signupButton: {
-//     backgroundColor: '#9B8BCA', // Purple color
-//     padding: 15,
-//     borderRadius: 30, // Slightly rounded corners
-//     alignItems: 'center',
-//   },
-//   signupButtonText: {
-//     color: '#fff',
-//     fontSize: 18,
-//   },
-//   passwordMismatchText: {
-//     color: 'red',
-//     fontSize: 14,
-//     marginLeft: 8,
-//   },
-//   imagePickerButton: {
-//     alignSelf: 'center', // Center the button
-//     marginBottom: 20, // Space below the button
-//   },
-//   profileImage: {
-//     width: 100,
-//     height: 100,
-//     borderRadius: 50, // Circular image
-//     marginBottom: 20,
-//   },
-//   imagePickerText: {
-//     fontSize: 16,
-//     color: '#5e2d79', // Purple color
-//   }
-// });
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -419,3 +351,75 @@ const styles = StyleSheet.create({
   }
 });
 export default RegistrationScreen;
+
+
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingHorizontal: 30,
+//     backgroundColor: '#f0f0f0',
+//     // justifyContent: 'space-between', 
+
+//   },
+//   backButton: {
+//     position: 'absolute',
+//     top: 10,
+//     left: 10,
+//     padding: 10, 
+//     borderRadius: 5, 
+//   },
+//   backButtonText: {
+//     fontSize: 20,
+//     bottom: -1,
+//     right: 10,
+//     color: '#7f3db5', // Blue color
+//   },
+//   title: {
+//     fontSize: 30,
+//     fontWeight: 'bold',
+//     marginBottom: 20,
+//     textAlign: 'center',
+//     color: '#7f3db5'
+//   },
+//   inputContainer: {
+//     marginBottom: 10,
+//   },
+//   input: {
+//     padding: 15,
+//     marginBottom: 10,
+//     backgroundColor: '#fff',
+//     borderRadius: 5,
+//     fontSize: 16,
+//   },
+//   signupButton: {
+//     backgroundColor: '#9B8BCA', // Purple color
+//     padding: 15,
+//     borderRadius: 30, // Slightly rounded corners
+//     alignItems: 'center',
+//   },
+//   signupButtonText: {
+//     color: '#fff',
+//     fontSize: 18,
+//   },
+//   passwordMismatchText: {
+//     color: 'red',
+//     fontSize: 14,
+//     marginLeft: 8,
+//   },
+//   imagePickerButton: {
+//     alignSelf: 'center', // Center the button
+//     marginBottom: 20, // Space below the button
+//   },
+//   profileImage: {
+//     width: 100,
+//     height: 100,
+//     borderRadius: 50, // Circular image
+//     marginBottom: 20,
+//   },
+//   imagePickerText: {
+//     fontSize: 16,
+//     color: '#5e2d79', // Purple color
+//   }
+// });

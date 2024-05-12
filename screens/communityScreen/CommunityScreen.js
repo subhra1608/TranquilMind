@@ -136,19 +136,11 @@ const segmentWidth = width / 2;
 
   const renderItemQnA = ({ item }) => {
     return(
-      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} />
+      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} selectedLanguage={language}/>
     );
   }
   
-  // const qnaData=[
-  //   {id:1,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-  //   {id:2,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-  //   {id:3,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-  //   {id:4,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-  //   {id:5,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-  //   {id:6,question:"How are you",answer:"I'm Fine",userId:1,userName:"Subhra",liked:12,disliked:14},
-  // ]
-
+ 
   return (
     <View style={styles.container}>
       <View style={styles.segmentContainer}>
@@ -196,7 +188,7 @@ const segmentWidth = width / 2;
       { !isLoading && (
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('CreateQnAScreen')} style={styles.addButton}>
-          <Text style={styles.addButtonText}> + Add Question</Text>
+        <Text style={styles.addButtonText}>{t('addQuestion', { lng: language })}</Text>  
         </TouchableOpacity>
         <View  className=" h-5/6">
         <FlatList

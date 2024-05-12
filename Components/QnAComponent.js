@@ -122,11 +122,14 @@
 // });
 
 // export default QnAComponent;
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-paper';
+import translate from 'translate-google-api';
 
-const QnAComponent = ({ item }) => {
+const QnAComponent = ({ item, selectedLanguage }) => {
+    const [translatedQuestion, setTranslatedQuestion] = useState(item.question);
+    const [translatedAnswer, setTranslatedAnswer] = useState(item.answer);
 
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
@@ -136,20 +139,33 @@ const QnAComponent = ({ item }) => {
         });
     };
 
+    useEffect(() => {
+        const translateText = async () => {
+            if (selectedLanguage === 'hi') {
+                const translatedQ = await translate(item.question, { from: 'en', to: 'hi' });
+                const translatedA = item.answer ? await translate(item.answer, { from: 'en', to: 'hi' }) : '';
+                setTranslatedQuestion(translatedQ[0]);
+                setTranslatedAnswer(translatedA[0]);
+            } else {
+                setTranslatedQuestion(item.question);
+                setTranslatedAnswer(item.answer);
+            }
+        };
+        translateText();
+    }, [item, selectedLanguage]);
+
     return (
         <View style={styles.container}>
             <View style={styles.card}>
                 <View style={styles.userInfo}>
-                    {/* Updated to handle potentially missing `questionByName` */}
                     <Avatar.Text size={30} label={(item.questionByName?.charAt(0) || 'U').toUpperCase()} />
                     <Text style={styles.username}>{item.questionByName || 'Unknown'}</Text>
                     <Text style={styles.timestamp}>{item.uploadedAt ? formatDate(item.uploadedAt) : 'N/A'}</Text>
                 </View>
-                <Text style={styles.question}>{item.question}</Text>
+                <Text style={styles.question}>{translatedQuestion}</Text>
                 {item.answered && (
                     <>
-                        <Text style={styles.answer}>{item.answer}</Text>
-                        
+                        <Text style={styles.answer}>{translatedAnswer}</Text>
                     </>
                 )}
             </View>

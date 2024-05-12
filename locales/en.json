@@ -11,7 +11,17 @@
         "viewPosts": "View Posts",
         "viewQuestions": "View Questions",
         "addPost": "+ Add Post",
-        "addQuestion": "+ Add Question"
+        "addQuestion": "+ Add Question",
+        "quizScreenTitle": "Quiz Screen",
+        "wellnessCheckIn": "Wellness Check-In",
+        "quizDescription": "Take a moment to assess your overall well-being. This quiz helps you understand where you stand on your journey to a healthier and happier you.",
+        "questionScreenTitle": "Question Screen",
+        "wellnessCheckInIntro": "Let's take the first step towards understanding your mental wellness. Answer each question as openly as you can.",
+        "submit": "Submit",
+        "yourTotalScore": "Your Total Score: ",
+        "backToQuizzes": "Back to Quizzes"
+
+
       }
 
   

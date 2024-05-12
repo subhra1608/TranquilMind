@@ -138,7 +138,7 @@ const segmentWidth = width / 2;
 
   const renderItemQnA = ({ item }) => {
     return(
-      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} />
+      <QnAComponent item={item} setIsRefresh={setIsRefresh} setRefresh={isRefresh} selectedLanguage={language}/>
     );
   }
   
@@ -193,7 +193,7 @@ const segmentWidth = width / 2;
       { !isLoading && !isViewPostsSelected &&(
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('CreateQnAScreen')} style={styles.addButton}>
-          <Text style={styles.addButtonText}> + Add Question</Text>
+        <Text style={styles.addButtonText}>{t('addQuestion', { lng: language })}</Text> 
         </TouchableOpacity>
         <View  className=" h-5/6">
         <FlatList
