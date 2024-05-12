@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView, ActivityIndicator, Image, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView, ActivityIndicator, Image, Platform, Modal, Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { baseUrl } from '../../data/baseUrl';
 import * as ImagePicker from 'expo-image-picker';
@@ -21,6 +21,9 @@ const RegistrationScreen = ({navigation}) => {
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [isLoading,setIsLoading]=useState(false);
   const [imageUri, setImageUri] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+
 
   
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
@@ -63,6 +66,10 @@ const RegistrationScreen = ({navigation}) => {
   
  
   const handleRegistration = async () => {
+    if (!agreeToTerms) {
+      Alert.alert("Agreement Required", "You must agree to the terms and conditions to register.");
+      return;
+    }
     let imageBase64 = "";
     if (imageUri) {
       imageBase64 = await FileSystem.readAsStringAsync(imageUri, { encoding: 'base64' });
@@ -162,7 +169,7 @@ const RegistrationScreen = ({navigation}) => {
       setIsLoading(false);
   };   
 
- 
+
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -242,11 +249,90 @@ const RegistrationScreen = ({navigation}) => {
         <Text style={styles.passwordMismatchText}>Passwords do not match</Text>
       )}
       </View>
-      <TouchableOpacity style={styles.signupButton} onPress={handleRegistration}>
-        {isLoading && (<ActivityIndicator size={30} color='white'/>)}
-        {!isLoading && (<Text style={styles.signupButtonText}>Sign Up</Text>) }
-      </TouchableOpacity>
-    </View>
+      <Text style={styles.termsText}>
+          We have updated our
+          <Text style={styles.linkText} onPress={() => setModalVisible(true)}> Terms of Service and Privacy Policy</Text>
+          . By continuing to use our service, you accept these terms and policies.
+        </Text>
+        <View style={styles.checkboxContainer}>
+          <Switch
+            value={agreeToTerms}
+            onValueChange={setAgreeToTerms}
+            style={styles.switch}
+          />
+          <Text style={styles.checkboxLabel}>I agree to the terms and conditions</Text>
+        </View>
+        <TouchableOpacity style={styles.signupButton} onPress={handleRegistration} >
+          {isLoading ? <ActivityIndicator size={30} color='white' /> : <Text style={styles.signupButtonText}>Sign Up</Text>}
+        </TouchableOpacity>
+      </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ScrollView>
+            <Text style={styles.modalText}>
+{`Terms and Conditions
+
+Welcome to Tranquil Mind!
+These Terms and Conditions govern your access to and use of Tranquil Mind, including any content, functionality, and services offered through the App.
+
+By accessing or using the App, you agree to be bound by these Terms. If you do not agree to these Terms, please do not access or use the App.
+
+1. Accuracy of Materials
+1.1. Errors: The materials appearing on Tranquil Mind may include technical, typographical, or photographic errors. We do not warrant that any of the materials on its app are accurate, complete, or current.
+1.2. Changes: We may make changes to the materials contained on the app at any time without notice. However, We do not make any commitment to update the materials.
+
+2. Links
+2.1. External Sites: We have not reviewed all of the sites linked to our app and are not responsible for the contents of any such linked site.
+2.2. Endorsement: The inclusion of any link does not imply endorsement by Tranquil Mind of the site. Use of any such linked website is at the user's own risk.
+
+3. Prohibited Conduct
+3.1. Violate any applicable laws, regulations, or third-party rights.
+3.2. Use the App for any unlawful or fraudulent purpose.
+
+4. Contact Information
+4.1. Questions: If you have any questions about these Terms, please contact us at [Contact Information].
+
+5. Data Collection and Privacy
+5.1. Consent: By using the App, you consent to the collection, processing, and use of your personal data as described in our Privacy Policy.
+5.2. Data Security: We implement reasonable security measures to protect your personal data from unauthorized access, use, or disclosure. However, please note that no method of transmission over the internet or method of electronic storage is 100% secure.
+
+6. Intellectual Property
+6.1. Ownership: All content, features, and functionality available through the App are owned by or licensed to us and are protected by copyright, trademark, and other intellectual property laws.
+
+7. Disclaimer of Warranties
+7.1. No Warranty: The App is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not warrant that the App will be error-free or uninterrupted, or that defects will be corrected.
+
+8. Limitation of Liability
+8.1. Exclusion of Damages: In no event shall we be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, arising out of or in connection with your use of the App.
+
+9. Governing Law
+9.1. Jurisdiction: These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law provisions.
+
+10. Changes to Terms
+10.1. Modification: We reserve the right to modify these Terms at any time. Any changes will be effective immediately upon posting the revised Terms on the App. Your continued use of the App after the posting of the revised Terms constitutes your agreement to the revised Terms.
+
+Consent Form
+I acknowledge that I have read and understood the Terms and Conditions of Tranquil Mind, and I consent to the collection, processing, and use of my personal data as described in the Privacy Policy.
+
+I understand that by using the App, I am agreeing to abide by the Terms and Conditions set forth by Tranquil Mind and that failure to comply with these terms may result in the termination of my access to the App.
+By providing my consent, I affirm that I am at least 18 years old and have the legal capacity to enter into these Terms.`}
+</Text>
+            </ScrollView>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.textStyle}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -348,7 +434,67 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 30, // Space at the bottom inside the scroll view
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  termsText: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  linkText: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    marginTop: 20,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  checkboxLabel: {
+    marginLeft: 10,
+    fontSize: 16,
+  },
+  switch: {
+    transform: [{ scaleX: .8 }, { scaleY: .8 }],
+  },
 });
 export default RegistrationScreen;
 
