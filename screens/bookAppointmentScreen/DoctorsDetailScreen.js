@@ -26,7 +26,7 @@ const DoctorsDetailScreen = ({ navigation }) => {
         },
       });
       
-      console.log(response.data);
+      // console.log(response.data);
       setDoctorData(response.data);
       // Handle the response data as needed
     } catch (error) {

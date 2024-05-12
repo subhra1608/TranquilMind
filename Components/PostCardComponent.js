@@ -27,6 +27,7 @@ const PostCardComponent = ({ item,setIsRefresh,setRefresh, navigation,selectedLa
       await convertSelectedLanguageName(item.name)
       await convertSelectedLanguage(item.title);
       await convertSelectedLanguageDescription(item.description);
+      
       const guestStatus = await AsyncStorage.getItem('isGuest');
       setIsGuest(guestStatus === 'true');
     };

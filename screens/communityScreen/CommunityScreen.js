@@ -35,6 +35,7 @@ const segmentWidth = width / 2;
     fetchPosts();
     setLanguageFromAsyncStorage();
   }, [isRefresh])
+  
   const setLanguageFromAsyncStorage = async ()=>
   {
       const getSelectedLanguage = await AsyncStorage.getItem('language');

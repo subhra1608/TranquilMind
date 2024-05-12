@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Button, StyleSheet,FlatList, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Header from '../../Components/HeaderComponent';
-import { ProgressBar, MD3Colors, ActivityIndicator } from 'react-native-paper';
+import { ProgressBar, ActivityIndicator } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
 import CoursesCardComponent from '../../Components/CoursesCardComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUrl } from '../../data/baseUrl';
+
 
 const CourseHomeScreen = ({ navigation }) => {
   const route = useRoute();
@@ -42,16 +43,16 @@ const CourseHomeScreen = ({ navigation }) => {
 ;    } catch (error) {
 
       // console.log(error.message);
-      console.error('Error Getting details:', error);
+      // console.error('Error Getting details:', error);
     }    
    setIsLoading(false);
    
   };
   
-  const handleCardPress = (item) => {
+  const handleCardPress = (item,param1) => {
     // console.log("Inside component handleCardPress");
-    // console.log(item);
-    navigation.navigate('ViewTaskScreen',{ taskData: item});
+    // console.log(param1);
+    navigation.navigate('ViewTaskScreen',{ taskData: item,courseId:param1});
     // navigation.navigate('CourseHomeScreen',{ param1: item.courseId, param2: item.courseName,param3: item.category })
 
   }
@@ -60,7 +61,7 @@ const CourseHomeScreen = ({ navigation }) => {
   const renderTaskCard = ({item}) => {
     // console.log(item);
     return (
-      <TouchableOpacity className=" mt-6 ml-3 mr-3"onPress={()=>{handleCardPress(item)}}>
+      <TouchableOpacity className=" mt-6 ml-3 mr-3"onPress={()=>{handleCardPress(item,param1)}}>
         <CoursesCardComponent item={item} courseId = {param1} />
       </TouchableOpacity>
     )
@@ -99,7 +100,7 @@ const CourseHomeScreen = ({ navigation }) => {
           <View className="flex flex-row justify-around">
             {
               Object.keys(courseMaterial).map(key =>(
-                <View>
+                <View key={key}>
                 <Button 
                   title={`Week ${key}`} 
                   onPress={() => handleWeekButtonClick(parseInt(key))} 
