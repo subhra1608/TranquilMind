@@ -19,12 +19,33 @@ const CourseHomeScreen = ({ navigation }) => {
   const [isLoading,setIsLoading]= useState(false);
   const [courseMaterial,setCourseMaterial]= useState({});
   const [selectedTask,setSelectedTask] =useState({});
- 
+  const [completedTask,setCompletedTasks]= useState(0);
+  
 
   useEffect(() => {
     fetchCoursesByWeek();
+    checkTaskCompletion();
   }, [])
   
+  const checkTaskCompletion = async()=>{
+
+    const token = await  AsyncStorage.getItem('token');
+    const patientId = await  AsyncStorage.getItem('userId');
+
+    try {
+      const response = await axios.get(`${baseUrl}/api/patient/${patientId}/task-complete/${param1}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCompletedTasks(response.data.completed);
+
+;    } catch (error) {
+
+      // console.log(error.message);
+      // console.error('Error Getting details:', error);
+    }    
+  }
 
   const fetchCoursesByWeek = async() => {
 
@@ -36,7 +57,7 @@ const CourseHomeScreen = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log(response.data.tasksByWeek);
+
       setCourseMaterial(response.data.tasksByWeek);
       setSelectedTask(response.data.tasksByWeek[selectedWeek]);
 
@@ -50,10 +71,8 @@ const CourseHomeScreen = ({ navigation }) => {
   };
   
   const handleCardPress = (item,param1) => {
-    // console.log("Inside component handleCardPress");
-    // console.log(param1);
-    navigation.navigate('ViewTaskScreen',{ taskData: item,courseId:param1});
-    // navigation.navigate('CourseHomeScreen',{ param1: item.courseId, param2: item.courseName,param3: item.category })
+    
+    navigation.navigate('ViewTaskScreen',{ taskData: item,courseId:param1,completedTasks:completedTask});
 
   }
 
@@ -74,15 +93,15 @@ const CourseHomeScreen = ({ navigation }) => {
   };
 
   return (
-        <View className="flex flex-1 bg-[#D3BBDD]">
+        <View className="flex flex-1 bg-[#C197D2]">
         <View className=" basis-1/14">
           <Header onPressBack={() => navigation.goBack()} title={param3}/>
         </View>
-        <Text className="text-2xl font-bold ml-2 mt-2 text-center">Welcome to the {param2} module!</Text>
+        <Text className="text-2xl  ml-2 mt-2 text-center ">Welcome to the {param2} module!</Text>
         <View className="mt-2 rounded-lg basis-18 m-2 justify-center bg-yellow-100">
           <View className="flex flex-row justify-evenly">
             <View className="m-3">
-              <Avatar.Text size={45} label='50%'/>
+              <Avatar.Text size={45} label= {`${(completedTask/10)*100}%`}/>
             </View>
             <View className=" flex flex-1 justify-evenly content-center flex-col w-6">
                 <View>
@@ -90,7 +109,7 @@ const CourseHomeScreen = ({ navigation }) => {
                 </View>
                 <View className="flex flex-row content-center">
                   <View className=" w-11/12">
-                    <ProgressBar  progress={0.25}  color='purple' />
+                    <ProgressBar  progress={(completedTask/10)}  color='purple' />
                   </View>
                 </View>
             </View>
@@ -121,7 +140,7 @@ const CourseHomeScreen = ({ navigation }) => {
             renderItem={({ item}) => renderTaskCard(item={item})}
             keyExtractor={(item,index) => index}
             horizontal={false}
-        />
+            />
           )}
         </View>
       </View>

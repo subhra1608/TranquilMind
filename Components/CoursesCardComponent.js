@@ -6,7 +6,7 @@ import { ProgressBar } from 'react-native-paper';
 
 const CoursesCardComponent = ({item,courseId}) => {
   //console.log("Inside card component");
-  console.log(item);
+  // console.log(item);
 
 // console.log(courseId)
   return (

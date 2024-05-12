@@ -19,6 +19,7 @@ const ExploreScreen = ({ navigation }) => {
   // const isEnrolled=true;
   const [enrolledCourseId,setEnrolledCourseId]=useState([]);
   const [enroll,setEnroll]=useState(false);
+  
   useEffect(() => {
     fetchCoursesData();
     fetchEnrolledCoursesData();
@@ -124,26 +125,28 @@ const ExploreScreen = ({ navigation }) => {
   };
 
   return (
-    <View className="">
+    <View className="flex-auto bg-[#C197D2] rounded-xl">
       <View>
         <Header title="Mindful Modules" onPressBack={() => navigation.goBack()} />
-        <Text className="text-stone-900 font-semibold text-xl text-center mt-3 mb-2">{t('Welcome to Mindful Modules!', { lng: language })}</Text>
-        <Text  className="text-stone-900 font-semibold text-xl text-center mb-3">{t('Enroll into these interesting Modules for working upon yourself !', { lng: language })}</Text>
+        <View>
+          <Text className=" text-slate-900 font-semibold text-xl text-center mt-3 mb-2">{t('Welcome to Mindful Modules!', { lng: language })}</Text>
+          <Text  className="text-slate-900 font-semibold text-xl text-center mb-3">{t('Enroll into these interesting Modules for working upon yourself !', { lng: language })}</Text>
         </View>
-       
-      
-      {isLoading && <ActivityIndicator  size={40} color='blue'/>}
-      
-      {!isLoading && 
-        (
-        <FlatList
-        data={courseData}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => item.courseId.toString()}
-        numColumns={2}
-        horizontal={false}
-        />)
-      }
+        </View>
+        <View className="flex-auto  bg-white rounded-3xl">
+          {isLoading && <ActivityIndicator  size={40} color='blue'/>}
+          
+          {!isLoading && 
+            (
+            <FlatList
+            data={courseData}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => item.courseId.toString()}
+            numColumns={2}
+            horizontal={false}
+            />)
+          }
+        </View>
       </View>
     
   );
