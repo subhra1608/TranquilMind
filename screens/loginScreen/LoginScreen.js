@@ -12,7 +12,7 @@ import {Picker} from '@react-native-picker/picker';
 const LoginScreen = ({ navigation }) => {
 
   const t = i18n.t;
-  const [email, setEmail] = useState("sbj@gmail.com");
+  const [email, setEmail] = useState("p@gmail.com");
   const [password, setPassword] = useState('Dell@123');
   const [user,setUser]= useState({});
   const [selectedLanguage, setSelectedLanguage] = useState("en"); 
@@ -51,13 +51,11 @@ const LoginScreen = ({ navigation }) => {
 
     try {
       const response =  await axios.post(`${baseUrl}/api/user/authenticate`,cred,{headers});
-      console.log(response.data);  
+      // console.log(response.data);  
       const userId = response.data.userId;
       await AsyncStorage.setItem('token',response.data.accessToken);      // setUser(response.data);
       console.log(response.data.accessToken);
       await AsyncStorage.setItem('userId',String(userId));      // setUser(response.data);
-
-      //console.log(token)
       navigation.navigate('LandingScreen');
 
     } catch (error) {
@@ -67,7 +65,7 @@ const LoginScreen = ({ navigation }) => {
     }
     setIsLoading(false);
 
-    navigation.navigate('LandingScreen');
+    // navigation.navigate('LandingScreen');
    
   };
 

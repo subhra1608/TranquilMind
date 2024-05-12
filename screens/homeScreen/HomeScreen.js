@@ -97,8 +97,8 @@ const HomeScreen = ({navigation}) => {
               resizeMode="cover"
               />
               <View className="absolute top-5 left-4 ">
-              <Text className=" font-bold text-lg ml-18 text-neutral-50">{t('welcomeMessage', { lng: language })}</Text>
-              <Text className="mt-2 font-bold text-lg ml-20 text-neutral-50">{t('How are you feeling today', { lng: language })}</Text>
+              <Text className=" font-bold text-lg ml-9 text-neutral-50">{t('welcomeMessage', { lng: language })}</Text>
+              <Text className="mt-2 font-bold text-lg ml-12 text-neutral-50">{t('How are you feeling today', { lng: language })}</Text>
               <View className="flex-row justify-between">
               <View>
                 <TouchableOpacity onPress={()=>{showAlert("confused",language)}}>
@@ -140,21 +140,21 @@ const HomeScreen = ({navigation}) => {
           </View> 
           <View className=" flex-1 bg-white">
   
-            <View className=" h-8 mb-2 flex-row justify-between">
+            <View className=" h-8  flex-row justify-between">
               <View >
                 <Text style={{ fontSize:18,fontWeight:'600'}} className="mt-1 ml-4" >{t('mentalCheckout', { lng: language })}</Text>
               </View>
               
             </View>
-            <View className="flex-row mx-2 p-2 mb-4 ">
-            <View className="w-1/2 p-1 ">
+            <View className="flex-row mx-2 p-1 mb-2">
+            <View className="w-1/2 p-1 rounded-lg ">
               <TouchableOpacity onPress={() => { seeAll() }} style={{backgroundColor: '#8155BA', height: 120, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={{ color: 'white', fontSize: 18, textAlign:"center" }}>{t('Take a Quiz', { lng: language })}</Text>
               </TouchableOpacity>
             </View>
-            <View className="w-1/2 p-1">
+            <View className="w-1/2 p-1 rounded-xl">
               <TouchableOpacity onPress={() => navigation.navigate('DoctorsDetailScreen')} style={{backgroundColor: '#8155BA', height:120, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 5, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{ color: 'white', fontSize: 18 , textAlign: 'center'}}>{t('Book Appointment', { lng: language })}</Text>
+                <Text style={{ color: 'white', fontSize: 18 , textAlign: 'center'}}>{t('Book An Appointment', { lng: language })}</Text>
               </TouchableOpacity>
             </View>
           </View>

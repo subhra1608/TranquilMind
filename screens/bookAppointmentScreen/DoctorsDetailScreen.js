@@ -19,7 +19,8 @@ const DoctorsDetailScreen = ({ navigation }) => {
 
   const fetchDoctorData = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await  AsyncStorage.getItem('token');
+      // console.log(token);
       const response = await axios.get(`${baseUrl}/api/appointment/doctors`, {
         headers: {
           Authorization: `Bearer ${token}`,

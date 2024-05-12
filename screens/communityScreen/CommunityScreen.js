@@ -37,6 +37,7 @@ const segmentWidth = width / 2;
     fetchPosts();
     setLanguageFromAsyncStorage();
   }, [isRefresh])
+  
   const setLanguageFromAsyncStorage = async ()=>
   {
       const getSelectedLanguage = await AsyncStorage.getItem('language');
@@ -188,7 +189,7 @@ const segmentWidth = width / 2;
       { !isLoading && (
       <View>
         <TouchableOpacity onPress={() => navigation.navigate('CreateQnAScreen')} style={styles.addButton}>
-        <Text style={styles.addButtonText}>{t('addQuestion', { lng: language })}</Text>  
+          <Text style={styles.addButtonText}>{t('addQuestion', { lng: language })}</Text>
         </TouchableOpacity>
         <View  className=" h-5/6">
         <FlatList

@@ -1,8 +1,44 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect,useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import translate from 'translate-google-api';
 
 const Card = ({ id,title, description, imageSource,isEnrolled }) => {
   isEnrolled=true;
+
+  const [stitle,setTitle]=useState("");
+  const [language,setLanguage]=useState("hi");
+
+  useEffect(() => {
+      setLanguageFromAsyncStorage()
+      convertSelectedLanguageTitle(title);
+  }, [])
+  
+  const setLanguageFromAsyncStorage = async ()=>
+    {
+        const getSelectedLanguage = await AsyncStorage.getItem('language');
+        if(getSelectedLanguage===null)
+        {setLanguage('en');}
+        else
+        {setLanguage(getSelectedLanguage);}
+    }
+
+  const convertSelectedLanguageTitle = async(text)=>{
+    // console.log(text);
+    let result=text;
+      if(language==='hi')
+      {
+        result = await translate(text, {
+          from:"en",
+          to: "hi",
+        });
+        setTitle(result[0]);    
+        return;
+      }
+      setTitle(text);
+      // console.log(result[0])
+  }
+
 
   
   return (
@@ -11,7 +47,7 @@ const Card = ({ id,title, description, imageSource,isEnrolled }) => {
           uri: imageSource,
         }} style={styles.image} />
         <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{stitle}</Text>
         
       </View>
     </View>
