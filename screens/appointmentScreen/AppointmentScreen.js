@@ -1,4 +1,4 @@
-import React, { useState ,useEffect } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Button } from 'react-native';
 import Header from '../../Components/HeaderComponent';
 import { baseUrl } from '../../data/baseUrl';
@@ -38,13 +38,12 @@ const AppointmentScreen = ({navigation}) => {
         console.log(response.data);
 
         if (response.data && response.data.length > 0) {
-          // Fetch each doctor's full name from AsyncStorage
-          const appointmentsWithDoctors = await Promise.all(response.data.map(async (appointment) => {
-            const doctorFullName = await AsyncStorage.getItem(`doctorFullName${appointment.doctorId}`);
-            return { ...appointment, doctorFullName: doctorFullName || 'Doctor Name Unavailable' };
+          const appointmentsWithDoctorNames = response.data.map((appointment) => ({
+            ...appointment,
+            doctorFullName: `${appointment.doctor.firstName.trim()} ${appointment.doctor.lastName.trim()}`
           }));
-  
-          setAppointments(appointmentsWithDoctors);
+    
+          setAppointments(appointmentsWithDoctorNames);
         }
     } catch (error) {
       console.log(error.message);
@@ -84,19 +83,19 @@ const AppointmentScreen = ({navigation}) => {
             </TouchableOpacity>
         </View>
         <FlatList
-            data={filteredAppointments}
-            keyExtractor={item => item.appointmentId.toString()}
-            renderItem={({ item }) => (
-            <View style={styles.appointmentItem}>
-                <Text style={styles.appointmentText}>Date: {item.date}</Text>
-                <Text style={styles.appointmentText}>Doctor: {item.doctorFullName}</Text>
-                <Button
-                title="Chat"
-                onPress={() => handleChatPress()}
-            />
-            </View>
-            )}
-        />
+          data={filteredAppointments}
+          keyExtractor={item => item.appointmentId.toString()} 
+          renderItem={({ item }) => (
+              <View style={styles.appointmentItem}>
+                  <Text style={styles.appointmentText}>Date: {item.date}</Text>
+                  <Text style={styles.appointmentText}>Doctor: {item.doctorFullName}</Text>
+                  <Button
+                      title="Chat"
+                      onPress={() => handleChatPress()}
+                  />
+              </View>
+          )}
+      />
         </View>
    
   );
@@ -144,4 +143,3 @@ const styles = StyleSheet.create({
 });
 
 export default AppointmentScreen;
-

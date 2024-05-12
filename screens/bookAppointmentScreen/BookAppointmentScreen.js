@@ -19,6 +19,16 @@ const BookAppointmentScreen = ({ navigation }) => {
   const [doctorFullName, setDoctorFullName] = useState('');
   const [doctorGender, setDoctorGender] = useState('');
   const [doctorDescription, setDoctorDescription] = useState('');
+  const [doctorImageUri, setDoctorImageUri] = useState('');
+
+  useEffect(() => {
+    const fetchImageUri = async () => {
+      const imageUri = await AsyncStorage.getItem(`doctorImageUri${param.userId}`);
+      setDoctorImageUri(imageUri);
+    };
+  
+    fetchImageUri();
+  }, [param]);
 
   useEffect(() => {
     fetchDoctorDetails();
@@ -112,10 +122,10 @@ const BookAppointmentScreen = ({ navigation }) => {
         </View>
       <View style={styles.doctorInfoContainer}>
       <Avatar.Image 
-          size={150} 
-          source={{ uri: "https://img.freepik.com/free-photo/beautiful-young-female-doctor-looking-camera-office_1301-7807.jpg" }}
-          style={{ marginBottom: 10 }}
-        />
+        size={150} 
+        source={{ uri: doctorImageUri }} // Using the fetched image URI
+        style={{ marginBottom: 10 }}
+      />
         <Text style={styles.doctorDetails}>Name: Dr. {doctorFullName}</Text>
         <Text style={styles.doctorDetails}>Gender: {doctorGender}</Text>
         <Text style={styles.doctorDetails}>Description: {doctorDescription || 'No description provided'}</Text>

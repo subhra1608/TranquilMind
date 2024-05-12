@@ -7,7 +7,7 @@ const DoctorCard = ({doctorData}) => {
   return (
     
       <View style={styles.cardContainer}>
-        <Image source={{ uri: doctorData.description }} style={styles.image} />
+        <Image source={{ uri: doctorData.image }} style={styles.image} />
         <View style={styles.infoContainer}>
           <Text style={styles.name}>{doctorData.firstName} {doctorData.middleName} {doctorData.lastName}</Text>
           <Text>{`Experience: ${doctorData.experience}`}</Text>

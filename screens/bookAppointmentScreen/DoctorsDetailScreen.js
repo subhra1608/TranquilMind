@@ -31,7 +31,9 @@ const DoctorsDetailScreen = ({ navigation }) => {
         ...doctor,
         fullName: `${doctor.firstName} ${doctor.lastName}`,
         gender: doctor.gender,
-        description: doctor.description || 'No description available'
+        description: doctor.description || 'No description available',
+        imageUri: doctor.image || 'default_uri' // Assuming 'imageUri' is the key for the image URL
+
       }));
   
       console.log(enrichedDoctorData);
@@ -42,6 +44,7 @@ const DoctorsDetailScreen = ({ navigation }) => {
         await AsyncStorage.setItem(`doctorFullName${doctor.userId}`, doctor.fullName);
         await AsyncStorage.setItem(`doctorGender${doctor.userId}`, doctor.gender);
         await AsyncStorage.setItem(`doctorDescription${doctor.userId}`, doctor.description);
+        await AsyncStorage.setItem(`doctorImageUri${doctor.userId}`, doctor.imageUri);
       });
 
     } catch (error) {
