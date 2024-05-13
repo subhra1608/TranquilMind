@@ -21,13 +21,15 @@ const ExploreScreen = ({ navigation }) => {
   const [enroll,setEnroll]=useState(false);
   
   useEffect(() => {
+    setLanguageFromAsyncStorage();
     fetchCoursesData();
     fetchEnrolledCoursesData();
-    setLanguageFromAsyncStorage();
   }, [enroll])
+
   const setLanguageFromAsyncStorage = async ()=>
     {
         const getSelectedLanguage = await AsyncStorage.getItem('language');
+        // console.log(getSelectedLanguage);
         if(getSelectedLanguage===null)
         {setLanguage('en');}
         else
@@ -112,6 +114,7 @@ const ExploreScreen = ({ navigation }) => {
         title={item.category}
         description={item.description}
         imageSource={item.courseImage?item.courseImage:"https://img.freepik.com/premium-vector/flat-valentine-s-day-illustration_52683-157836.jpg"}
+        language={language}
       />
         {  !enrolledCourseId.includes(item.courseId) &&(<TouchableOpacity onPress={()=>{enrollUser(item.courseId)}} className="flex flex-row rounded-lg mx-6 bg-green-500 justify-center ">
           <Text className="justify-center text-base ">{t('Enroll Now', { lng: language })}</Text>

@@ -47,7 +47,7 @@ export default function App() {
           headerShown:false
         }}
         
-        initialRouteName="LandingScreen" >
+        initialRouteName="OnboardingScreen" >
         <Stack.Screen
         name="OnboardingScreen"
         component={OnboardingScreen}

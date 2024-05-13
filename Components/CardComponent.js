@@ -3,25 +3,25 @@ import React, { useEffect,useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import translate from 'translate-google-api';
 
-const Card = ({ id,title, description, imageSource,isEnrolled }) => {
+const Card = ({ id,title, description, imageSource,isEnrolled,language }) => {
   isEnrolled=true;
 
   const [stitle,setTitle]=useState("");
-  const [language,setLanguage]=useState("hi");
+  // const [language,setLanguage]=useState("");
 
   useEffect(() => {
-      setLanguageFromAsyncStorage()
+      // setLanguageFromAsyncStorage()
       convertSelectedLanguageTitle(title);
   }, [])
   
-  const setLanguageFromAsyncStorage = async ()=>
-    {
-        const getSelectedLanguage = await AsyncStorage.getItem('language');
-        if(getSelectedLanguage===null)
-        {setLanguage('en');}
-        else
-        {setLanguage(getSelectedLanguage);}
-    }
+  // const setLanguageFromAsyncStorage = async ()=>
+  //   {
+  //       const getSelectedLanguage = await AsyncStorage.getItem('language');
+  //       if(getSelectedLanguage===null)
+  //       {setLanguage('en');}
+  //       else
+  //       {setLanguage(getSelectedLanguage);}
+  //   }
 
   const convertSelectedLanguageTitle = async(text)=>{
     // console.log(text);
@@ -48,7 +48,6 @@ const Card = ({ id,title, description, imageSource,isEnrolled }) => {
         }} style={styles.image} />
         <View style={styles.textContainer}>
         <Text style={styles.title}>{stitle}</Text>
-        
       </View>
     </View>
   );
