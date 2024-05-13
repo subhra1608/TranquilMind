@@ -32,7 +32,7 @@ const DoctorsDetailScreen = ({ navigation }) => {
         fullName: `${doctor.firstName} ${doctor.lastName}`,
         gender: doctor.gender,
         description: doctor.description || 'No description available',
-        imageUri: doctor.image || 'default_uri' // Assuming 'imageUri' is the key for the image URL
+        imageUri: doctor.image || 'https://imgs.search.brave.com/WooNiPEFicNOv9qSI7wpUa-XDfwN8_ldHpTPR1Nwnis/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9p/LXRyeWluZy1iZS1i/ZXN0LWRvY3Rvcl8z/MjkxODEtMjE4OC5q/cGc_c2l6ZT02MjYm/ZXh0PWpwZw' // Assuming 'imageUri' is the key for the image URL
 
       }));
   

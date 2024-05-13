@@ -19,7 +19,7 @@ const BookAppointmentScreen = ({ navigation }) => {
   const [doctorFullName, setDoctorFullName] = useState('');
   const [doctorGender, setDoctorGender] = useState('');
   const [doctorDescription, setDoctorDescription] = useState('');
-  const [doctorImageUri, setDoctorImageUri] = useState('');
+  const [doctorImageUri, setDoctorImageUri] = useState('https://imgs.search.brave.com/Lj5JYE3-770qlnK6qgN5mG2sAnBB8ZTRq431cOWv18I/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zdC5k/ZXBvc2l0cGhvdG9z/LmNvbS8xNTE4NzY3/LzQyOTMvaS80NTAv/ZGVwb3NpdHBob3Rv/c180MjkzMDE4Ny1z/dG9jay1waG90by1z/bWlsaW5nLW1hbGUt/ZG9jdG9yLXdpdGgt/YXJtcy5qcGc');
 
   useEffect(() => {
     const fetchImageUri = async () => {
@@ -136,6 +136,7 @@ const BookAppointmentScreen = ({ navigation }) => {
         data={nextDates}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
+
           <TouchableOpacity
             style={styles.dateButton}
             onPress={() => handleDatePress(item)}
@@ -147,6 +148,7 @@ const BookAppointmentScreen = ({ navigation }) => {
         contentContainerStyle={styles.dateContainer}
         removeClippedSubviews={true}
       />
+      
       {selectedDate && (
         <Text style={styles.selectedDateText}>Selected Date: {formatDate(new Date(selectedDate))}</Text>
       )}

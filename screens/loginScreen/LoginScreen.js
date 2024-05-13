@@ -12,8 +12,8 @@ import {Picker} from '@react-native-picker/picker';
 const LoginScreen = ({ navigation }) => {
 
   const t = i18n.t;
-  const [email, setEmail] = useState("p@gmail.com");
-  const [password, setPassword] = useState('Dell@123');
+  const [email, setEmail] = useState("ramdas@gmail.com");
+  const [password, setPassword] = useState('1234@a');
   const [user,setUser]= useState({});
   const [selectedLanguage, setSelectedLanguage] = useState("en"); 
   const [isLoading,setIsLoading]=useState(false);
@@ -86,7 +86,7 @@ const LoginScreen = ({ navigation }) => {
           }>
           <Picker.Item label="English" value="en" />
           <Picker.Item label="हिन्दी" value="hi" />
-          <Picker.Item label="ಕನ್ನಡ" value="ka" />
+          
         </Picker>
       </View>
 
