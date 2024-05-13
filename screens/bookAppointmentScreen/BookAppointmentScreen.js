@@ -10,7 +10,7 @@ import { baseUrl } from '../../data/baseUrl';
 import { StyleSheet } from 'react-native';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['`flexWrap: `wrap`` is not supported with the `VirtualizedList` components.']);
-
+LogBox.ignoreLogs(['source.uri should not be an empty string']);
 
 const BookAppointmentScreen = ({ navigation }) => {
   const { param } = useRoute().params;
@@ -51,7 +51,7 @@ const BookAppointmentScreen = ({ navigation }) => {
   const getNextSixDates = () => {
     const dates = [];
     const today = new Date();
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 0; i < 6; i++) {
       const nextDate = new Date(today);
       nextDate.setDate(today.getDate() + i);
       dates.push(nextDate);
@@ -78,6 +78,8 @@ const BookAppointmentScreen = ({ navigation }) => {
       Alert.alert("No date selected", "Please select a date first.");
       return;
     }
+    const appointmentDate = new Date(selectedDate);
+  appointmentDate.setHours(12); // Set the time to noon
     try {
       const token = await AsyncStorage.getItem('token');
       const patientId = await AsyncStorage.getItem('userId');
@@ -85,7 +87,7 @@ const BookAppointmentScreen = ({ navigation }) => {
       const payload = {
         doctorId: param.userId,
         patientId: patientId,
-        date: selectedDate.toISOString().substring(0, 10),
+        date: appointmentDate.toISOString().substring(0, 10),
         description: remark,
         remarks: remark
       };

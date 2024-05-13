@@ -8,13 +8,6 @@ import  {signInAnonymouslyIfNeeded} from '../../firebase-config';
 
 
 
-// Sample appointment data
-// const appointments = [
-//   { id: 1, date: '2024-03-10', doctor: 'Dr. Smith' ,problem:' cannot workout'},
-//   { id: 2, date: '2024-03-15', doctor: 'Dr. Johnson',problem:'cannot Dance' },
-//   { id: 3, date: '2024-03-20', doctor: 'Dr. Lee',problem:'cannot eat' },
-// ];
-
 const AppointmentScreen = ({navigation}) => {
   const [selectedTab, setSelectedTab] = React.useState('past');
   const [appointments,setAppointments]=useState([]);
@@ -35,7 +28,7 @@ const AppointmentScreen = ({navigation}) => {
           "Content-Type":"application/json"
           }
         });
-        console.log(response.data);
+        // console.log(response.data);
 
         if (response.data && response.data.length > 0) {
           const appointmentsWithDoctorNames = response.data.map((appointment) => ({
@@ -57,10 +50,36 @@ const AppointmentScreen = ({navigation}) => {
     ? appointments.filter(appointment => new Date(appointment.date) < new Date())
     : appointments.filter(appointment => new Date(appointment.date) >= new Date());
 
-    const handleChatPress = async () => {
+    const handleChatPress = async (appointment) => {
+      if (!appointment) {
+        console.error('Appointment is undefined');
+        return;
+      }
+      // console.log("Received date:", date);
+      // if (!date) {
+      //   console.error('Date is undefined');
+      //   return;
+      // }
+      // try {
+        // await AsyncStorage.setItem('selectedAppointmentDate', date);
+        // await AsyncStorage.setItem('doctorId', doctorId.toString());  // Store the doctorId
+        // signInAnonymouslyIfNeeded();
+        // navigation.navigate('ChatMessageScreen');
+        // navigation.navigate('ChatMessageScreen', {
+          // doctorId: appointment.doctor.userId,
+          // appointmentDate: appointment.date,
+          // doctorFullName: `${appointment.doctor.firstName.trim()} ${appointment.doctor.lastName.trim()}`
+        // });
+      // } catch (error) {
+      //   console.error('Error signing in anonymously:', error);
+      // }
       try {
         await signInAnonymouslyIfNeeded();
-        navigation.navigate('ChatMessageScreen');
+        navigation.navigate('ChatMessageScreen', {
+          doctorId: appointment.doctor.userId,
+          appointmentDate: appointment.date,
+          doctorFullName: `${appointment.doctor.firstName.trim()} ${appointment.doctor.lastName.trim()}`
+        });
       } catch (error) {
         console.error('Error signing in anonymously:', error);
       }
@@ -91,7 +110,7 @@ const AppointmentScreen = ({navigation}) => {
                   <Text style={styles.appointmentText}>Doctor: {item.doctorFullName}</Text>
                   <Button
                       title="Chat"
-                      onPress={() => handleChatPress()}
+                      onPress={() => handleChatPress(item)}
                   />
               </View>
           )}

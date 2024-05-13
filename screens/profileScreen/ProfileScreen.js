@@ -53,7 +53,7 @@ const ProfileScreen = ({ navigation }) => {
     return cleaned;
   };
   const handleOpenDialer = () => {
-    const phoneNumber = '9409548048';  // This should be your actual emergency contact number
+    const phoneNumber = '08046110007';  // This should be your actual emergency contact number
     const formattedNumber = formatPhoneNumber(phoneNumber);
     
     Linking.openURL(`tel:${formattedNumber}`)
