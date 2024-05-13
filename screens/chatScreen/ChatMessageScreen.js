@@ -1,33 +1,58 @@
 // ChatMessageScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet, Alert } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { db } from '../../firebase-config';
 import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { encryptMessage, decryptMessage, masterKey } from '../../EncryptionHelper';
 
-const ChatMessageScreen = ({ navigation }) => {
+const ChatMessageScreen = ({ navigation, route }) => {
   const [patientId, setPatientId] = useState(null);
-  const [doctorId, setDoctorId] = useState(null);
+  // const [doctorId, setDoctorId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  // const [appointmentDate, setAppointmentDate] = useState(null);
+  const { doctorId, appointmentDate } = route.params;
+  const [isChatEnabled, setIsChatEnabled] = useState(true);
 
+  // useEffect(() => {
+  //   const fetchIds = async () => {
+  //     const patientId = await AsyncStorage.getItem('userId');
+  //     // const patientId = '6';
+  //     const doctorId = await AsyncStorage.getItem('doctorId');
+  //     const storedAppointmentDate = await AsyncStorage.getItem('selectedAppointmentDate'); // Fetching the stored appointment date
+  //     setPatientId(patientId);
+  //     setDoctorId(doctorId);
+  //     console.log(patientId);
+  //     console.log(doctorId);
+
+  //     if (storedAppointmentDate) {
+  //       setAppointmentDate(new Date(storedAppointmentDate));  // Convert string back to date
+  //     }
+  //     if (!storedAppointmentDate) {
+  //       console.error('No appointment date stored');
+  //       return;
+  //     }
+  //   };
+  //   fetchIds();
+  // }, []);
   useEffect(() => {
-    const fetchIds = async () => {
-      const patientId = await AsyncStorage.getItem('userId');
-      // const patientId = '6';
-      const doctorId = await AsyncStorage.getItem('doctorId');
-      setPatientId(patientId);
-      setDoctorId(doctorId);
+    const fetchPatientId = async () => {
+      const storedPatientId = await AsyncStorage.getItem('userId');
+      setPatientId(storedPatientId);
+      evaluateChatAvailability();
     };
-    fetchIds();
-  }, []);
+    fetchPatientId();
+  }, [doctorId, appointmentDate]);
+  console.log(patientId);
+  console.log(doctorId);
 
   useEffect(() => {
     if (patientId && doctorId) {
       // const roomId = '$5_6';
       const roomId = `$${doctorId}_${patientId}`;
+      console.log(roomId);
       const messagesRef = collection(db, 'Messages');
       const q = query(messagesRef, where('room', '==', roomId), orderBy('createdAt', 'asc'));
 
@@ -50,22 +75,69 @@ const ChatMessageScreen = ({ navigation }) => {
     }
   }, [patientId, doctorId]);
 
-  const handleSend = async () => {
-    if (newMessage.trim().length > 0 && patientId && doctorId) {
-      const encryptedMessage = encryptMessage(newMessage, masterKey); // Encrypt the message before sending
-      const roomId = `$${doctorId}_${patientId}`;
-      // const roomId = '$5_6';
-      const senderId = `${patientId}_${doctorId}`;  
-      const messagesRef = collection(db, 'Messages');
+  const evaluateChatAvailability = () => {
+    const currentDateTime = new Date();
+    const appointmentDateTime = new Date(appointmentDate);
+    const timeDiff = currentDateTime.getTime() - appointmentDateTime.getTime();
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+
+    setIsChatEnabled(daysDiff <= 3);
+  };
+
+  // const handleSend = async () => {
+  //   if (!appointmentDate) {
+  //     console.error("Appointment date not available.");
+  //     return;
+  //   }
+  //   const currentDate = new Date();
+
+  //   const timeDiff = currentDate.getTime() - appointmentDate.getTime();
+  //   const daysDiff = timeDiff / (1000 * 3600 * 24);
+
+  //   if (daysDiff > 3) {
+  //     Alert.alert("Chat Unavailable", "Chat is only available within 3 days from the appointment date.");
+  //     return;
+  //   }
+  //   if (newMessage.trim().length > 0 && patientId && doctorId) {
+  //     const encryptedMessage = encryptMessage(newMessage, masterKey); // Encrypt the message before sending
+  //     const roomId = `$${doctorId}_${patientId}`;
+  //     // const roomId = '$5_6';
+  //     const senderId = `${patientId}_${doctorId}`;  
+  //     const messagesRef = collection(db, 'Messages');
       
+  //     try {
+  //       await addDoc(messagesRef, {
+  //         text: encryptedMessage,
+  //         createdAt: serverTimestamp(),
+  //         senderId: senderId,
+  //         room: roomId
+  //       });
+        
+  //       setNewMessage('');
+  //     } catch (error) {
+  //       console.error("Failed to send the message: ", error);
+  //     }
+  //   }
+  // };
+
+  const handleSend = async () => {
+    if (!isChatEnabled) {
+      Alert.alert("Chat Unavailable", "Chat is only available within 3 days from the appointment date.");
+      return;
+    }
+    if (newMessage.trim().length > 0) {
+      const encryptedMessage = encryptMessage(newMessage, masterKey);
+      const roomId = `$${doctorId}_${patientId}`;
+      const senderId = `${patientId}_${doctorId}`;
+
       try {
-        await addDoc(messagesRef, {
+        await addDoc(collection(db, 'Messages'), {
           text: encryptedMessage,
           createdAt: serverTimestamp(),
-          senderId: senderId,
+          senderId,
           room: roomId
         });
-        
+
         setNewMessage('');
       } catch (error) {
         console.error("Failed to send the message: ", error);
@@ -87,7 +159,15 @@ const ChatMessageScreen = ({ navigation }) => {
 };
 
 
+// const canChat = () => {
+//   if (!appointmentDate) return false;
 
+//   const currentDate = new Date();
+//   const timeDiff = currentDate.getTime() - appointmentDate.getTime();
+//   const daysDiff = timeDiff / (1000 * 3600 * 24);
+
+//   return daysDiff <= 3;
+// };
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}>
       <View style={styles.header}>
@@ -103,18 +183,22 @@ const ChatMessageScreen = ({ navigation }) => {
       keyExtractor={(item) => item.id}
       inverted
     />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={newMessage}
-          onChangeText={setNewMessage}
-          placeholder="Type a message"
-          placeholderTextColor="#666"
-        />
-        <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
-          <Ionicons name="send" size={24} color="#fff" />
-        </TouchableOpacity>
-      </View>
+    {isChatEnabled ? (
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={newMessage}
+            onChangeText={setNewMessage}
+            placeholder="Type a message"
+            placeholderTextColor="#666"
+          />
+          <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+            <Ionicons name="send" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <Text style={styles.noChatText}>Chat is no longer available for this appointment.</Text>
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -210,6 +294,12 @@ const styles = StyleSheet.create({
       width: 40,
       height: 40,
   },
+  noChatText: {
+    padding: 20,
+    textAlign: 'center',
+    color: 'red',
+  }
+  
 });
 
 export default ChatMessageScreen;

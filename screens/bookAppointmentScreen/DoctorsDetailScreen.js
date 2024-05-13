@@ -26,7 +26,7 @@ const DoctorsDetailScreen = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+      console.log(response.data);
       const enrichedDoctorData = response.data.map(doctor => ({
         ...doctor,
         fullName: `${doctor.firstName} ${doctor.lastName}`,
